@@ -2,4 +2,49 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    --background: 255 255 255;
+    --foreground: 17 24 39;    /* zinc-900 */
+    --muted: 244 244 245;      /* stone-100 */
+    --card: 255 255 255;
+    --border: 228 228 231;     /* zinc-200 */
+  }
+  .dark {
+    --background: 9 9 11;      /* zinc-950 */
+    --foreground: 244 244 245; /* zinc-100 */
+    --muted: 24 24 27;         /* zinc-900 */
+    --card: 24 24 27;
+    --border: 39 39 42;        /* zinc-800 */
+  }
+  * { @apply border-border; }
+  body { @apply bg-background text-foreground antialiased; }
+}
+
+@layer utilities {
+  .bg-background { background-color: rgb(var(--background)); }
+  .text-foreground { color: rgb(var(--foreground)); }
+  .bg-card { background-color: rgb(var(--card)); }
+  .border-border { border-color: rgb(var(--border)); }
+  .bg-muted { background-color: rgb(var(--muted)); }
+}
+
+/* --- original globals.css below --- */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body { @apply antialiased; }
+
+/* Typography (prose) overrides for MDX articles */
+.prose {
+  @apply text-foreground;
+}
+.prose :where(h1,h2,h3,h4){ @apply text-foreground; }
+.prose :where(p,li,blockquote){ @apply opacity-90; }
+.prose a { @apply underline underline-offset-4 hover:opacity-80; }
+.prose blockquote { @apply border-l-4 border-border pl-4; }
+.prose img { @apply rounded-xl border border-border; }
+.prose figcaption { @apply opacity-80 text-sm; }
+
+.dark .prose { @apply text-foreground; }

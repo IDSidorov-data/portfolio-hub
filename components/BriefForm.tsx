@@ -83,7 +83,7 @@ export default function BriefForm({ defaultSource }: { defaultSource?: string })
     <form onSubmit={onSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2">
       <input type="hidden" name="source" value={data.source} />
       <div className="md:col-span-1">
-        <label className="mb-1 block text-xs text-zinc-600">Имя</label>
+        <label className="mb-1 block text-sm font-medium opacity-80">Имя</label>
         <input
           className="w-full rounded-xl border p-3 text-sm"
           value={data.name ?? ''}
@@ -94,7 +94,7 @@ export default function BriefForm({ defaultSource }: { defaultSource?: string })
       </div>
 
       <div className="md:col-span-1">
-        <label className="mb-1 block text-xs text-zinc-600">Email *</label>
+        <label className="mb-1 block text-sm font-medium opacity-80">Email *</label>
         <input
           required
           type="email"
@@ -107,7 +107,7 @@ export default function BriefForm({ defaultSource }: { defaultSource?: string })
       </div>
 
       <div className="md:col-span-1">
-        <label className="mb-1 block text-xs text-zinc-600">Telegram</label>
+        <label className="mb-1 block text-sm font-medium opacity-80">Telegram</label>
         <input
           className="w-full rounded-xl border p-3 text-sm"
           value={data.tg ?? ''}
@@ -118,7 +118,7 @@ export default function BriefForm({ defaultSource }: { defaultSource?: string })
       </div>
 
       <div className="md:col-span-1">
-        <label className="mb-1 block text-xs text-zinc-600">Бюджет</label>
+        <label className="mb-1 block text-sm font-medium opacity-80">Бюджет</label>
         <input
           className="w-full rounded-xl border p-3 text-sm"
           value={data.budget ?? ''}
@@ -129,7 +129,7 @@ export default function BriefForm({ defaultSource }: { defaultSource?: string })
       </div>
 
       <div className="md:col-span-2">
-        <label className="mb-1 block text-xs text-zinc-600">О проекте *</label>
+        <label className="mb-1 block text-sm font-medium opacity-80">О проекте *</label>
         <textarea
           className="min-h-[110px] w-full rounded-xl border p-3 text-sm"
           value={data.about}
@@ -140,7 +140,7 @@ export default function BriefForm({ defaultSource }: { defaultSource?: string })
       </div>
 
       <div className="md:col-span-2">
-        <label className="mb-1 block text-xs text-zinc-600">Резюме/бриф (PDF/JPG/PNG)</label>
+        <label className="mb-1 block text-sm font-medium opacity-80">Резюме/бриф (PDF/JPG/PNG)</label>
         <input
           type="file"
           accept=".pdf,.png,.jpg,.jpeg"
@@ -149,7 +149,7 @@ export default function BriefForm({ defaultSource }: { defaultSource?: string })
         />
         {resumePreview && (
           <div className="mt-2 rounded-xl border p-2">
-            <div className="mb-1 text-xs text-zinc-600">Превью файла</div>
+            <div className="mb-1 text-xs opacity-80">Превью файла</div>
             {/* Для PDF покажем ссылку, для изображений — превью */}
             {resumeFile?.type.includes('pdf') ? (
               <a href={resumePreview} target="_blank" className="text-sm text-blue-600 underline">
@@ -161,7 +161,7 @@ export default function BriefForm({ defaultSource }: { defaultSource?: string })
             )}
           </div>
         )}
-        <p className="mt-1 text-xs text-zinc-500">
+        <p className="mt-1 text-xs opacity-70">
           Файл не загружается на сервер в этой версии — только локальный предпросмотр.
         </p>
       </div>

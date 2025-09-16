@@ -11,7 +11,7 @@ export default function Hero({ onOpenBooking }: { onOpenBooking: () => void }) {
         <h1 className="text-4xl font-bold leading-tight sm:text-6xl max-w-4xl">
           Аналитика, бекенд и боты — системно, быстро, с результатом
         </h1>
-        <p className="mt-6 max-w-2xl text-lg text-zinc-600 dark:text-zinc-300">
+        <p className="mt-6 max-w-2xl text-lg opacity-80 dark:opacity-70">
           A/B-тесты, MVP-валидации, API/интеграции и автоматизация, которые
           экономят спринты и растят ключевые метрики.
         </p>
@@ -33,14 +33,14 @@ export default function Hero({ onOpenBooking }: { onOpenBooking: () => void }) {
             Оставить бриф проекта
           </Button>
           <Button
-            variant="ghost"
+            variant="secondary"
             href={RESUME_URL}
             onClick={() => sendEvent('click_resume_pdf')}
           >
             Скачать резюме (PDF)
           </Button>
           <Button
-            variant="ghost"
+            variant="secondary"
             onClick={() => {
               sendEvent('tg_booking_click_placeholder', { source: 'hero' });
               onOpenBooking();

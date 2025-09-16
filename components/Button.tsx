@@ -1,31 +1,36 @@
+import React from "react";
 import Link from "next/link";
-import { ComponentProps } from "react";
+
+type Variant = "primary" | "secondary" | "ghost";
 
 type Props = {
-  variant?: "primary" | "secondary" | "ghost";
+  variant?: Variant;
   href?: string;
-} & ComponentProps<"button">;
+  className?: string;
+  children: React.ReactNode;
+} & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 export default function Button({ variant = "primary", href, className = "", children, ...rest }: Props) {
-  const base = "inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-medium transition focus:outline-none";
-  const styles = {
-    primary: "bg-blue-600 text-white hover:bg-blue-700",
-    secondary: "bg-zinc-100 text-zinc-900 hover:bg-zinc-200",
-    ghost: "bg-transparent text-zinc-700 hover:bg-zinc-100"
-  }[variant];
+  const base = "inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2";
+  const styles =
+    {
+      primary: "bg-foreground text-background hover:opacity-90",
+      secondary: "border border-border bg-card text-foreground hover:bg-muted",
+      ghost: "bg-transparent text-foreground ring-1 ring-transparent hover:bg-muted focus-visible:ring-border",
+    }[variant] || "";
+
+  const cls = `${base} ${styles} ${className}`.trim();
 
   if (href) {
-    const external = href.startsWith("http");
-    return external ? (
-      <a href={href} target="_blank" rel="noopener noreferrer" className="no-underline">
-        <span className={`${base} ${styles} ${className}`}>{children}</span>
-      </a>
-    ) : (
-      <Link href={href} className="no-underline">
-        <span className={`${base} ${styles} ${className}`}>{children}</span>
+    return (
+      <Link href={href} className={cls}>
+        {children}
       </Link>
     );
   }
-
-  return <button className={`${base} ${styles} ${className}`} {...rest}>{children}</button>;
+  return (
+    <button className={cls} {...rest}>
+      {children}
+    </button>
+  );
 }
