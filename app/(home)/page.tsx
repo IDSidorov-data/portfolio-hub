@@ -10,21 +10,25 @@ import BriefForm from '@/components/BriefForm';
 import Footer from '@/components/Footer';
 import Modal from '@/components/Modal';
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 export default function HomePage() {
   const [open, setOpen] = useState(false);
+  const params = useSearchParams();
+  const source = params.get('utm_source') ?? 'site';
+
   return (
-    <div id="top">
+    <div className="flex min-h-screen flex-col">
       <Nav />
-      <main>
-        <Hero />
+      <main className="flex-1">
+        <Hero onCTA={() => setOpen(true)} />
         <Services />
         <Cases />
         <Process />
         <Stack />
         <Container id="brief" className="py-10">
           <h2 className="mb-6 text-2xl font-semibold">Оставить бриф проекта</h2>
-          <BriefForm />
+          <BriefForm defaultSource={source} />
         </Container>
       </main>
       <Footer />
