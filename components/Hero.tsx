@@ -9,11 +9,10 @@ export default function Hero({ onOpenBooking }: { onOpenBooking: () => void }) {
     <div className="relative overflow-hidden py-16 sm:py-24">
       <Container className="text-left">
         <h1 className="text-4xl font-bold leading-tight sm:text-6xl max-w-4xl">
-          Аналитика, бекенд и боты — системно, быстро, с результатом
+          Аналитика, бэкенд и Telegram‑боты — быстро и с эффектом
         </h1>
         <p className="mt-6 max-w-2xl text-lg opacity-80 dark:opacity-70">
-          Запускаю проверяемые решения под бизнес-цели: за 1–2 недели — MVP или A/B с понятными метриками.
-          Интеграции и отчёты настроены, риски и сроки прозрачны.
+          Проектирую эксперименты и метрики, собираю MVP и автоматизирую рутину. Работают данные, а не мнения.
         </p>
         <div className="mt-8 flex flex-wrap items-center gap-3">
           <Button
@@ -25,9 +24,7 @@ export default function Hero({ onOpenBooking }: { onOpenBooking: () => void }) {
           </Button>
           <Button
             variant="secondary"
-            onClick={() =>
-              document.getElementById('brief')?.scrollIntoView({ behavior: 'smooth' })
-            }
+            onClick={() => document.getElementById('brief')?.scrollIntoView({ behavior: 'smooth' })}
           >
             Оставить бриф проекта
           </Button>
@@ -40,10 +37,7 @@ export default function Hero({ onOpenBooking }: { onOpenBooking: () => void }) {
           </Button>
           <Button
             variant="secondary"
-            onClick={() => {
-              sendEvent('tg_booking_click_placeholder', { source: 'hero' });
-              onOpenBooking();
-            }}
+            onClick={() => { sendEvent('tg_booking_click_placeholder', { source: 'hero' }); onOpenBooking(); }}
           >
             Записаться на 15-мин (скоро)
           </Button>
