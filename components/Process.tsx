@@ -1,16 +1,16 @@
 import Container from '@/components/Container';
 
 const steps = [
-  'Быстрое погружение в задачу',
-  'Формулирую гипотезы, метрики, ТЗ',
-  'Дешёвая проверка (MVP / A/B)',
-  'Реализация (API / бот / дашборд)',
-  'Передача знаний команде',
+  'Диагностика и аудит: цели, данные, ограничения',
+  'Гипотезы и метрики; план экспериментов (A/B, MVP)',
+  'Архитектура решения: данные ↔ интеграции ↔ API/бот/дашборд',
+  'Реализация: MVP/интеграции, автоматизация, проверка на данных',
+  'Измерения и итерации; документация и передача артефактов',
 ];
 
 export default function Process() {
   return (
-    <section id="process" className="py-16 sm:py-24 bg-zinc-50 dark:bg-zinc-900/50">
+    <section id="process" className="py-16 sm:py-24 bg-background dark:bg-zinc-900/50">
       <Container>
         <h2 className="mb-10 text-3xl font-semibold">Как я работаю</h2>
         <ol className="space-y-6">

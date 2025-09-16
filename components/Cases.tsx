@@ -42,11 +42,11 @@ export default function Cases() {
               </div>
               <div className="mt-6">
                 <Button
-                  variant="ghost"
+                  variant="primary"
                   href={`/cases/${c.slug}`}
                   onClick={() => sendEvent(`click_case_${c.id}`)}
                 >
-                  Разбор
+                  Ознакомиться
                 </Button>
               </div>
             </Card>

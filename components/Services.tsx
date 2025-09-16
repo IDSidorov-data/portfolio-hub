@@ -81,20 +81,20 @@ export default function Services() {
             <Card key={s.id} className="flex flex-col gap-3">
               <div>
                 <h3 className="text-lg font-medium">{s.title}</h3>
-                <p className="mt-1 text-sm opacity-80">{s.desc}</p>
+                <p className="mt-1 text-sm opacity-90">{s.desc}</p>
               </div>
-              <ul className="mt-2 list-disc space-y-1 pl-4 text-sm opacity-80">
+              <ul className="mt-2 list-disc space-y-1 pl-4 text-sm opacity-90">
                 {s.tasks.map((t, i) => (
                   <li key={i}>{t}</li>
                 ))}
               </ul>
-              <div className="mt-auto flex items-center justify-between pt-3 text-sm opacity-80">
+              <div className="mt-auto flex items-center justify-between pt-3 text-sm opacity-90">
                 <span>⏱ {s.timeline}</span>
                 <span>💰 {s.budget}</span>
               </div>
               <div className="flex justify-end">
                 <Button
-                  variant="secondary"
+                  variant="primary"
                   href="#brief"
                   onClick={() => sendEvent(`click_service_${s.id}`)}
                 >

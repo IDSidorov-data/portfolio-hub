@@ -1,35 +1,70 @@
 import Container from '@/components/Container';
+import Card from '@/components/Card';
 
-const stack = [
-  'SQL',
-  'Python',
-  'Pandas',
-  'FastAPI',
-  'Streamlit',
-  'Supabase / Postgres',
-  'Superset',
-  'aiogram (TG Bots)',
-  'Playwright / RPA',
-  'Excel',
-  'PowerPoint',
-  'GitHub',
+const sections = [
+  {
+    title: 'Аналитика',
+    intro: 'От событий и витрин до проверяемых гипотез и решений.',
+    lines: [
+      'Сбор/ETL событий → SQL-модели → метрики и дашборды',
+      'A/B-эксперименты, z/t-тесты, отчёты по критериям успеха',
+    ],
+    chips: ['SQL', 'Postgres/Supabase', 'Superset/Metabase', 'Python/Pandas'],
+  },
+  {
+    title: 'Backend / API',
+    intro: 'Прикладной бекенд под продуктовые задачи.',
+    lines: [
+      'FastAPI + Postgres, очереди, вебхуки и интеграции',
+      'Авторизация, платежи, простые админки',
+    ],
+    chips: ['FastAPI', 'Postgres', 'Supabase Auth/Storage', 'Cloud Run/Vercel'],
+  },
+  {
+    title: 'TG-боты & Автоматизация',
+    intro: 'Автономные помощники и интеграции с системами.',
+    lines: [
+      'aiogram-боты ↔ API ↔ Sheets/CRM, напоминания/отчёты',
+      'TG Web App, интеграции c AI-сервисами, сложная бекенд-логика',
+    ],
+    chips: ['aiogram', 'Playwright/RPA', 'Webhook', 'Google Sheets', 'AI интеграции'],
+  },
+  {
+    title: 'Разработка сайтов',
+    intro: 'От лендингов до многостраничных приложений.',
+    lines: [
+      'Лендинги (Tilda) и промо',
+      'Next.js/React: многостраничники с админкой, API-ключами и интеграциями',
+    ],
+    chips: ['Next.js', 'React', 'Tailwind', 'Tilda', 'Vercel'],
+  },
 ];
 
 export default function Stack() {
   return (
     <section id="stack" className="py-16 sm:py-24">
       <Container>
-        <h2 className="mb-10 text-3xl font-semibold">Стек и инструменты</h2>
-        <ul className="flex flex-wrap gap-3 text-sm text-zinc-700 dark:text-zinc-300">
-          {stack.map((t) => (
-            <li
-              key={t}
-              className="rounded-full border border-zinc-300 px-3 py-1 dark:border-zinc-700"
-            >
-              {t}
-            </li>
+        <h2 className="mb-6 text-3xl font-semibold">Стек и инструменты</h2>
+        <p className="opacity-80 mb-8">
+          Что именно я делаю и из каких компонентов это собираю.
+        </p>
+
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
+          {sections.map((s) => (
+            <Card key={s.title} className="p-6">
+              <h3 className="text-lg font-semibold">{s.title}</h3>
+              <p className="mt-1 text-sm opacity-80">{s.intro}</p>
+              <ul className="mt-3 space-y-1 text-sm opacity-90 list-disc pl-4">
+                {s.lines.map((l, i) => (<li key={i}>{l}</li>))}
+              </ul>
+              <div className="mt-4 flex flex-wrap gap-2 text-sm opacity-80">
+                {s.chips.map((c) => (
+                  <span key={c} className="rounded-full border border-border px-3 py-1">{c}</span>
+                ))}
+              </div>
+            </Card>
           ))}
-        </ul>
+        </div>
       </Container>
     </section>
   );
