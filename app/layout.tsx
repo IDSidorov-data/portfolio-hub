@@ -1,7 +1,12 @@
+// app/layout.tsx
 import './globals.css';
 import type { Metadata } from 'next';
 import Analytics from '@/components/Analytics';
 import ThemeScript from '@/components/ThemeScript';
+import Providers from './providers';
+import dynamic from 'next/dynamic';
+
+const BackgroundFX = dynamic(() => import('@/components/BackgroundFX'), { ssr: false });
 
 export const metadata: Metadata = {
   title: 'Иван Сидоров — Системный архитектор',
@@ -15,9 +20,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ru" suppressHydrationWarning>
       <head>
         <ThemeScript />
+        <meta name="color-scheme" content="light dark" />
       </head>
-      <body className="bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100">
-        {children}
+      <body className="page-bg min-h-dvh antialiased">
+        <Providers>
+          {/* динамические обои под контентом */}
+          <BackgroundFX />
+          {children}
+        </Providers>
         <Analytics />
       </body>
     </html>
