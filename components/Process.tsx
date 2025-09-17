@@ -1,28 +1,46 @@
 import Container from '@/components/Container';
+import Card from '@/components/Card';
+import { ArrowRight } from 'lucide-react';
 
 const steps = [
-  'Диагностика и аудит: цели, данные, ограничения',
-  'Гипотезы и метрики; план экспериментов (A/B, MVP)',
-  'Архитектура решения: данные ↔ интеграции ↔ API/бот/дашборд',
-  'Реализация: MVP/интеграции, автоматизация, проверка на данных',
-  'Измерения и итерации; документация и передача артефактов',
+  { title: 'Диагностика и метрики', text: 'Быстрое погружение, цель и критерии успеха. Согласуем, что меряем и какие артефакты на выходе.' },
+  { title: 'Спринт MVP', text: 'Прототип/интеграция за 1–2 недели: только то, что проверяет гипотезу. Прозрачные риски и сроки.' },
+  { title: 'Валидация на данных', text: 'Запуск A/B или пилота. Считаем метрики, делаем вывод — раскатывать, доработать или закрыть.' },
+  { title: 'Продукт в работу', text: 'Упаковка решения: автоматизация, документация, передача артефактов. Поддержка по договорённости.' },
 ];
 
 export default function Process() {
   return (
-    <section id="process" className="py-16 sm:py-24 bg-background dark:bg-zinc-900/50">
+    <section id="process" className="py-16 sm:py-24">
       <Container>
-        <h2 className="mb-10 text-3xl font-semibold">Как я работаю</h2>
-        <ol className="space-y-6">
-          {steps.map((s, i) => (
-            <li key={i} className="flex items-start gap-4">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white font-medium">
-                {i + 1}
-              </span>
-              <span className="text-zinc-700 dark:text-zinc-300">{s}</span>
-            </li>
+        <h2 className="mb-6 text-3xl font-semibold">Как я работаю</h2>
+
+        {/* Моб/планшет — сетка */}
+        <div className="grid gap-6 sm:grid-cols-2 lg:hidden">
+          {steps.map((s) => (
+            <Card key={s.title} className="p-6">
+              <h3 className="text-xl font-semibold">{s.title}</h3>
+              <p className="mt-1 text-sm opacity-80">{s.text}</p>
+            </Card>
           ))}
-        </ol>
+        </div>
+
+        {/* Десктоп — ряд со стрелками по центру */}
+        <div className="mt-2 hidden lg:flex items-center gap-4">
+          {steps.map((s, i) => (
+            <div key={s.title} className="flex items-center">
+              <Card className="p-6 w-72">
+                <h3 className="text-xl font-semibold">{s.title}</h3>
+                <p className="mt-1 text-sm opacity-80">{s.text}</p>
+              </Card>
+              {i < steps.length - 1 && (
+                <div className="mx-4 flex items-center">
+                  <ArrowRight className="h-6 w-6 text-zinc-500 dark:text-zinc-300" />
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       </Container>
     </section>
   );

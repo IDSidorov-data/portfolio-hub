@@ -18,7 +18,7 @@ const services: Service[] = [
     title: 'Analytics',
     desc: 'Метрики, эксперименты, дашборды — чтобы принимать решения по данным',
     timeline: '3–10 дней',
-    budget: 'от 50 000 ₽',
+    budget: 'от 50 000 ₽',
     tasks: [
       'Аудит воронки/юнит-экономики',
       'Настройка GA4 / Я.Метрики / GTM',
@@ -32,7 +32,7 @@ const services: Service[] = [
     title: 'Backend / API',
     desc: 'Продакшен-API на FastAPI/Node, интеграции и инфраструктура',
     timeline: '1–3 недели',
-    budget: 'от 120 000 ₽',
+    budget: 'от 120 000 ₽',
     tasks: [
       'Проектирование REST/GraphQL',
       'Интеграции (CRM, платежи, Telegram, Notion)',
@@ -44,11 +44,11 @@ const services: Service[] = [
   {
     id: 'bots',
     title: 'Bots / RPA',
-    desc: 'Телеграм‑боты, интеграции, автоматизация рутины',
+    desc: 'Телеграм-боты, интеграции, автоматизация рутины',
     timeline: '5–12 дней',
-    budget: 'от 80 000 ₽',
+    budget: 'от 80 000 ₽',
     tasks: [
-      'Телеграм‑бот (menues, платежи, WebApp)',
+      'Телеграм-бот (меню, платежи, WebApp)',
       'Сбор заявок/обратной связи',
       'Автосинк в Notion/Sheets/CRM',
       'Распознавание/парсинг документов',
@@ -60,7 +60,7 @@ const services: Service[] = [
     title: 'MVP / Prototypes',
     desc: 'Быстрые прототипы на Next.js + Supabase для проверки гипотез',
     timeline: '1–4 недели',
-    budget: 'от 150 000 ₽',
+    budget: 'от 150 000 ₽',
     tasks: [
       'Сборка MVP (авторизация, CRUD)',
       'Дизайн простых UI/кейсы/лендинг',

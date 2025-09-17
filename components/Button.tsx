@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
-type Variant = "primary" | "secondary" | "ghost";
+type Variant = "primary" | "secondary" | "ghost" | "accent";
 
 type Props = {
   variant?: Variant;
@@ -11,12 +11,20 @@ type Props = {
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 export default function Button({ variant = "primary", href, className = "", children, ...rest }: Props) {
-  const base = "inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2";
+  const base =
+    "inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2";
+
+  // ВАЖНО: используем произвольные значения Tailwind с нашими CSS-переменными
   const styles =
     {
-      primary: "bg-accent text-accent-foreground hover:opacity-90 shadow-sm hover:shadow",
-      secondary: "border border-border bg-card text-foreground hover:bg-muted",
-      ghost: "bg-transparent text-foreground ring-1 ring-transparent hover:bg-muted focus-visible:ring-border",
+      primary:
+        "bg-[rgb(var(--foreground))] text-[rgb(var(--background))] hover:opacity-90 shadow-sm hover:shadow focus-visible:outline-[rgb(var(--accent))]",
+      secondary:
+        "border border-[rgb(var(--border))] bg-[rgb(var(--card))] text-[rgb(var(--foreground))] hover:bg-[rgb(var(--muted))] focus-visible:outline-[rgb(var(--accent))]",
+      ghost:
+        "bg-transparent text-[rgb(var(--foreground))] hover:bg-[rgb(var(--muted))] focus-visible:outline-[rgb(var(--accent))]",
+      accent:
+        "bg-[rgb(var(--accent))] text-[rgb(var(--accent-foreground))] hover:opacity-90 shadow-sm hover:shadow focus-visible:outline-[rgb(var(--accent))]",
     }[variant] || "";
 
   const cls = `${base} ${styles} ${className}`.trim();
