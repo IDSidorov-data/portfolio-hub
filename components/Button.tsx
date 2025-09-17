@@ -8,13 +8,25 @@ type Props = {
   href?: string;
   className?: string;
   children: React.ReactNode;
+  target?: string; // важно для внешних ссылок
+  rel?: string;    // важно для внешних ссылок
+  onClick?: React.MouseEventHandler<HTMLAnchorElement | HTMLButtonElement>;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-export default function Button({ variant = "primary", href, className = "", children, ...rest }: Props) {
+export default function Button({
+  variant = "primary",
+  href,
+  className = "",
+  children,
+  target,
+  rel,
+  onClick,
+  ...rest
+}: Props) {
   const base =
     "inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2";
 
-  // ВАЖНО: используем произвольные значения Tailwind с нашими CSS-переменными
+  // Используем ваши CSS-переменные
   const styles =
     {
       primary:
@@ -31,13 +43,14 @@ export default function Button({ variant = "primary", href, className = "", chil
 
   if (href) {
     return (
-      <Link href={href} className={cls}>
+      <Link href={href} className={cls} target={target} rel={rel} onClick={onClick}>
         {children}
       </Link>
     );
   }
+
   return (
-    <button className={cls} {...rest}>
+    <button className={cls} onClick={onClick} {...rest}>
       {children}
     </button>
   );
