@@ -154,3 +154,27 @@
       color-mix(in oklab, var(--bg-spot-2) 60%, transparent), transparent 60%),
     rgb(var(--background));
 }
+
+/* AURORA (ясная голубая) — только для светлой темы */
+:root:not(.dark).theme-aurora {
+  --fx-base: 253,250,245;
+  --fx-accent: 160,190,255;
+  --fx-star-alpha: .80;
+  --background: 253 250 245;
+}
+
+/* SAKURA (розово-фиолетовая туманность) — только для светлой темы */
+:root:not(.dark).theme-sakura {
+  --fx-base: 255,240,248;   /* #fff0f8 */
+  --fx-accent: 190,160,255;
+  --fx-star-alpha: .75;
+  --background: 254 246 250;
+}
+
+/* MINT SKY (мятно-лазурная) — только для светлой темы */
+:root:not(.dark).theme-mint {
+  --fx-base: 242,252,248;
+  --fx-accent: 120,210,220;
+  --fx-star-alpha: .78;
+  --background: 244 250 247;
+}
