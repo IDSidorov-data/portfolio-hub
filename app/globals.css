@@ -36,7 +36,7 @@
 .dark {
   --background: 10 10 10;
   --foreground: 255 255 255;
-  --muted: 39 39 42;
+  --muted: 39 39 42;      /* zinc-800 */
   --card: 24 24 27;
   --border: 63 63 70;
   --accent: 59 130 246;
@@ -62,45 +62,25 @@
 }
 
 @layer base {
-  * {
-    border-color: rgb(var(--border));
-  }
-
-  body {
-    color: rgb(var(--foreground));
-    @apply antialiased;
-  }
+  * { border-color: rgb(var(--border)); }
+  body { color: rgb(var(--foreground)); @apply antialiased; }
 }
 
 @layer utilities {
-  .bg-success {
-    background-color: rgb(var(--success));
-  }
+  .bg-success { background-color: rgb(var(--success)); }
+  .text-success-foreground { color: rgb(var(--success-foreground)); }
 
-  .text-success-foreground {
-    color: rgb(var(--success-foreground));
-  }
+  .bg-card-soft { background-color: var(--card-soft); }
+  .text-card-soft { color: var(--card-soft-foreground); }
 
-  /* утилиты */
-  .bg-card-soft {
-    background-color: var(--card-soft);
-  }
-
-  .text-card-soft {
-    color: var(--card-soft-foreground);
-  }
-
-  /* деликатный, плоский callout под “Результат” — без псевдо-3D */
+  /* деликатный callout под “Результат” */
   .result-callout {
-    /* лёгкий зелёный тинт к текущему фону */
     background: color-mix(in oklab, rgb(var(--success)) 8%, rgb(var(--background)) 92%);
     border: 1px solid color-mix(in oklab, rgb(var(--success)) 26%, transparent);
     border-radius: 0.75rem;
     padding: .75rem 1rem;
-    box-shadow: none;      /* убираем глубину */
+    box-shadow: none;
   }
-
-  /* fallback для браузеров без color-mix */
   @supports not (background: color-mix(in oklab, white, black)) {
     .result-callout {
       background-color: rgb(var(--success) / 0.10);
@@ -112,40 +92,109 @@
   }
 }
 
-/* Prose overrides (MDX content) */
-.prose {
-  @apply text-[15px] leading-7;
+/* ---------- Prose (MDX) ---------- */
+.prose { @apply text-[15px] leading-7; }
+.prose h1 { @apply text-3xl sm:text-4xl font-bold mb-4; }
+.prose h2 { @apply text-2xl sm:text-3xl font-semibold mt-8 mb-3; }
+.prose h3 { @apply text-xl font-semibold mt-6 mb-2; }
+.prose p  { @apply mb-4; }
+
+/* Списки: яркие маркеры и лучший ритм */
+.prose ul { @apply list-disc pl-6 mb-4; }
+.prose ol { @apply list-decimal pl-6 mb-4; }
+.prose li { margin: .3rem 0; }
+.prose ul > li::marker,
+.prose ol > li::marker {
+  color: color-mix(in oklab, rgb(var(--foreground)) 88%, rgb(var(--background)) 12%);
+  font-weight: 800;
+}
+.dark .prose ul > li::marker,
+.dark .prose ol > li::marker {
+  color: color-mix(in oklab, white 80%, rgb(24 24 27) 20%);
 }
 
-.prose h1 {
-  @apply text-3xl sm:text-4xl font-bold mb-4;
-}
-
-.prose h2 {
-  @apply text-2xl sm:text-3xl font-semibold mt-8 mb-3;
-}
-
-.prose h3 {
-  @apply text-xl font-semibold mt-6 mb-2;
-}
-
-.prose p {
-  @apply mb-4;
-}
-
-.prose ul {
-  @apply list-disc pl-6 mb-4;
-}
-
-.prose ol {
-  @apply list-decimal pl-6 mb-4;
-}
-
+/* inline-код в тексте */
 .prose code {
   @apply rounded px-1 py-0.5 text-sm;
   background-color: rgb(var(--muted));
 }
 
+/* блочные коды ``` */
+.prose pre {
+  @apply rounded-xl p-4 overflow-x-auto text-sm;
+  background-color: rgb(var(--muted));
+  color: inherit;
+  border: 1px solid rgb(var(--border));
+}
+.dark .prose pre {
+  background-color: rgb(39 39 42);
+  color: rgb(229 229 231);
+  border: 1px solid rgb(63 63 70);
+}
+/* чтобы стиль inline-code не лез в pre */
+.prose pre code { background-color: transparent; padding: 0; border-radius: 0; }
+
+/* “Локально:” — уплотняем отступ перед следующим pre */
+.prose p:has(+ pre) { margin-bottom: .5rem; }
+
+/* ---------- Таблицы (GFM) ---------- */
+/* компактная «карточка»-таблица по центру */
+.prose table {
+  display: inline-table;
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+  width: auto;
+  max-width: 100%;
+  margin: 1rem auto;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid rgb(var(--border));
+  border-radius: 12px;
+  overflow: hidden;
+  background: color-mix(in oklab, rgb(var(--foreground)) 4%, rgb(var(--card)) 96%);
+  box-shadow: 0 1px 2px rgb(0 0 0 / .04);
+}
+.dark .prose table {
+  background: color-mix(in oklab, white 3%, rgb(24 24 27) 97%);
+  box-shadow: 0 1px 2px rgb(0 0 0 / .35);
+}
+
+.prose thead th {
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  font-size: .8rem;
+  font-weight: 700;
+  text-align: left;
+  background: color-mix(in oklab, rgb(var(--foreground)) 6%, rgb(var(--background)) 94%);
+  border-bottom: 1px solid rgb(var(--border));
+}
+.dark .prose thead th {
+  background: color-mix(in oklab, white 06%, rgb(24 24 27) 94%);
+}
+
+.prose td,
+.prose th {
+  padding: .6rem .9rem;
+  border-bottom: 1px solid rgb(var(--border));
+}
+.prose tbody tr:last-child td { border-bottom: 0; }
+
+/* зебра + hover */
+.prose tbody tr:nth-child(odd) { background-color: rgb(0 0 0 / 0.025); }
+.dark .prose tbody tr:nth-child(odd) { background-color: rgb(255 255 255 / 0.035); }
+.prose tbody tr:hover { background-color: rgb(0 0 0 / 0.05); }
+.dark .prose tbody tr:hover { background-color: rgb(255 255 255 / 0.06); }
+
+/* KPI внутри таблицы (для **bold**) */
+.prose table td strong {
+  background: color-mix(in oklab, rgb(var(--success)) 18%, transparent);
+  color: color-mix(in oklab, rgb(var(--success)) 80%, rgb(var(--foreground)) 20%);
+  padding: .12rem .4rem;
+  border-radius: .5rem;
+  font-weight: 700;
+}
+
+/* блок-цитаты */
 .prose blockquote {
   background: color-mix(in oklab, var(--result-bg) 92%, transparent);
   border-left: 4px solid var(--result-border);
@@ -153,11 +202,9 @@
   border-radius: .75rem;
   font-weight: 500;
 }
+.prose blockquote > p:first-child { margin: 0; }
 
-.prose blockquote>p:first-child {
-  margin: 0;
-}
-
+/* фон страницы с «туманностью» */
 .page-bg {
   background:
     radial-gradient(1200px 700px at 80% -10%,
@@ -167,23 +214,21 @@
     rgb(var(--background));
 }
 
-/* AURORA — только для светлой темы */
+/* AURORA — светлая тема */
 :root:not(.dark).theme-aurora {
   --fx-base: 253, 250, 245;
   --fx-accent: 160, 190, 255;
   --fx-star-alpha: .80;
   --background: 253 250 245;
 }
-
-/* SAKURA — только для светлой темы */
+/* SAKURA — светлая тема */
 :root:not(.dark).theme-sakura {
   --fx-base: 255, 240, 248;
   --fx-accent: 190, 160, 255;
   --fx-star-alpha: .75;
   --background: 254 246 250;
 }
-
-/* MINT SKY — только для светлой темы */
+/* MINT SKY — светлая тема */
 :root:not(.dark).theme-mint {
   --fx-base: 242, 252, 248;
   --fx-accent: 120, 210, 220;
@@ -195,38 +240,105 @@
    Chips for metrics/status
    =============================== */
 @layer components {
-  .chip {
-    @apply inline-flex items-center rounded-full px-2.5 py-1 text-xs border;
-  }
+  .chip { @apply inline-flex items-center rounded-full px-2.5 py-1 text-xs border; }
 
-  /* Нейтральная: читаемо на любом фоне, без “зеленения” */
   .chip-neutral {
     background: color-mix(in oklab, rgb(var(--background)) 90%, rgb(var(--foreground)) 10%);
     border-color: color-mix(in oklab, rgb(var(--foreground)) 22%, transparent);
     color: color-mix(in oklab, rgb(var(--foreground)) 85%, rgb(var(--background)) 15%);
   }
 
-  /* Положительная: использует success-токены */
   .chip-positive {
     color: color-mix(in oklab, rgb(var(--success)) 70%, rgb(var(--foreground)) 30%);
     background: color-mix(in oklab, rgb(var(--success)) 14%, transparent);
     border-color: color-mix(in oklab, rgb(var(--success)) 28%, transparent);
   }
 
-  /* Fallback для браузеров без color-mix */
   @supports not (background: color-mix(in oklab, white, black)) {
     .chip-neutral {
-      /* мягкая подложка и читаемый текст в обеих темах */
       background-color: rgb(var(--foreground) / 0.06);
       border-color: rgb(var(--border));
       color: rgb(var(--foreground) / 0.85);
     }
-
     .chip-positive {
-      /* акцентно-зелёный, но не яд */
       background-color: rgb(var(--success) / 0.14);
       border-color: rgb(var(--success));
       color: rgb(var(--success));
     }
   }
+}
+
+/* ==== rehype-pretty-code ==== */
+
+/* Обёртка фрагмента (нужна для титула) */
+.prose [data-rehype-pretty-code-fragment] {
+  position: relative;
+  display: block;
+}
+
+/* Титул кода: работает если в ``` указать meta title="..." */
+/* rehype-pretty-code: заголовок блока */
+.prose [data-rehype-pretty-code-title] {
+  display: block;
+  font-size: 0.9375rem; /* 15px */
+  font-weight: 600;
+  line-height: 1.4;
+  padding: .7rem .9rem;
+  border: 1px solid rgb(var(--border));
+  border-bottom: 0;
+  border-radius: 12px 12px 0 0;
+  background: color-mix(in oklab, rgb(var(--foreground)) 5%, rgb(var(--card)) 95%);
+  color: color-mix(in oklab, rgb(var(--foreground)) 82%, rgb(var(--background)) 18%);
+}
+.dark .prose [data-rehype-pretty-code-title] {
+  background: color-mix(in oklab, white 5%, rgb(24 24 27) 95%);
+  color: rgb(228 228 231);
+  border-color: rgb(63 63 70);
+}
+
+/* сам блок кода сразу под титулом красиво стыкуется */
+.prose [data-rehype-pretty-code-fragment] pre {
+  margin-top: 0;
+  border-radius: 0 0 12px 12px;
+}
+
+/* нумерация/подсветка строк (если в meta {1,3-5}) */
+.prose pre code { display: grid; }
+.prose pre [data-line] {
+  padding: 0 .75rem;
+  border-left: 2px solid transparent;
+}
+.prose pre [data-highlighted] {
+  background: rgb(var(--accent) / 0.10);
+  border-left-color: rgb(var(--accent));
+}
+
+/* подсветка отдельных слов (если включишь mark/==word==) */
+.prose pre mark {
+  background: rgb(var(--accent) / 0.18);
+  color: inherit;
+  padding: 0 .15rem;
+  border-radius: .25rem;
+}
+
+/* ===== заметный бэйдж под заголовком (summary из фронтматтера) ===== */
+.case-summary {
+  margin-bottom: 1.25rem;
+  padding: .75rem 1rem;
+  font-weight: 600;
+  border-radius: .75rem;
+  border: 1px solid color-mix(in oklab, rgb(var(--accent)) 28%, transparent);
+  background: color-mix(in oklab, rgb(var(--accent)) 12%, rgb(var(--background)) 88%);
+  color: color-mix(in oklab, rgb(var(--foreground)) 85%, rgb(var(--accent-foreground)) 15%);
+}
+.dark .case-summary {
+  border-color: color-mix(in oklab, rgb(var(--accent)) 40%, transparent);
+  background: color-mix(in oklab, rgb(var(--accent)) 18%, transparent);
+  color: rgb(234 234 236);
+}
+
+/* ===== UX для раскрывашек (details/summary) ===== */
+.prose details > summary {
+  cursor: pointer;      /* вместо текстового курсора */
+  user-select: none;    /* не выделяется при клике */
 }

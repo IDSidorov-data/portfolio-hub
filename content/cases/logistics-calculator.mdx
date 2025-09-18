@@ -1,28 +1,54 @@
 ---
-title: "Логистика: MVP калькулятора → pivot (−200 ч)"
-summary: "Прототип на Streamlit выявил истинную потребность: калькулятор ценообразования."
-tags: ["Python","Streamlit","Customer interview","Экономия −200 ч"]
+title: "Логистика: калькулятор маржи (MVP)"
+summary: "MVP за ~5 часов: проверена гипотеза, предотвращено ~200 ч ненужной разработки; есть публичная демка."
+tags: ["MVP","Streamlit","Python","Product Discovery","~200 ч экономии"]
+role: "Product/Tech"
+duration: "1 неделя (дискавери → MVP → интервью)"
+status: "delivered"
+links:
+  - { label: "Демо", href: "https://log-calc.streamlit.app/" }
+  - { label: "Код", href: "https://github.com/IDSidorov-data/logistics_calculator" }
+  - { label: "ТЗ v2", href: "https://github.com/IDSidorov-data/logistics_calculator/blob/main/MVP_v2_SPEC.md" }
 ---
 
+<div className="result-callout">
+  <strong>TL;DR.</strong> Собрал MVP за ~5 часов, проверил гипотезу «быстрого решения выгодно/убыточно» и 
+  <strong>сэкономил ~200 часов</strong> на разработке «не той» фичи. 
+  Инсайт: рынку нужен <em>калькулятор ценообразования</em> (MVP v2).
+</div>
+
+<div className="mt-3 flex flex-wrap gap-2">
+  <a className="chip chip-positive" href="https://log-calc.streamlit.app/" target="_blank" rel="noopener noreferrer">Демо</a>
+  <a className="chip chip-neutral" href="https://github.com/IDSidorov-data/logistics_calculator" target="_blank" rel="noopener noreferrer">Код (MVP v1)</a>
+  <a className="chip chip-neutral" href="https://github.com/IDSidorov-data/logistics_calculator/blob/main/MVP_v2_SPEC.md" target="_blank" rel="noopener noreferrer">ТЗ на MVP v2</a>
+</div>
+
 ## Контекст
-Экспедиторская компания. Нужно принимать решение о сделке в реальном времени.
+Экспедитору нужен мгновенный расчёт маржи прямо в диалоге (звонок/чаты) без Excel.
 
-## Гипотеза / цель
-Достаточно калькулятора **маржи** для быстрой оценки прибыльности.
+## Моя роль
+- Провёл 3 быстрых интервью (дискавери).
+- Спроектировал минимальный UX и бизнес-формулы.
+- Реализовал MVP на **Streamlit** и провёл демо на реальных сценариях.
 
-## Данные / инпуты
-Ставка клиента, ставка перевозчика, доп. расходы.
-
-## Подход
-- **MVP за 1 день** на Streamlit: ввод → расчёт маржи/маржинальности, цветовой индикатор выгодности.
-- Демо пользователю + интервью.
+## Решение (MVP v1)
+- Поля ввода: ставка клиента, ставка перевозчика, доп. расходы.  
+- Автовычисления: маржа (₽) и маржинальность (%).  
+- Индикатор сделки: ✅ «выгодно» / ❌ «убыточно».  
+- Адаптивный интерфейс (десктоп/мобайл).
 
 ## Результат
-Ключевая боль — не маржа «по факту», а **формирование цены** с нуля.  
-**Pivot:** отмена ненужной фичи, экономия ~200 ч разработки. Подготовлено ТЗ v2 «калькулятор ценообразования».
+- Подтверждена полезность «быстрой оценки».
+- Ключевой инсайт: чаще требуется **собрать правильную цену с нуля** → **MVP v2** (параметры тарифа, сезонность, SLA).
+- Оценка экономии: ~**200 ч** разработки, т.к. не уходим в полномасштабную «аналитику ради аналитики».
 
-## Стек
-Python, Streamlit.
+## Что дальше (MVP v2)
+- Конструктор цены: плечо/тип груза, надбавки, ограничения.  
+- Экспорт КП в 1 клик; сохранение пресетов; аудит действий.
 
-## Ссылки
-Демо/репозиторий (по запросу).
+## Стек и запуск
+**Streamlit + Python**.  
+Локально:
+```bash
+pip install -r requirements.txt
+streamlit run app.py

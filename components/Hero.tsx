@@ -14,7 +14,7 @@ export default function Hero({ onOpenBooking }: { onOpenBooking: () => void }) {
         </h1>
 
         <p className="mt-6 max-w-2xl text-xl sm:text-2xl opacity-80">
-          A/B-тесты, MVP-валидации, API/интеграции и автоматизация, которые экономят спринты и растят ключевые метрики.
+          A/B-тесты, MVP-валидации, API интеграции и автоматизация, которые экономят спринты и растят ключевые метрики.
         </p>
 
         <div className="mt-8 flex flex-wrap items-center gap-3">

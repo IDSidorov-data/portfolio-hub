@@ -3,6 +3,16 @@ import Container from "@/components/Container";
 import type { Metadata } from "next";
 import { compileMDX } from "next-mdx-remote/rsc";
 
+import remarkGfm from "remark-gfm";
+import rehypeSlug from "rehype-slug";
+import rehypePrettyCode from "rehype-pretty-code";
+
+const prettyCodeOptions = {
+  theme: { light: "github-light", dark: "github-dark" },
+  keepBackground: false,
+  defaultLang: "text",
+};
+
 export async function generateStaticParams() {
   return getCaseSlugs().map((f) => ({ slug: f.replace(/\.mdx$/, "") }));
 }
@@ -15,10 +25,10 @@ export async function generateMetadata({
   const { frontmatter } = readCaseBySlug(params.slug);
   return {
     title: `${frontmatter.title} — Иван Сидоров`,
-    description: frontmatter.tag,
+    description: frontmatter.summary ?? "",
     openGraph: {
       title: frontmatter.title,
-      description: frontmatter.tag,
+      description: frontmatter.summary ?? "",
       type: "article",
     },
   };
@@ -33,15 +43,26 @@ export default async function CasePage({
 
   const { content: rendered } = await compileMDX({
     source: content,
-    options: { parseFrontmatter: false },
+    options: {
+      parseFrontmatter: false,
+      mdxOptions: {
+        remarkPlugins: [remarkGfm],
+        rehypePlugins: [[rehypePrettyCode, prettyCodeOptions], rehypeSlug],
+        format: "mdx",
+      },
+    },
   });
 
   return (
     <Container className="py-10 sm:py-16">
       <h1 className="text-3xl font-semibold mb-2">{frontmatter.title}</h1>
-      <div className="mb-8 text-sm text-zinc-500">
-        {frontmatter.tag} · {frontmatter.date}
-      </div>
+
+      {frontmatter.summary ? (
+        <div className="case-summary" role="note">
+          {frontmatter.summary}
+        </div>
+      ) : null}
+
       <article className="prose prose-zinc dark:prose-invert max-w-none">
         {rendered}
       </article>

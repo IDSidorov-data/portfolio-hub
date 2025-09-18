@@ -1,34 +1,28 @@
 ---
-title: "Scenario: платформа моделирования юнит‑экономики (Core + Landing)"
-summary: "Core на Python/Pandas считает P&L/CF/LTV; лендинг собирает лиды (антиспам/логирование)."
-tags: ["Pandas/Streamlit","Excel‑экспорт","Next.js","Sentry/reCAPTCHA","Тесты"]
+title: "Scenario: модульная платформа моделирования"
+summary: "Песочница юнит-экономики: профили, what-if, чувствительность; готово к прод-деплою."
+tags: ["Analytics","Modeling","What-if","Sensitivity","Ready"]
 ---
 
-## Контекст
-Платформа «что‑если» для управленческого моделирования: MRR/ARPU/CAC/Churn → P&L, Cash Flow, LTV.
+<div className="result-callout">
+  <strong>TL;DR.</strong> Модульное ядро + профили доходов/затрат, детерминированный граф вычислений, пресеты для быстрых ответов. 
+  Готово к прод-деплою; код открыт.
+</div>
 
-## Цель
-Объединить расчётное ядро и публичный лендинг для демо, сбора лидов и масштабирования.
+<div className="mt-3 flex flex-wrap gap-2">
+  <a className="chip chip-positive" href="https://github.com/IDSidorov-data/scenario-core" target="_blank" rel="noopener noreferrer">Код (core)</a>
+  <a className="chip chip-neutral" href="https://github.com/IDSidorov-data/scenario-landing" target="_blank" rel="noopener noreferrer">Код (landing)</a>
+</div>
 
-## Архитектура
-**Core (Python/Pandas + Streamlit).** Расчёт месячных траекторий MRR/оттока, LTV и агрегатов P&L/CF.  
-Интерактивные параметры, локализация (RU), экспорт в **многостраничный Excel**. Тесты (pytest). Docker‑артефакты.
+## Архитектура (основное)
+- **Ядро сценариев**: модульные профили доходов/затрат, зависимости, каскад пересчёта.  
+- **What-if/чувствительность**: быстрый перебор параметров и сравнение P&L/LTV/CF.  
+- **Пресеты**: ответы на типовые продуктовые вопросы «в 1 клик».  
+- **Расширяемость**: добавление модулей без переписывания ядра.
 
-**Landing (Next.js).** Публичный сайт с формой лида: API‑роут `/api/lead`, **reCAPTCHA v3**, наблюдаемость (**Sentry**), автотесты (Jest/Playwright). Поддержка встраивания демо‑ядра (iframe).
-
-## Потоки данных
-1. Параметры → Ядро → Метрики/графики → Excel‑отчёт.
-2. Форма лида → API → Хранилище (Supabase/Postgres) + Sentry для ошибок/трассировки.
-
-## Ключевые решения
-- Разделение **ядра** и **витрины**: независимые релизы и изоляция рисков.
-- Экспорт **Excel** как артефакт офлайн‑анализа.
-- Наблюдаемость и автотесты для стабильности публичного контура.
-- Контейнеризация (Docker Compose) для быстрого запуска и CI/CD.
-
-## Результат
-Демо‑платформа: быстрый «what‑if», наглядные отчёты и воронка лидов.
-
-## Стек
-Core: Python, pandas, Streamlit, pytest, Docker.  
-Landing: Next.js, Tailwind, API routes, reCAPTCHA v3, Sentry, Playwright/Jest.
+## Пример интерфейса модуля
+```ts
+// pseudo
+const revenue = module('revenue', ({ price, conversion, users }) => price * conversion * users);
+const cost    = module('cost',    ({ cogs, fixed }) => cogs + fixed);
+const pnl     = module('pnl',     ({ revenue, cost }) => revenue - cost);

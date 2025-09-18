@@ -59,7 +59,6 @@ const ndaChip =
 const metricChip = (m: Metric) => `chip ${m.positive ? 'chip-positive' : 'chip-neutral'}`;
 
 const cases: CaseItem[] = [
-  // 1) A/B — оставили только D7
   {
     slug: 'ab-test-mobile-game',
     title: 'A/B: Cookie Cats — гейт 40→30',
@@ -74,7 +73,6 @@ const cases: CaseItem[] = [
     ],
   },
 
-  // 2) Logistics — delivered (передано заказчику) + публичная демка
   {
     slug: 'logistics-calculator',
     title: 'Логистика: калькулятор маржи (MVP)',
@@ -92,7 +90,6 @@ const cases: CaseItem[] = [
     ],
   },
 
-  // 3) Scenario — ready (готов к прод, но не хостится сейчас)
   {
     slug: 'scenario',
     title: 'Scenario: модульная платформа моделирования',
@@ -108,7 +105,6 @@ const cases: CaseItem[] = [
     ],
   },
 
-  // 4) LOKI — async/low-latency
   {
     slug: 'loki-assistant',
     title: 'LOKI — голосовой AI-ассистент',
@@ -123,7 +119,6 @@ const cases: CaseItem[] = [
     ],
   },
 
-  // 5) RPA — Excel + Telegram
   {
     slug: 'rpa-bot',
     title: 'RPA-бот',
