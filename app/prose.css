@@ -1,0 +1,15 @@
+.prose :where(h1):not(:where(.not-prose *)) {
+  font-size: clamp(1.75rem, 1.2rem + 2vw, 2.25rem);
+  line-height: 1.2;
+  scroll-margin-top: 96px;
+}
+.prose :where(h2):not(:where(.not-prose *)) {
+  font-size: clamp(1.25rem, 1rem + 1.2vw, 1.75rem);
+  line-height: 1.25;
+  margin-top: 2.25em;
+  scroll-margin-top: 96px;
+}
+.prose :where(h3):not(:where(.not-prose *)) {
+  margin-top: 1.75em;
+  scroll-margin-top: 96px;
+}

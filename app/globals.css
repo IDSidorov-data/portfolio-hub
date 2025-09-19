@@ -1,3 +1,5 @@
+@import './prose.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -341,4 +343,9 @@
 .prose details > summary {
   cursor: pointer;      /* вместо текстового курсора */
   user-select: none;    /* не выделяется при клике */
+}
+
+/* Отключение WebGL-слоя по тумблеру */
+.bg-static [data-webgl-bg] { 
+  display: none !important; 
 }
