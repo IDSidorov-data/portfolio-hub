@@ -71,10 +71,24 @@ async function sendEmails(body: z.infer<typeof Body>) {
 
 export async function POST(req: NextRequest) {
   try {
+    // 🔒 Ранняя проверка на наличие конфигурации
+    const hasSupabase = !!process.env.SUPABASE_URL && !!process.env.SUPABASE_ANON_KEY;
+    const hasMail = !!process.env.RESEND_API_KEY || (!!process.env.MAIL_FROM && !!process.env.MAIL_TO);
+
+    if (!hasSupabase || !hasMail) {
+      return NextResponse.json(
+        { ok: false, error: 'Service unavailable' },
+        { status: 503 }
+      );
+    }
+
     const json = await req.json();
     const result = Body.safeParse(json);
     if (!result.success) {
-      return NextResponse.json({ ok: false, error: 'invalid_body', details: result.error.flatten() }, { status: 400 });
+      return NextResponse.json(
+        { ok: false, error: 'invalid_body', details: result.error.flatten() },
+        { status: 400 }
+      );
     }
     const body = result.data;
 
