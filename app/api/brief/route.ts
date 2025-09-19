@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { getSupabase } from '@/lib/supabase';
 import { z } from 'zod';
 
 const Body = z.object({
@@ -7,6 +7,7 @@ const Body = z.object({
   email: z.string().email(),
   tg: z.string().optional(),
   about: z.string().optional(),
+  project: z.string().optional(),   // ⬅️ добавили project
   budget: z.string().optional(),
   source: z.string().default('site'),
 });
@@ -71,9 +72,9 @@ async function sendEmails(body: z.infer<typeof Body>) {
 
 export async function POST(req: NextRequest) {
   try {
-    // 🔒 Ранняя проверка на наличие конфигурации
     const hasSupabase = !!process.env.SUPABASE_URL && !!process.env.SUPABASE_ANON_KEY;
-    const hasMail = !!process.env.RESEND_API_KEY || (!!process.env.MAIL_FROM && !!process.env.MAIL_TO);
+    const hasMail =
+      !!process.env.RESEND_API_KEY || (!!process.env.MAIL_FROM && !!process.env.MAIL_TO);
 
     if (!hasSupabase || !hasMail) {
       return NextResponse.json(
@@ -92,36 +93,63 @@ export async function POST(req: NextRequest) {
     }
     const body = result.data;
 
-    // find or create contact
-    const { data: existing, error: exErr } = await supabase
-      .from('contacts')
-      .select('id')
-      .eq('email', body.email)
-      .maybeSingle();
+    if (hasSupabase) {
+      const supabase = getSupabase();
 
-    if (exErr) throw exErr;
+      if (!supabase) {
+        return NextResponse.json({
+          ok: false,
+          error: 'Supabase not configured',
+        });
+      }
 
-    let contact_id = existing?.id as string | undefined;
-    if (!contact_id) {
-      const { data: ins, error: insErr } = await supabase
+      // find or create contact
+      const { data: existing, error: exErr } = await supabase
         .from('contacts')
-        .insert({ name: body.name ?? null, email: body.email, tg: body.tg ?? null })
         .select('id')
-        .single();
-      if (insErr) throw insErr;
-      contact_id = ins?.id;
+        .eq('email', body.email)
+        .maybeSingle();
+
+      if (exErr) throw exErr;
+
+      let contact_id = existing?.id as string | undefined;
+      if (!contact_id) {
+        const { data: ins, error: insErr } = await supabase
+          .from('contacts')
+          .insert({
+            name: body.name ?? null,
+            email: body.email,
+            tg: body.tg ?? null,
+          })
+          .select('id')
+          .single();
+
+        if (insErr) throw insErr;
+        contact_id = ins!.id;
+      }
+
+      const { error: briefErr } = await supabase
+        .from('briefs')
+        .insert({
+          contact_id,
+          about: body.about ?? null,
+          project: body.project ?? null,
+          budget: body.budget ?? null,
+          source: body.source,
+          created_at: new Date().toISOString(),
+        });
+
+      if (briefErr) throw briefErr;
     }
 
-    const { error: briefErr } = await supabase
-      .from('briefs')
-      .insert({ contact_id, about: body.about ?? null, budget: body.budget ?? null, source: body.source });
-    if (briefErr) throw briefErr;
-
-    // fire-and-forget emails (no await)
+    // fire-and-forget emails
     sendEmails(body);
 
     return NextResponse.json({ ok: true });
   } catch (e: any) {
-    return NextResponse.json({ ok: false, error: e?.message ?? 'unknown' }, { status: 400 });
+    return NextResponse.json(
+      { ok: false, error: e?.message ?? 'unknown' },
+      { status: 400 }
+    );
   }
 }
