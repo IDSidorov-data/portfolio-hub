@@ -7,6 +7,9 @@ import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
 import rehypePrettyCode from "rehype-pretty-code";
 
+import CaseMeta from '@/components/CaseMeta';
+import CaseCTA from '@/components/CaseCTA';
+
 const prettyCodeOptions = {
   theme: { light: "github-light", dark: "github-dark" },
   keepBackground: false,
@@ -55,17 +58,26 @@ export default async function CasePage({
 
   return (
     <Container className="py-10 sm:py-16">
-      <h1 className="text-3xl font-semibold mb-2">{frontmatter.title}</h1>
+      {/* Заголовок и описание */}
+      <h1 className="text-3xl md:text-4xl font-bold">{frontmatter.title}</h1>
+      <p className="case-summary mt-2 text-base md:text-lg opacity-80">
+        {frontmatter.summary}
+      </p>
 
-      {frontmatter.summary ? (
-        <div className="case-summary" role="note">
-          {frontmatter.summary}
-        </div>
-      ) : null}
+      {/* ✅ блок с ролью, длительностью, статусом и тегами */}
+      <CaseMeta
+        role={frontmatter.role}
+        duration={frontmatter.duration}
+        status={frontmatter.status}
+        tags={frontmatter.tags}
+      />
 
-      <article className="prose prose-zinc dark:prose-invert max-w-none">
+      {/* Контент статьи */}
+      <article className="prose prose-zinc dark:prose-invert max-w-none mt-8">
         {rendered}
       </article>
+
+      <CaseCTA result={frontmatter?.result} />
     </Container>
   );
 }
