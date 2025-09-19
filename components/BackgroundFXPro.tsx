@@ -258,5 +258,12 @@ export default function BackgroundFXPro() {
     }, []);
 
     // Контейнер ниже контента, выше фоновой заливки
-    return <div ref={containerRef} aria-hidden className="fixed inset-0 z-0 pointer-events-none" />;
+    return (
+        <div
+            ref={containerRef}
+            data-webgl-bg
+            aria-hidden
+            className="fixed inset-0 z-0 pointer-events-none"
+        />
+    );
 }

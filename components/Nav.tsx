@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Button from '@/components/Button';
 import ThemeToggle from '@/components/ThemeToggle';
+import BackgroundToggle from '@/components/BackgroundToggle';
 
 export default function Nav({ backToCases = false }: { backToCases?: boolean }) {
   return (
@@ -25,7 +26,12 @@ export default function Nav({ backToCases = false }: { backToCases?: boolean }) 
             <Link href="https://github.com" className="opacity-80 hover:opacity-100">GitHub</Link>
             <Link href="https://t.me" className="opacity-80 hover:opacity-100">Telegram</Link>
 
-            {/* компактный переключатель темы */}
+            {/* переключатель фона */}
+            <div className="rounded-lg p-1.5 hover:bg-[rgb(var(--muted))] transition">
+              <BackgroundToggle />
+            </div>
+
+            {/* переключатель темы */}
             <div className="rounded-lg p-1.5 hover:bg-[rgb(var(--muted))] transition">
               <ThemeToggle aria-label="Переключить тему" />
             </div>

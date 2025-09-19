@@ -82,6 +82,7 @@ export default function BackgroundFX() {
 
   return (
     <canvas
+      data-webgl-bg
       ref={ref}
       aria-hidden
       className="pointer-events-none fixed inset-0 z-0"
