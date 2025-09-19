@@ -74,24 +74,6 @@
 
   .bg-card-soft { background-color: var(--card-soft); }
   .text-card-soft { color: var(--card-soft-foreground); }
-
-  /* деликатный callout под “Результат” */
-  .result-callout {
-    background: color-mix(in oklab, rgb(var(--success)) 8%, rgb(var(--background)) 92%);
-    border: 1px solid color-mix(in oklab, rgb(var(--success)) 26%, transparent);
-    border-radius: 0.75rem;
-    padding: .75rem 1rem;
-    box-shadow: none;
-  }
-  @supports not (background: color-mix(in oklab, white, black)) {
-    .result-callout {
-      background-color: rgb(var(--success) / 0.10);
-      border: 1px solid rgb(var(--success) / 0.35);
-      border-radius: 0.75rem;
-      padding: .75rem 1rem;
-      box-shadow: none;
-    }
-  }
 }
 
 /* ---------- Prose (MDX) ---------- */
@@ -238,38 +220,6 @@
   --background: 244 250 247;
 }
 
-/* ===============================
-   Chips for metrics/status
-   =============================== */
-@layer components {
-  .chip { @apply inline-flex items-center rounded-full px-2.5 py-1 text-xs border; }
-
-  .chip-neutral {
-    background: color-mix(in oklab, rgb(var(--background)) 90%, rgb(var(--foreground)) 10%);
-    border-color: color-mix(in oklab, rgb(var(--foreground)) 22%, transparent);
-    color: color-mix(in oklab, rgb(var(--foreground)) 85%, rgb(var(--background)) 15%);
-  }
-
-  .chip-positive {
-    color: color-mix(in oklab, rgb(var(--success)) 70%, rgb(var(--foreground)) 30%);
-    background: color-mix(in oklab, rgb(var(--success)) 14%, transparent);
-    border-color: color-mix(in oklab, rgb(var(--success)) 28%, transparent);
-  }
-
-  @supports not (background: color-mix(in oklab, white, black)) {
-    .chip-neutral {
-      background-color: rgb(var(--foreground) / 0.06);
-      border-color: rgb(var(--border));
-      color: rgb(var(--foreground) / 0.85);
-    }
-    .chip-positive {
-      background-color: rgb(var(--success) / 0.14);
-      border-color: rgb(var(--success));
-      color: rgb(var(--success));
-    }
-  }
-}
-
 /* ==== rehype-pretty-code ==== */
 
 /* Обёртка фрагмента (нужна для титула) */
@@ -278,7 +228,6 @@
   display: block;
 }
 
-/* Титул кода: работает если в ``` указать meta title="..." */
 /* rehype-pretty-code: заголовок блока */
 .prose [data-rehype-pretty-code-title] {
   display: block;
@@ -304,7 +253,7 @@
   border-radius: 0 0 12px 12px;
 }
 
-/* нумерация/подсветка строк (если в meta {1,3-5}) */
+/* нумерация/подсветка строк */
 .prose pre code { display: grid; }
 .prose pre [data-line] {
   padding: 0 .75rem;
@@ -315,7 +264,7 @@
   border-left-color: rgb(var(--accent));
 }
 
-/* подсветка отдельных слов (если включишь mark/==word==) */
+/* подсветка отдельных слов */
 .prose pre mark {
   background: rgb(var(--accent) / 0.18);
   color: inherit;
@@ -323,7 +272,7 @@
   border-radius: .25rem;
 }
 
-/* ===== заметный бэйдж под заголовком (summary из фронтматтера) ===== */
+/* ===== заметный бэйдж под заголовком ===== */
 .case-summary {
   margin-bottom: 1.25rem;
   padding: .75rem 1rem;
@@ -339,13 +288,37 @@
   color: rgb(234 234 236);
 }
 
-/* ===== UX для раскрывашек (details/summary) ===== */
+/* ===== UX для раскрывашек ===== */
 .prose details > summary {
-  cursor: pointer;      /* вместо текстового курсора */
-  user-select: none;    /* не выделяется при клике */
+  cursor: pointer;
+  user-select: none;
 }
 
-/* Отключение WebGL-слоя по тумблеру */
+/* Отключение WebGL-слоя */
 .bg-static [data-webgl-bg] { 
   display: none !important; 
+}
+
+/* --- chips --- */
+.chip {
+  @apply inline-flex items-center rounded-full px-2 py-1 text-xs md:text-sm border select-none;
+}
+/* нейтральная */
+.chip-neutral {
+  @apply bg-black/[0.04] border-black/10 text-black/80
+         dark:bg-white/10 dark:border-white/15 dark:text-white/80;
+}
+/* позитивная/успех */
+.chip-positive {
+  @apply bg-emerald-50 border-emerald-200 text-emerald-900
+         dark:bg-emerald-400/10 dark:border-emerald-300/20 dark:text-emerald-200;
+}
+
+/* --- зелёная плашка результата в кейсах --- */
+.result-callout {
+  @apply rounded-2xl p-4 md:p-5 border shadow-sm;
+  @apply bg-emerald-50/90 border-emerald-200 text-emerald-900;
+}
+.dark .result-callout {
+  @apply bg-emerald-400/10 border-emerald-300/20 text-emerald-200;
 }

@@ -2,34 +2,109 @@
 title: "LOKI — голосовой AI-ассистент (v3.1)"
 summary: "Три контура принятия решений, async/await + httpx → низкая задержка; потоковый TTS с прерыванием."
 tags: ["AI","Voice","Async/await","Whisper","Piper TTS","Gemini"]
+role: "ML/Backend"
+duration: "R&D → v3.1"
+status: "dogfooding"
+links:
+  - { label: "Код (репозиторий)", href: "https://github.com/IDSidorov-data/loki-reborn-ai-assistant" }
 ---
 
 <div className="result-callout">
-  <strong>TL;DR.</strong> Голосом управляешь ПК: быстрые локальные команды + умные сценарии через LLM; визуальный анализ экрана и самокоррекция. 
-  Асинхронная архитектура обеспечивает быстрый отклик.
+  Голосом управляешь ПК: быстрые локальные команды + умные сценарии через LLM; визуальный анализ экрана и самокоррекция. 
+  Асинхронная архитектура обеспечивает быстрый отклик и потоковый <em>TTS</em> с прерыванием.
 </div>
 
 <div className="mt-3 flex flex-wrap gap-2">
-  <a className="chip chip-positive" href="https://github.com/IDSidorov-data/loki-reborn-ai-assistant" target="_blank" rel="noopener noreferrer">Код</a>
+  <span className="chip chip-neutral select-text"><strong>Потоковый TTS</strong>&nbsp;+&nbsp;прерывание</span>
+  <span className="chip chip-neutral select-text">3 контура: локальный · текстовый · визуальный</span>
+  <a className="chip chip-neutral select-text" href="https://github.com/IDSidorov-data/loki-reborn-ai-assistant" target="_blank" rel="noopener noreferrer">GitHub</a>
 </div>
 
+
+## Контекст
+Нужен ассистент, который понимает голос, быстро реагирует и может сам ориентироваться на экране: «открой браузер», «переключи вкладку», «нажми на эту иконку», «скажи, что на экране». Приоритет — низкая задержка и предсказуемость выполнения команд.
+
+## Задача
+Спроектировать гибрид: мгновенные **локальные** действия для простых команд и **LLM-логика** для сложных сценариев (включая визуальный контекст), оставаясь отзывчивым за счёт **async/await** и потокового **TTS**.
+
+## Моя роль
+- Архитектура (3 контура + оркестратор), выбор библиотек, сетевой стек.
+- Интеграция STT/TTS/LLM, обработка экрана, управление ОС.
+- Асинхронный пайплайн: очереди задач, тайм-ауты, retry/fallback.
+- Безопасные прерывания озвучки и конкурентных операций.
+
 ## Архитектура
-- **Контур 0 (локальный):** быстрые команды без API («открой браузер»).  
-- **Контур 1 (текст):** классификация намерений лёгкой LLM.  
-- **Контур 2 (визуальный):** скрин + команда → мультимодальная модель для выбора действия.  
-- **Оркестратор:** retry/fallback, трассировка; **TTS потоковый** с прерыванием.
+- **Контур 0 (локальный):** быстрые команды без API (“открой браузер”).  
+- **Контур 1 (текст):** классификация намерений лёгкой LLM (Gemini Flash).  
+- **Контур 2 (визуальный):** скриншот + команда → мультимодальная LLM для выбора действия.  
+- **Оркестратор:** очереди, тайм-ауты, retry/fallback, трассировка; **потоковый TTS** с прерыванием.
+
+<details>
+  <summary><strong>Показать технические детали (скелет оркестратора)</strong></summary>
+
+```python title="Async-оркестратор (упрощённо)"
+import asyncio
+import httpx
+import contextlib
+
+class Orchestrator:
+    def __init__(self, stt, tts, llm, hands, screen):
+        self.stt, self.tts, self.llm, self.hands, self.screen = stt, tts, llm, hands, screen
+        self.speech_task: asyncio.Task | None = None
+
+    async def speak(self, text: str):
+        # прерываем текущую озвучку, если есть
+        if self.speech_task and not self.speech_task.done():
+            self.speech_task.cancel()
+            with contextlib.suppress(asyncio.CancelledError):
+                await self.speech_task
+        self.speech_task = asyncio.create_task(self.tts.stream(text))  # потоковый вывод
+
+    async def handle(self, audio_chunk: bytes):
+        text = await self.stt.to_text(audio_chunk)           # локальный whisper
+        if local_cmd := self.hands.match_local(text):         # Контур 0
+            await self.hands.run(local_cmd)
+            return await self.speak("Готово.")
+        intent = await self.llm.classify_intent(text)         # Контур 1
+        if intent.requires_vision:
+            image = await self.screen.capture()               # Контур 2
+            plan = await self.llm.plan_with_vision(text, image)
+        else:
+            plan = await self.llm.plan(text)
+        ok = await self.hands.execute(plan)
+        await self.speak("Готово." if ok else "Не удалось, пробую иначе.")
+```
+</details>
 
 ## Технологии
 - Wake-word: `pvporcupine`  
 - STT: `openai-whisper` (локально)  
-- TTS: `piper-tts` (поточно)  
-- LLM: Google Gemini  
+- TTS: `piper-tts` (поточно, с прерыванием)  
+- LLM: Google **Gemini** (Flash/мультимодальная)  
 - Управление ОС: `pyautogui`, `psutil`  
 - Async I/O: `httpx`, `asyncio`  
-- Конфиг: `.env`
+- Конфиг: `.env`  
 
-## Запуск (коротко)
-```bash
+## Риски/ограничения
+- Разнородные конфигурации ОС/дисплеев → нужны профили и калибровка кликов.  
+- Стабильность VAD/микрофона влияет на UX.  
+- Визуальная навигация ограничена качеством скриншота и доступностью элементов.
+
+## Стек и запуск
+
+Ниже — краткие шаги для воспроизведения. Блок для инженера.
+
+<details>
+  <summary><strong>Показать шаги запуска (локально)</strong></summary>
+
+```bash title="Локальный запуск"
+# зависимости
 poetry install
-cp .env.example .env   # заполнить ключи и пути
+
+# конфиг
+cp .env.example .env   # заполните ключи и пути (см. README)
+
+# старт
 poetry run python main.py
+```
+</details>
