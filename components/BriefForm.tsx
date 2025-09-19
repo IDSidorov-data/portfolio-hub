@@ -1,7 +1,8 @@
 'use client';
+
 import { useState, useMemo, useEffect } from 'react';
 import { z } from 'zod';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { sendEvent } from '@/lib/analytics';
 
 const Schema = z.object({
@@ -17,14 +18,13 @@ type FormData = z.infer<typeof Schema>;
 
 export default function BriefForm({ defaultSource }: { defaultSource?: string }) {
   const router = useRouter();
-  const params = useSearchParams();
   const [data, setData] = useState<FormData>({
     name: '',
     email: '',
     tg: '',
     about: '',
     budget: '',
-    source: defaultSource || params.get('utm_source') || 'site',
+    source: defaultSource || 'site',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
@@ -67,13 +67,15 @@ export default function BriefForm({ defaultSource }: { defaultSource?: string })
       });
       if (!res.ok) throw new Error('request_failed');
       sendEvent('brief_submitted', { source: parsed.data.source });
-      // пометим, чтобы на /thanks показать toast
       if (typeof window !== 'undefined') {
         sessionStorage.setItem('brief_toast', '1');
       }
       router.push('/thanks?ok=1');
     } catch (e) {
-      setErrors((p) => ({ ...p, form: 'Не удалось отправить. Попробуйте ещё раз.' }));
+      setErrors((p) => ({
+        ...p,
+        form: 'Не удалось отправить. Попробуйте ещё раз.',
+      }));
     } finally {
       setLoading(false);
     }
@@ -82,6 +84,7 @@ export default function BriefForm({ defaultSource }: { defaultSource?: string })
   return (
     <form onSubmit={onSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2">
       <input type="hidden" name="source" value={data.source} />
+
       <div className="md:col-span-1">
         <label className="mb-1 block text-sm font-medium opacity-80">Имя</label>
         <input
@@ -90,7 +93,9 @@ export default function BriefForm({ defaultSource }: { defaultSource?: string })
           onChange={(e) => onChange('name', e.target.value)}
           placeholder="Как к вам обращаться"
         />
-        {errors.name && <p className="mt-1 text-xs text-red-600">{errors.name}</p>}
+        {errors.name && (
+          <p className="mt-1 text-xs text-red-600">{errors.name}</p>
+        )}
       </div>
 
       <div className="md:col-span-1">
@@ -103,7 +108,9 @@ export default function BriefForm({ defaultSource }: { defaultSource?: string })
           onChange={(e) => onChange('email', e.target.value)}
           placeholder="you@company.com"
         />
-        {errors.email && <p className="mt-1 text-xs text-red-600">{errors.email}</p>}
+        {errors.email && (
+          <p className="mt-1 text-xs text-red-600">{errors.email}</p>
+        )}
       </div>
 
       <div className="md:col-span-1">
@@ -125,7 +132,9 @@ export default function BriefForm({ defaultSource }: { defaultSource?: string })
           onChange={(e) => onChange('budget', e.target.value)}
           placeholder="например, 100–300 тыс. ₽"
         />
-        {errors.budget && <p className="mt-1 text-xs text-red-600">{errors.budget}</p>}
+        {errors.budget && (
+          <p className="mt-1 text-xs text-red-600">{errors.budget}</p>
+        )}
       </div>
 
       <div className="md:col-span-2">
@@ -136,11 +145,15 @@ export default function BriefForm({ defaultSource }: { defaultSource?: string })
           onChange={(e) => onChange('about', e.target.value)}
           placeholder="Кратко опишите контекст, цель и сроки"
         />
-        {errors.about && <p className="mt-1 text-xs text-red-600">{errors.about}</p>}
+        {errors.about && (
+          <p className="mt-1 text-xs text-red-600">{errors.about}</p>
+        )}
       </div>
 
       <div className="md:col-span-2">
-        <label className="mb-1 block text-sm font-medium opacity-80">Резюме/бриф (PDF/JPG/PNG)</label>
+        <label className="mb-1 block text-sm font-medium opacity-80">
+          Резюме/бриф (PDF/JPG/PNG)
+        </label>
         <input
           type="file"
           accept=".pdf,.png,.jpg,.jpeg"
@@ -150,14 +163,21 @@ export default function BriefForm({ defaultSource }: { defaultSource?: string })
         {resumePreview && (
           <div className="mt-2 rounded-xl border p-2">
             <div className="mb-1 text-xs opacity-80">Превью файла</div>
-            {/* Для PDF покажем ссылку, для изображений — превью */}
             {resumeFile?.type.includes('pdf') ? (
-              <a href={resumePreview} target="_blank" className="text-sm text-blue-600 underline">
+              <a
+                href={resumePreview}
+                target="_blank"
+                className="text-sm text-blue-600 underline"
+              >
                 Открыть PDF
               </a>
             ) : (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={resumePreview} alt="Превью резюме" className="max-h-48 rounded-md" />
+              <img
+                src={resumePreview}
+                alt="Превью резюме"
+                className="max-h-48 rounded-md"
+              />
             )}
           </div>
         )}
@@ -166,7 +186,9 @@ export default function BriefForm({ defaultSource }: { defaultSource?: string })
         </p>
       </div>
 
-      {errors.form && <p className="md:col-span-2 text-sm text-red-600">{errors.form}</p>}
+      {errors.form && (
+        <p className="md:col-span-2 text-sm text-red-600">{errors.form}</p>
+      )}
 
       <div className="md:col-span-2 flex justify-end gap-3">
         <button

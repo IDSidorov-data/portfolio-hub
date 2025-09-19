@@ -1,4 +1,8 @@
 'use client';
+
+import { useState, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
+
 import Nav from '@/components/Nav';
 import Hero from '@/components/Hero';
 import Services from '@/components/Services';
@@ -9,13 +13,15 @@ import Container from '@/components/Container';
 import BriefForm from '@/components/BriefForm';
 import Footer from '@/components/Footer';
 import Modal from '@/components/Modal';
-import { useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+
+function SourceProvider({ children }: { children: (source: string) => React.ReactNode }) {
+  const params = useSearchParams();
+  const source = params.get('utm_source') ?? 'site';
+  return <>{children(source)}</>;
+}
 
 export default function HomePage() {
   const [open, setOpen] = useState(false);
-  const params = useSearchParams();
-  const source = params.get('utm_source') ?? 'site';
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -28,12 +34,22 @@ export default function HomePage() {
         <Stack />
         <Container id="brief" className="py-10">
           <h2 className="mb-6 text-2xl font-semibold">Оставить бриф проекта</h2>
-          <BriefForm defaultSource={source} />
+          <Suspense fallback={<BriefForm defaultSource="site" />}>
+            <SourceProvider>
+              {(source) => <BriefForm defaultSource={source} />}
+            </SourceProvider>
+          </Suspense>
         </Container>
       </main>
       <Footer />
-      <Modal open={open} onClose={() => setOpen(false)} title="Скоро: запись через Telegram WebApp">
-        <p className="text-sm">Оставьте email — пришлю ссылку, когда запись включу.</p>
+      <Modal
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Скоро: запись через Telegram WebApp"
+      >
+        <p className="text-sm">
+          Оставьте email — пришлю ссылку, когда запись включу.
+        </p>
       </Modal>
     </div>
   );
