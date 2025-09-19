@@ -32,7 +32,7 @@ export default function BackgroundToggle() {
       className="text-sm px-3 py-1.5 rounded-xl border bg-background/60 hover:bg-background/80"
       title="Переключить фон"
     >
-      Фон: {mode === 'dynamic' ? 'Динамический' : 'Статичный'}
+      Фон: {mode === 'dynamic' ? 'динамический' : 'статичный'}
     </button>
   );
 }
