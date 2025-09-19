@@ -21,7 +21,7 @@ export default function HomePage() {
     <div className="flex min-h-screen flex-col">
       <Nav />
       <main className="flex-1">
-        <Hero onCTA={() => setOpen(true)} />
+        <Hero onOpenBooking={() => setOpen(true)} />
         <Services />
         <Cases />
         <Process />
