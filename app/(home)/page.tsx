@@ -33,7 +33,7 @@ export default function HomePage() {
         <Cases />
         <Process />
         <Stack />
-        <Container id="brief" className="py-10">
+        <Container id="brief" className="md:scroll-mt-20 py-10 scroll-mt-16">
           <h2 className="mb-6 text-2xl font-semibold">Оставить бриф проекта</h2>
           <Suspense fallback={<BriefForm defaultSource="site" />}>
             <SourceProvider>
