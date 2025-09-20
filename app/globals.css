@@ -322,14 +322,3 @@
 .dark .result-callout {
   @apply bg-emerald-400/10 border-emerald-300/20 text-emerald-200;
 }
-
-/* === mobile/performance utilities (added) === */
-.no-scrollbar::-webkit-scrollbar { display: none; }
-.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-/* render fast for offscreen sections */
-.cv-auto { content-visibility: auto; contain-intrinsic-size: 800px 1px; }
-
-@media (max-width:640px){
-  .blur-mobile-none { -webkit-backdrop-filter: none; backdrop-filter: none; }
-}

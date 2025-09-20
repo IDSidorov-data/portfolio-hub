@@ -1,5 +1,4 @@
 import Container from '@/components/Container';
-import CarouselRow from '@/components/CarouselRow';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
 import { sendEvent } from '@/lib/analytics';
@@ -74,20 +73,9 @@ const services: Service[] = [
 
 export default function Services() {
   return (
-    <section id="services" className="cv-auto py-12 scroll-mt-24 sm:py-16">
+    <section id="services" className="py-12 sm:py-16">
       <Container>
         <h2 className="mb-6 text-2xl font-semibold">Услуги</h2>
-      {/* Mobile carousel (added) */}
-      <div className="md:hidden mt-4">
-        <div className="hidden md:grid grid auto-cols-[85%] grid-flow-col gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory touch-pan-x" role="list" aria-label="Услуги">
-          {services.map((it, i) => (
-            <div key={i} className="snap-start" role="listitem">
-              <div className="h-full rounded-2xl border p-4 shadow-sm"><div className="text-base font-semibold">{it.title}</div><p className="mt-2 text-sm opacity-80">{it.desc}</p><div className="mt-3 text-sm opacity-70">{it.timeline} · {it.budget}</div></div>
-            </div>
-          ))}
-        </div>
-      </div>
-
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {services.map((s) => (
             <Card key={s.id} className="flex flex-col gap-3">

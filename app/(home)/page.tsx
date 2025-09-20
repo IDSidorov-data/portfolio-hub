@@ -5,11 +5,10 @@ import { useSearchParams } from 'next/navigation';
 
 import Nav from '@/components/Nav';
 import Hero from '@/components/Hero';
-import dynamic from 'next/dynamic';
-const Services = dynamic(() => import('@/components/Services'), { loading: () => null });
-const Cases = dynamic(() => import('@/components/Cases'), { loading: () => null });
-const Process = dynamic(() => import('@/components/Process'), { loading: () => null });
-const Stack = dynamic(() => import('@/components/Stack'), { loading: () => null });
+import Services from '@/components/Services';
+import Cases from '@/components/Cases';
+import Process from '@/components/Process';
+import Stack from '@/components/Stack';
 import Container from '@/components/Container';
 import BriefForm from '@/components/BriefForm';
 import Footer from '@/components/Footer';
