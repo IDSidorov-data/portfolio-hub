@@ -322,3 +322,7 @@
 .dark .result-callout {
   @apply bg-emerald-400/10 border-emerald-300/20 text-emerald-200;
 }
+
+/* hide horizontal scroller on mobile tracks */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
