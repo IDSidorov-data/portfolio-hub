@@ -21,7 +21,7 @@ export default function Process() {
           {steps.map((it, i) => (
             <div key={i} className="snap-start" role="listitem">
               <Card className="h-full" variant="soft">
-                <div className="text-base font-semibold">{it.title}</Card>
+                <div className="text-base font-semibold">{it.title}</div>
                 <p className="mt-2 text-sm opacity-80">{it.text}</p>
               </div>
             </div>

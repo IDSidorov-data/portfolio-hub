@@ -147,7 +147,7 @@ export default function Cases() {
           {cases.map((it, i) => (
             <div key={i} className="snap-start" role="listitem">
               <Card className="h-full" variant="soft">
-                <div className="text-base font-semibold">{it.title}</Card>
+                <div className="text-base font-semibold">{it.title}</div>
                 <p className="mt-2 text-sm opacity-80">{it.teaser}</p>
                 <a href={`/cases/${it.slug}`} className="mt-3 inline-block text-sm font-medium underline underline-offset-4">Подробнее →</a>
               </div>

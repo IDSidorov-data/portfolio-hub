@@ -1,16 +1,4 @@
 import Container from '@/components/Container';
-impo
-{/* Mobile carousel (stack) */}
-      <div className="md:hidden mt-2">
-        <div className="grid auto-cols-[85%] grid-flow-col gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory touch-pan-x" role="list" aria-label="Стек и инструменты">
-          {sections.map((it, i) => (
-            <div key={i} className="snap-start" role="listitem">
-              <Card className="h-full" variant="soft">
-                <div className="text-base font-semibold">{it.title}</Card>
-                <p className="mt-2 text-sm opacity-80">{it.intro}</p>
-              </div>
-            </div>
-rt CarouselRow from '@/components/CarouselRow';
 import Card from '@/components/Card';
 
 const sections = [
@@ -57,16 +45,27 @@ export default function Stack() {
     <section id="stack" className="py-16 sm:py-24">
       <Container>
         <h2 className="mb-6 text-3xl font-semibold">Стек и инструменты</h2>
-      
-          ))}
-        </div>
-      </div>
-    
         <p className="opacity-80 mb-8">
           Что именно я делаю и из каких компонентов это собираю.
         </p>
 
-        <div className="hidden md:grid grid gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
+{/* Mobile carousel (stack) */}
+<div className="md:hidden mt-2">
+  <div className="grid auto-cols-[85%] grid-flow-col gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory touch-pan-x" role="list" aria-label="Стек и инструменты">
+    {sections.map((it, i) => (
+      <div key={i} className="snap-start" role="listitem">
+        <Card className="h-full p-6" variant="soft">
+          <h3 className="text-lg font-semibold">{it.title}</h3>
+          <p className="mt-1 text-sm opacity-80">{it.intro}</p>
+        </Card>
+      </div>
+    ))}
+  </div>
+</div>
+
+
+
+        <div className="hidden md:grid gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
           {sections.map((s) => (
             <Card key={s.title} className="p-6">
               <h3 className="text-lg font-semibold">{s.title}</h3>

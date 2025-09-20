@@ -83,7 +83,7 @@ export default function Services() {
           {services.map((it, i) => (
             <div key={i} className="snap-start" role="listitem">
               <Card className="h-full" variant="soft">
-                <div className="text-base font-semibold">{it.title}</Card>
+                <div className="text-base font-semibold">{it.title}</div>
                 <p className="mt-2 text-sm opacity-80">{it.desc}</p>
                 <div className="mt-3 text-sm opacity-70">{it.timeline} · {it.budget}</div>
               </div>
