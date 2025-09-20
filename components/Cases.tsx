@@ -1,4 +1,5 @@
 import Container from '@/components/Container';
+import CarouselRow from '@/components/CarouselRow';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
 import { sendEvent } from '@/lib/analytics';
@@ -137,9 +138,20 @@ const cases: CaseItem[] = [
 
 export default function Cases() {
   return (
-    <section id="cases" className="py-12 sm:py-16">
+    <section id="cases" className="cv-auto py-12 scroll-mt-24 sm:py-16">
       <Container>
         <h2 className="mb-6 text-3xl font-semibold">Кейсы</h2>
+      {/* Mobile carousel (added) */}
+      <div className="md:hidden mt-4">
+        <div className="hidden md:grid grid auto-cols-[85%] grid-flow-col gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory touch-pan-x" role="list" aria-label="Кейсы">
+          {cases.map((it, i) => (
+            <div key={i} className="snap-start" role="listitem">
+              <div className="h-full rounded-2xl border p-4 shadow-sm"><div className="text-base font-semibold">{it.title}</div><p className="mt-2 text-sm opacity-80">{it.teaser}</p><a href={`/cases/${it.slug}`} className="mt-3 inline-block text-sm font-medium underline underline-offset-4">Подробнее →</a></div>
+            </div>
+          ))}
+        </div>
+      </div>
+
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {cases.map((c) => {
             const resultId = `case-${c.slug}-result`;
