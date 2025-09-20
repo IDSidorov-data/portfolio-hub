@@ -31,7 +31,7 @@ export default function CaseCTA({ result }: { result?: string }) {
 
           <div className="mt-4">
             <Link
-              href="/#brief"           // ← ведём на форму на главной
+              href="/#brief" replace           // ← ведём на форму на главной
               prefetch={false}
               aria-label="Перейти к форме обсуждения проекта"
               className="no-underline inline-flex items-center rounded-xl px-4 py-2 border border-black/10 bg-white/80 hover:bg-white/90 transition

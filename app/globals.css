@@ -329,3 +329,7 @@
 .cv-auto{content-visibility:auto;contain-intrinsic-size:800px 1px}
 @media (max-width:640px){.blur-mobile-none{-webkit-backdrop-filter:none;backdrop-filter:none}}
 
+@media (max-width: 768px){
+  header[data-back="1"] a[href="#services"]{ display: none !important; }
+}
+

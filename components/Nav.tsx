@@ -4,12 +4,12 @@ import ThemeToggle from '@/components/ThemeToggle';
 
 export default function Nav({ backToCases = false }: { backToCases?: boolean }) {
   return (
-    <header className="sticky top-0 z-40 border-b bg-background/80 md:bg-background/70 md:backdrop-blur blur-mobile-none">
+    <header data-back={backToCases ? "1" : undefined} className="sticky top-0 z-40 border-b bg-background">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <nav className="flex h-14 items-center justify-between">
           <div className="flex items-center gap-3 min-w-0">
             {backToCases && (
-              <Button variant="secondary" href="/#cases" className="px-3 py-1.5">
+              <Button variant="secondary" href="/" className="px-3 py-1.5">
                 ← Назад
               </Button>
             )}
@@ -20,7 +20,7 @@ export default function Nav({ backToCases = false }: { backToCases?: boolean }) 
 
           <div className="flex items-center gap-4">
             <Link href="/#services" className="opacity-80 hover:opacity-100">Услуги</Link>
-            <Link href="/#cases" className="opacity-80 hover:opacity-100">Кейсы</Link>
+            <Link href="/" className="opacity-80 hover:opacity-100">Кейсы</Link>
             <Link href="/#process" className="opacity-80 hover:opacity-100">Процесс</Link>
             <Link href="https://github.com" className="opacity-80 hover:opacity-100">GitHub</Link>
             <Link href="https://t.me" className="opacity-80 hover:opacity-100">Telegram</Link>

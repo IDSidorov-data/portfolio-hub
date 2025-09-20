@@ -82,8 +82,8 @@ export default function Services() {
         <div className="grid auto-cols-[85%] grid-flow-col gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory touch-pan-x" role="list" aria-label="Услуги">
           {services.map((it, i) => (
             <div key={i} className="snap-start" role="listitem">
-              <div className="h-full rounded-2xl border p-4 shadow-sm">
-                <div className="text-base font-semibold">{it.title}</div>
+              <Card className="h-full" variant="soft">
+                <div className="text-base font-semibold">{it.title}</Card>
                 <p className="mt-2 text-sm opacity-80">{it.desc}</p>
                 <div className="mt-3 text-sm opacity-70">{it.timeline} · {it.budget}</div>
               </div>
