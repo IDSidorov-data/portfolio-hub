@@ -15,20 +15,24 @@ export default function Process() {
     <section id="process" className="py-16 sm:py-24">
       <Container>
         <h2 className="mb-6 text-3xl font-semibold">Как я работаю</h2>
-      {/* Mobile carousel (process) */}
-      <div className="md:hidden mt-2">
-        <div className="grid auto-cols-[85%] grid-flow-col gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory touch-pan-x" role="list" aria-label="Как я работаю">
-          {steps.map((it, i) => (
-            <div key={i} className="snap-start" role="listitem">
-              <Card className="h-full" variant="soft">
-                <div className="text-base font-semibold">{it.title}</div>
-                <p className="mt-2 text-sm opacity-80">{it.text}</p>
+
+        {/* Mobile carousel (process) */}
+        <div className="md:hidden mt-2">
+          <div
+            className="grid auto-cols-[85%] grid-flow-col gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory touch-pan-x"
+            role="list"
+            aria-label="Как я работаю"
+          >
+            {steps.map((it, i) => (
+              <div key={i} className="snap-start" role="listitem">
+                <Card className="h-full" variant="soft">
+                  <div className="text-base font-semibold">{it.title}</div>
+                  <p className="mt-2 text-sm opacity-80">{it.text}</p>
+                </Card>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
-    
 
         {/* Моб/планшет — сетка */}
         <div className="hidden md:grid grid gap-6 sm:grid-cols-2 lg:hidden">
