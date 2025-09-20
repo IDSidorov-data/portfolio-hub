@@ -19,13 +19,13 @@ export default function Process() {
         {/* Mobile carousel (process) */}
         <div className="md:hidden mt-2">
           <div
-            className="grid auto-cols-[85%] grid-flow-col gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory touch-pan-x"
+            className="grid auto-cols-[85%] grid-flow-col gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory touch-pan-x scroll-px-4 px-4 overscroll-x-contain"
             role="list"
             aria-label="Как я работаю"
           >
             {steps.map((it, i) => (
               <div key={i} className="snap-start" role="listitem">
-                <Card className="h-full" variant="soft">
+                <Card className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--ring))] h-full hover:translate-y-[1px] transition" variant="soft">
                   <div className="text-base font-semibold">{it.title}</div>
                   <p className="mt-2 text-sm opacity-80">{it.text}</p>
                 </Card>
@@ -37,7 +37,7 @@ export default function Process() {
         {/* Моб/планшет — сетка */}
         <div className="hidden md:grid grid gap-6 sm:grid-cols-2 lg:hidden">
           {steps.map((s) => (
-            <Card key={s.title} className="p-6">
+            <Card key={s.title} className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--ring))] h-full hover:translate-y-[1px] p-6 transition">
               <h3 className="text-xl font-semibold">{s.title}</h3>
               <p className="mt-1 text-sm opacity-80">{s.text}</p>
             </Card>
@@ -48,7 +48,7 @@ export default function Process() {
         <div className="mt-2 hidden lg:flex items-center gap-4">
           {steps.map((s, i) => (
             <div key={s.title} className="flex items-center">
-              <Card className="p-6 w-72">
+              <Card className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--ring))] h-full hover:translate-y-[1px] p-6 transition w-72">
                 <h3 className="text-xl font-semibold">{s.title}</h3>
                 <p className="mt-1 text-sm opacity-80">{s.text}</p>
               </Card>

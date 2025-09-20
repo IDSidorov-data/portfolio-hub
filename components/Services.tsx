@@ -81,13 +81,13 @@ export default function Services() {
         {/* Mobile carousel (services) */}
         <div className="md:hidden mt-2">
           <div
-            className="grid auto-cols-[85%] grid-flow-col gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory touch-pan-x"
+            className="grid auto-cols-[85%] grid-flow-col gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory touch-pan-x scroll-px-4 px-4 overscroll-x-contain"
             role="list"
             aria-label="Услуги"
           >
             {services.map((it, i) => (
               <div key={i} className="snap-start" role="listitem">
-                <Card className="h-full" variant="soft">
+                <Card className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--ring))] h-full hover:translate-y-[1px] transition" variant="soft">
                   <div className="text-base font-semibold">{it.title}</div>
                   <p className="mt-2 text-sm opacity-80">{it.desc}</p>
                   <div className="mt-3 text-sm opacity-70">
@@ -102,7 +102,7 @@ export default function Services() {
         {/* Tablet/Desktop grid */}
         <div className="hidden md:grid grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {services.map((s) => (
-            <Card key={s.id} className="flex flex-col gap-3">
+            <Card key={s.id} className="flex flex-col focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--ring))] gap-3 h-full hover:translate-y-[1px] transition">
               <div>
                 <h3 className="text-lg font-medium">{s.title}</h3>
                 <p className="mt-1 text-sm opacity-90">{s.desc}</p>

@@ -51,10 +51,10 @@ export default function Stack() {
 
 {/* Mobile carousel (stack) */}
 <div className="md:hidden mt-2">
-  <div className="grid auto-cols-[85%] grid-flow-col gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory touch-pan-x" role="list" aria-label="Стек и инструменты">
+  <div className="grid auto-cols-[85%] grid-flow-col gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory touch-pan-x scroll-px-4 px-4 overscroll-x-contain" role="list" aria-label="Стек и инструменты">
     {sections.map((it, i) => (
       <div key={i} className="snap-start" role="listitem">
-        <Card className="h-full p-6" variant="soft">
+        <Card className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--ring))] h-full hover:translate-y-[1px] p-6 transition" variant="soft">
           <h3 className="text-lg font-semibold">{it.title}</h3>
           <p className="mt-1 text-sm opacity-80">{it.intro}</p>
         </Card>
@@ -67,7 +67,7 @@ export default function Stack() {
 
         <div className="hidden md:grid gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
           {sections.map((s) => (
-            <Card key={s.title} className="p-6">
+            <Card key={s.title} className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--ring))] h-full hover:translate-y-[1px] p-6 transition">
               <h3 className="text-lg font-semibold">{s.title}</h3>
               <p className="mt-1 text-sm opacity-80">{s.intro}</p>
               <ul className="mt-3 space-y-1 text-sm opacity-90 list-disc pl-4">
