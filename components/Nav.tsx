@@ -6,7 +6,7 @@ import BackgroundToggle from '@/components/BackgroundToggle'; // ← верну�
 export default function Nav({ backToCases = false }: { backToCases?: boolean }) {
   return (
     // плотная плашка и там, и там
-    <header   data-back={backToCases ? '1' : undefined} className="sticky top-0 z-40 border-b border-border supports-[backdrop-filter]:bg-background/80 bg-background/95 md:backdrop-blur">
+    <header   data-back={backToCases ? '1' : undefined} className="sticky top-0 z-40 border-b border-border supports-[backdrop-filter]:bg-background/80 bg-background/95 backdrop-blur">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 min-w-0">
         <nav className="flex h-14 items-center justify-between">
           {/* левая группа не раздувает ширину */}
