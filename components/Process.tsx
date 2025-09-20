@@ -12,23 +12,26 @@ const steps = [
 
 export default function Process() {
   return (
-    <section id="process" className="cv-auto py-16 scroll-mt-24 sm:py-24">
+    <section id="process" className="py-16 sm:py-24">
       <Container>
         <h2 className="mb-6 text-3xl font-semibold">Как я работаю</h2>
-      {/* Mobile carousel (added) */}
-      <div className="md:hidden mt-4">
-        <div className="hidden md:grid grid auto-cols-[85%] grid-flow-col gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory touch-pan-x" role="list" aria-label="Как я работаю">
+      {/* Mobile carousel (process) */}
+      <div className="md:hidden mt-2">
+        <div className="grid auto-cols-[85%] grid-flow-col gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory touch-pan-x" role="list" aria-label="Как я работаю">
           {steps.map((it, i) => (
             <div key={i} className="snap-start" role="listitem">
-              <div className="h-full rounded-2xl border p-4 shadow-sm"><div className="text-base font-semibold">{it.title}</div><p className="mt-2 text-sm opacity-80">{it.text}</p></div>
+              <div className="h-full rounded-2xl border p-4 shadow-sm">
+                <div className="text-base font-semibold">{it.title}</div>
+                <p className="mt-2 text-sm opacity-80">{it.text}</p>
+              </div>
             </div>
           ))}
         </div>
       </div>
-
+    
 
         {/* Моб/планшет — сетка */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:hidden">
+        <div className="hidden md:grid grid gap-6 sm:grid-cols-2 lg:hidden">
           {steps.map((s) => (
             <Card key={s.title} className="p-6">
               <h3 className="text-xl font-semibold">{s.title}</h3>

@@ -33,7 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="color-scheme" content="light dark" />
       </head>
       {/* .page-bg остаётся как fallback на случай отключённого WebGL */}
-      <body className="antialiased min-h-dvh min-h-screen overflow-x-hidden page-bg">
+      <body className="page-bg min-h-dvh antialiased min-h-screen overflow-x-hidden">
         <Providers>
           <BackgroundFXPro />
           <div className="relative z-10">{children}</div>
