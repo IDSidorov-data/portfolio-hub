@@ -9,11 +9,11 @@ export default function Hero({ onOpenBooking }: { onOpenBooking: () => void }) {
   return (
     <div className="relative overflow-hidden py-16 sm:py-24">
       <Container className="text-left">
-        <h1 className="text-4xl font-bold leading-tight sm:text-6xl max-w-4xl">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl leading-tight font-bold max-w-4xl">
           Аналитика, бэкенд, сайты и боты — системно, быстро, с результатом
         </h1>
 
-        <p className="mt-6 max-w-2xl text-xl sm:text-2xl opacity-80">
+        <p className="mt-4 max-w-2xl text-lg sm:text-xl opacity-80">
           A/B-тесты, MVP-валидации, API интеграции и автоматизация, которые экономят спринты и растят ключевые метрики.
         </p>
 

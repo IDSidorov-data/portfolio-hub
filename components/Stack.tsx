@@ -1,4 +1,5 @@
 import Container from '@/components/Container';
+import CarouselRow from '@/components/CarouselRow';
 import Card from '@/components/Card';
 
 const sections = [
@@ -42,9 +43,20 @@ const sections = [
 
 export default function Stack() {
   return (
-    <section id="stack" className="py-16 sm:py-24">
+    <section id="stack" className="cv-auto py-16 scroll-mt-24 sm:py-24">
       <Container>
         <h2 className="mb-6 text-3xl font-semibold">Стек и инструменты</h2>
+      {/* Mobile carousel (added) */}
+      <div className="md:hidden mt-4">
+        <div className="hidden md:grid grid auto-cols-[85%] grid-flow-col gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory touch-pan-x" role="list" aria-label="Стек и инструменты">
+          {sections.map((it, i) => (
+            <div key={i} className="snap-start" role="listitem">
+              <div className="h-full rounded-2xl border p-4 shadow-sm"><div className="text-base font-semibold">{it.title}</div><p className="mt-2 text-sm opacity-80">{it.intro}</p></div>
+            </div>
+          ))}
+        </div>
+      </div>
+
         <p className="opacity-80 mb-8">
           Что именно я делаю и из каких компонентов это собираю.
         </p>
