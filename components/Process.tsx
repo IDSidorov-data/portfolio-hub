@@ -17,7 +17,7 @@ export default function Process() {
     <h2 className="mb-6 text-2xl font-semibold">Как я работаю</h2>
 
     {/* Mobile carousel (process) */}
-    <div className="md:hidden mt-2">
+    <div className="block md:hidden mt-2">
      <div className="grid auto-cols-[85%] grid-flow-col gap-4 snap-x md:snap-mandatory snap-proximity overflow-x-auto [-webkit-overflow-scrolling:touch] touch-auto md:touch-pan-x scroll-px-0 px-0" role="list" aria-label="Как я работаю">
       {steps.map((it, i) => (
        <div key={i} className="snap-start snap-always" role="listitem">

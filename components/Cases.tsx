@@ -178,7 +178,7 @@ export default function Cases() {
   return (
     <section id="cases" className="py-12 sm:py-16">
       <Container className="px-0 md:px-5">
-        <h2 className="mb-6 text-3xl font-semibold">Кейсы</h2>
+        <h2 className="mb-6 text-2xl font-semibold">Кейсы</h2>
 
         {/* Mobile carousel (cases) */}
         <div className="md:hidden mt-2">
