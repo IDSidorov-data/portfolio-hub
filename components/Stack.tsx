@@ -43,7 +43,7 @@ const sections = [
 export default function Stack() {
   return (
     <section id="stack" className="py-16 sm:py-24">
-      <Container>
+      <Container className="px-0 md:px-5 px-0 md:px-5">
         <h2 className="mb-6 text-3xl font-semibold">Стек и инструменты</h2>
         <p className="opacity-80 mb-8">
           Что именно я делаю и из каких компонентов это собираю.

@@ -73,7 +73,7 @@ const services: Service[] = [
 export default function Services() {
   return (
     <section id="services" className="py-12 sm:py-16">
-      <Container>
+      <Container className="px-0 md:px-5 px-0 md:px-5">
         <h2 className="mb-6 text-2xl font-semibold">Услуги</h2>
 
         {/* Mobile carousel (services) */}

@@ -13,7 +13,7 @@ const steps = [
 export default function Process() {
   return (
     <section id="process" className="py-16 sm:py-24">
-      <Container>
+      <Container className="px-0 md:px-5 px-0 md:px-5">
         <h2 className="mb-6 text-3xl font-semibold">Как я работаю</h2>
 
         {/* Mobile carousel (process) */}
