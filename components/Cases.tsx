@@ -2,7 +2,6 @@ import Container from '@/components/Container';
 import CarouselRow from '@/components/CarouselRow';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
-import { sendEvent } from '@/lib/analytics';
 import * as React from 'react';
 
 type Metric = {
@@ -52,7 +51,7 @@ const statusChip = (status?: CaseItem['status']) => {
 };
 
 const ndaChip =
-  'ml-2 inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] uppercase tracking-wide border-fuchsia-500/30 bg-fuchsia-500/10 text-fuchsia-600 dark:text-fuchsia-400';
+  'ml-2 inline-flex items-center rounded-full border px-2 py-0.5 border-fuchsia-500/30 bg-fuchsia-500/10 text-fuchsia-600 dark:text-fuchsia-400';
 
 const metricChip = (m: Metric) =>
   `chip ${m.positive ? 'chip-positive' : 'chip-neutral'}`;
@@ -268,7 +267,6 @@ export default function Cases() {
                     variant="primary"
                     href={`/cases/${c.slug}`}
                     aria-label={`Читать разбор: ${c.title}`}
-                    onClick={() => sendEvent(`click_case_${c.slug}_read`)}
                   >
                     Читать разбор
                   </Button>
@@ -285,11 +283,6 @@ export default function Cases() {
                           : undefined
                       }
                       aria-label={`${cta.label}: ${c.title}`}
-                      onClick={() =>
-                        sendEvent(
-                          `click_case_${c.slug}_${cta.label.toLowerCase()}`
-                        )
-                      }
                     >
                       {cta.label}
                     </Button>

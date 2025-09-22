@@ -2,8 +2,6 @@ import Container from '@/components/Container';
 import CarouselRow from '@/components/CarouselRow';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
-import { sendEvent } from '@/lib/analytics';
-
 type Service = {
   id: string;
   title: string;
@@ -120,7 +118,6 @@ export default function Services() {
                 <Button
                   variant="primary"
                   href="#brief"
-                  onClick={() => sendEvent(`click_service_${s.id}`)}
                 >
                   Обсудить
                 </Button>
