@@ -43,15 +43,31 @@ const sections = [
 export default function Stack() {
   return (
     <section id="stack" className="py-16 sm:py-24">
-      <Container>
-        <h2 className="mb-6 text-3xl font-semibold">Стек и инструменты</h2>
+      <Container className="px-0 md:px-5 ">
+        <h2 className="mb-6 text-2xl font-semibold">Стек и инструменты</h2>
         <p className="opacity-80 mb-8">
           Что именно я делаю и из каких компонентов это собираю.
         </p>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
+        {/* Mobile carousel (stack) */}
+        <div className="md:hidden mt-2">
+          <div className="grid auto-cols-[85%] grid-flow-col gap-4 snap-x md:snap-mandatory snap-proximity overflow-x-auto [-webkit-overflow-scrolling:touch] touch-auto md:touch-pan-x scroll-px-0 px-0" role="list" aria-label="Стек и инструменты">
+            {sections.map((it, i) => (
+              <div key={i} className="snap-start snap-always" role="listitem">
+                <Card className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--ring))] h-full hover:translate-y-[1px] p-6 transition" variant="soft">
+                  <h3 className="text-lg font-semibold">{it.title}</h3>
+                  <p className="mt-1 text-sm opacity-80">{it.intro}</p>
+                </Card>
+              </div>
+            ))}
+          </div>
+        </div>
+
+
+
+        <div className="hidden md:grid grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {sections.map((s) => (
-            <Card key={s.title} className="p-6">
+            <Card key={s.title} className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--ring))] h-full hover:translate-y-[1px] p-6 transition">
               <h3 className="text-lg font-semibold">{s.title}</h3>
               <p className="mt-1 text-sm opacity-80">{s.intro}</p>
               <ul className="mt-3 space-y-1 text-sm opacity-90 list-disc pl-4">

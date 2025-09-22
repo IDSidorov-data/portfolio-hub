@@ -5,11 +5,23 @@ import { useSearchParams } from 'next/navigation';
 
 import Nav from '@/components/Nav';
 import Hero from '@/components/Hero';
-import Services from '@/components/Services';
-import Cases from '@/components/Cases';
-import Process from '@/components/Process';
-import Stack from '@/components/Stack';
+import dynamic from 'next/dynamic';
+const Services = dynamic(() => import('@/components/Services'), { loading: () => null });
+
+// ensure hash #brief scrolls after hydration (mobile reliability)
+if (typeof window !== 'undefined') {
+  // run once on mount
+  setTimeout(() => {
+    if (window.location.hash === '#brief') {
+      document.getElementById('brief')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, 0);
+}
+const Cases = dynamic(() => import('@/components/Cases'), { loading: () => null });
+const Process = dynamic(() => import('@/components/Process'), { loading: () => null });
+const Stack = dynamic(() => import('@/components/Stack'), { loading: () => null });
 import Container from '@/components/Container';
+import Skeleton from '@/components/Skeleton';
 import BriefForm from '@/components/BriefForm';
 import Footer from '@/components/Footer';
 import Modal from '@/components/Modal';
@@ -32,9 +44,9 @@ export default function HomePage() {
         <Cases />
         <Process />
         <Stack />
-        <Container id="brief" className="py-10">
+        <Container id="brief" className="md:scroll-mt-20 py-10 scroll-mt-16">
           <h2 className="mb-6 text-2xl font-semibold">Оставить бриф проекта</h2>
-          <Suspense fallback={<BriefForm defaultSource="site" />}>
+          <Suspense fallback={<Skeleton className="h-48" />}>
             <SourceProvider>
               {(source) => <BriefForm defaultSource={source} />}
             </SourceProvider>

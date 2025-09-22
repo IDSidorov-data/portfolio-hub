@@ -1,6 +1,12 @@
+"use client";
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function CaseCTA({ result }: { result?: string }) {
+  const goBrief: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
+    e.preventDefault(); e.stopPropagation();
+    if (typeof window !== 'undefined') window.location.assign('/#brief');
+  };
   return (
     // 1) обёртка для подсветки
     <div className="not-prose relative mt-12">
@@ -16,8 +22,10 @@ export default function CaseCTA({ result }: { result?: string }) {
       />
 
       {/* 2) сама карточка — плотнее фон + кольцо + тень */}
-      <div className="rounded-2xl border border-white/12 bg-white/65 text-black backdrop-blur-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.6)] ring-1 ring-black/5
-                      dark:border-white/10 dark:bg-white/[0.07] dark:text-inherit dark:ring-white/[0.06]">
+      <div
+        className="rounded-2xl border border-white/12 bg-white/65 text-black backdrop-blur-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.6)] ring-1 ring-black/5
+                      dark:border-white/10 dark:bg-white/[0.07] dark:text-inherit dark:ring-white/[0.06]"
+      >
         <div className="p-5 md:p-6">
           <div className="text-sm uppercase tracking-wide opacity-70 mb-1">Результат</div>
 
@@ -30,12 +38,14 @@ export default function CaseCTA({ result }: { result?: string }) {
           )}
 
           <div className="mt-4">
-            <Link
-              href="/#brief"           // ← ведём на форму на главной
+                        <Link
+              href="/#brief"
+              replace
               prefetch={false}
+              scroll={false}
+              onClick={goBrief}
               aria-label="Перейти к форме обсуждения проекта"
-              className="no-underline inline-flex items-center rounded-xl px-4 py-2 border border-black/10 bg-white/80 hover:bg-white/90 transition
-                         dark:border-white/15 dark:bg-white/[0.10] dark:hover:bg-white/[0.14]"
+              className="no-underline inline-flex items-center rounded-xl px-4 py-2 border border-black/10 bg-white/80 dark:border-white/15 dark:bg-white/10 dark:hover:bg-white/14 hover:bg-white/90"
             >
               Обсудить проект
             </Link>
