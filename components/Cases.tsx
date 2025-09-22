@@ -177,13 +177,13 @@ const cases: CaseItem[] = [
 export default function Cases() {
   return (
     <section id="cases" className="py-12 sm:py-16">
-      <Container>
+      <Container className="px-0 md:px-5">
         <h2 className="mb-6 text-3xl font-semibold">Кейсы</h2>
 
         {/* Mobile carousel (cases) */}
         <div className="md:hidden mt-2">
           <div
-            className="grid auto-cols-[85%] grid-flow-col gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory [overscroll-behavior-x:contain] [-webkit-overflow-scrolling:touch] touch-auto md:touch-pan-x scroll-px-2 px-2 md:scroll-px-4 md:px-4 overscroll-x-contain"
+            className="grid auto-cols-[85%] grid-flow-col gap-4 snap-x md:snap-mandatory snap-proximity overflow-x-auto [-webkit-overflow-scrolling:touch] touch-auto md:touch-pan-x scroll-px-0 px-0"
             role="list"
             aria-label="Кейсы"
           >
