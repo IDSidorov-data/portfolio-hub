@@ -41,7 +41,7 @@ export default function Process() {
     </div>
 
     {/* Десктоп — ряд со стрелками по центру */}
-    <div className="mt-2 hidden lg:flex items-center gap-4">
+    <div className="hidden">
      {steps.map((s, i) => (
       <div key={s.title} className="flex items-center">
        <Card className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--ring))] h-full hover:translate-y-[1px] p-6 transition w-72">
