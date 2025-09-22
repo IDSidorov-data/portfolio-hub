@@ -1,5 +1,4 @@
 import Container from '@/components/Container';
-import CarouselRow from '@/components/CarouselRow';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
 import * as React from 'react';
