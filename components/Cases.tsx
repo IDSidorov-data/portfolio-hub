@@ -184,12 +184,12 @@ export default function Cases() {
         {/* Mobile carousel (cases) */}
         <div className="md:hidden mt-2">
           <div
-            className="grid auto-cols-[85%] grid-flow-col gap-4 overflow-x-auto no-scrollbar snap-x snap-proximity [overscroll-behavior-x:contain] [-webkit-overflow-scrolling:touch] touch-pan-x scroll-px-4 px-4 overscroll-x-contain"
+            className="grid auto-cols-[85%] grid-flow-col gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory [overscroll-behavior-x:contain] [-webkit-overflow-scrolling:touch] touch-pan-x scroll-px-4 px-4 overscroll-x-contain"
             role="list"
             aria-label="Кейсы"
           >
             {cases.map((it, i) => (
-              <div key={i} className="snap-start" role="listitem">
+              <div key={i} className="snap-start snap-always" role="listitem">
                 <Card className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--ring))] h-full hover:translate-y-[1px] transition" variant="soft">
                   <div className="text-base font-semibold">{it.title}</div>
                   <p className="mt-2 text-sm opacity-80">{it.teaser}</p>
