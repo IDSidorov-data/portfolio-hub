@@ -30,17 +30,7 @@ export default function Process() {
      </div>
     </div>
 
-    {/* Моб/планшет — сетка */}
-    <div className="hidden md:grid grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-     {steps.map((s) => (
-      <Card key={s.title} className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--ring))] h-full hover:translate-y-[1px] p-6 transition">
-       <h3 className="text-xl font-semibold">{s.title}</h3>
-       <p className="mt-1 text-sm opacity-80">{s.text}</p>
-      </Card>
-     ))}
-    </div>
-
-    {/* Десктоп — ряд со стрелками по центру */}
+    {/* Моб/планшет — сетка */}{/* Десктоп — ряд со стрелками по центру */}
     <div className="hidden">
      {steps.map((s, i) => (
       <div key={s.title} className="flex items-center">
