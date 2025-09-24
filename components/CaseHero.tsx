@@ -1,4 +1,4 @@
-﻿import Link from 'next/link';
+import Link from 'next/link';
 
 import CaseMeta from '@/components/CaseMeta';
 import { getCaseVibe } from '@/lib/caseVibes';
@@ -45,7 +45,7 @@ export default function CaseHero({
             <span
               className={`inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.28em] opacity-80 ${vibe.accent}`}
             >
-              Case · {vibe.label}
+              Case — {vibe.label}
             </span>
             <h1 className="mt-3 text-3xl font-bold sm:text-4xl">{title}</h1>
             {summary && (
@@ -88,3 +88,4 @@ export default function CaseHero({
     </div>
   );
 }
+
