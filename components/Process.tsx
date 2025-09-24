@@ -1,4 +1,4 @@
-﻿import Container from '@/components/Container';
+import Container from '@/components/Container';
 import Card from '@/components/Card';
 import { ArrowRight } from 'lucide-react';
 

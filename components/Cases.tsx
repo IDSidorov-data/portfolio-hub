@@ -2,6 +2,7 @@ import Container from '@/components/Container';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
 import * as React from 'react';
+import { getCaseVibe } from '@/lib/caseVibes';
 
 type Metric = {
   label: string;
@@ -55,80 +56,12 @@ const ndaChip =
 const metricChip = (m: Metric) =>
   `chip ${m.positive ? 'chip-positive' : 'chip-neutral'}`;
 
-type MobileCaseVibe = {
-  emoji: string;
-  label: string;
-  surface: string;
-  shadow: string;
-  accent: string;
-  chip: string;
-  link: string;
-};
-
-const mobileCasePalette: MobileCaseVibe[] = [
-  {
-    emoji: '🎮',
-    label: 'A/B',
-    surface: 'bg-gradient-to-br from-rose-100 via-orange-50/80 to-amber-100 dark:from-rose-500/25 dark:via-orange-500/10 dark:to-amber-500/10',
-    shadow: 'shadow-[0_18px_42px_-22px_rgba(244,114,182,0.55)]',
-    accent: 'text-rose-700 dark:text-rose-200',
-    chip: 'bg-white/75 text-rose-700/90 border-white/40 shadow-sm dark:bg-white/10 dark:text-rose-100 dark:border-white/15',
-    link: 'text-rose-700 hover:text-rose-800 dark:text-rose-100 dark:hover:text-rose-50',
-  },
-  {
-    emoji: '🚚',
-    label: 'Ops',
-    surface: 'bg-gradient-to-br from-emerald-100 via-sky-50 to-lime-100 dark:from-emerald-500/20 dark:via-sky-500/10 dark:to-lime-500/10',
-    shadow: 'shadow-[0_18px_42px_-22px_rgba(16,185,129,0.45)]',
-    accent: 'text-emerald-700 dark:text-emerald-200',
-    chip: 'bg-white/75 text-emerald-700/90 border-white/40 shadow-sm dark:bg-white/10 dark:text-emerald-100 dark:border-white/15',
-    link: 'text-emerald-700 hover:text-emerald-800 dark:text-emerald-100 dark:hover:text-emerald-50',
-  },
-  {
-    emoji: '🧠',
-    label: 'Modeling',
-    surface: 'bg-gradient-to-br from-violet-100 via-indigo-50 to-sky-100 dark:from-violet-500/25 dark:via-indigo-500/15 dark:to-sky-500/10',
-    shadow: 'shadow-[0_18px_42px_-22px_rgba(129,140,248,0.45)]',
-    accent: 'text-violet-700 dark:text-violet-200',
-    chip: 'bg-white/75 text-violet-700/90 border-white/40 shadow-sm dark:bg-white/10 dark:text-violet-100 dark:border-white/15',
-    link: 'text-violet-700 hover:text-violet-800 dark:text-violet-100 dark:hover:text-violet-50',
-  },
-  {
-    emoji: '🤖',
-    label: 'AI',
-    surface: 'bg-gradient-to-br from-sky-100 via-indigo-50 to-purple-100 dark:from-sky-500/25 dark:via-indigo-600/15 dark:to-purple-600/15',
-    shadow: 'shadow-[0_18px_42px_-22px_rgba(56,189,248,0.45)]',
-    accent: 'text-sky-700 dark:text-sky-200',
-    chip: 'bg-white/75 text-sky-700/90 border-white/40 shadow-sm dark:bg-white/10 dark:text-sky-100 dark:border-white/15',
-    link: 'text-sky-700 hover:text-sky-800 dark:text-sky-100 dark:hover:text-sky-50',
-  },
-  {
-    emoji: '🛠️',
-    label: 'Automation',
-    surface: 'bg-gradient-to-br from-amber-100 via-orange-50 to-lime-100 dark:from-amber-500/20 dark:via-orange-500/10 dark:to-lime-500/10',
-    shadow: 'shadow-[0_18px_42px_-22px_rgba(251,191,36,0.45)]',
-    accent: 'text-amber-700 dark:text-amber-200',
-    chip: 'bg-white/75 text-amber-700/90 border-white/40 shadow-sm dark:bg-white/10 dark:text-amber-100 dark:border-white/15',
-    link: 'text-amber-700 hover:text-amber-800 dark:text-amber-100 dark:hover:text-amber-50',
-  },
-];
-
-const mobileCaseVibes: Record<string, MobileCaseVibe> = {
-  'ab-test-mobile-game': mobileCasePalette[0],
-  'logistics-calculator': mobileCasePalette[1],
-  'scenario': mobileCasePalette[2],
-  'loki-assistant': mobileCasePalette[3],
-  'rpa-bot': mobileCasePalette[4],
-};
-
-const mobileCaseFallbacks = mobileCasePalette;
-
 const cases: CaseItem[] = [
   {
     slug: 'ab-test-mobile-game',
     title: 'A/B: Cookie Cats — гейт 40→30',
     teaser:
-      'D7 вырос статистически значимо → рекомендация: раскатить gate_30. Цепочка: ETL → Postgres → SQL → Z-тест.',
+      'D7 вырос статистически значимо → рекомендация: раскатить gate_30. Цепочка: ETL → Postgres → SQL → З-тест.',
     tags: ['Analytics', 'A/B', 'SQL', 'Python/statsmodels', 'PostgreSQL'],
     result: 'Рекомендация подтверждена: D7 ↑ +0.82 п.п. (p=0.0016).',
     metrics: [
@@ -255,21 +188,21 @@ export default function Cases() {
             aria-label="Кейсы"
           >
             {cases.map((it, i) => {
-              const vibe = mobileCaseVibes[it.slug] ?? mobileCaseFallbacks[i % mobileCaseFallbacks.length];
+              const vibe = getCaseVibe(it.slug, i);
               const metric = it.metrics?.[0];
               return (
                 <div key={i} className="snap-start snap-always" role="listitem">
                   <Card
-                    className={`group relative h-full overflow-hidden border border-transparent p-6 text-slate-900 transition-all hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/70 dark:text-white ${vibe.surface} ${vibe.shadow}`}
+                    className={`group relative h-full overflow-hidden border border-transparent p-6 text-slate-900 transition-all duration-500 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/70 dark:text-white ${vibe.surface} ${vibe.shadow}`}
                     variant="default"
                   >
                     <span
                       aria-hidden
-                      className="absolute -right-8 -top-10 h-32 w-32 rounded-full bg-white/40 blur-3xl dark:bg-white/5"
+                      className={`absolute -right-8 -top-10 h-32 w-32 rounded-full blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 ${vibe.halo}`}
                     />
                     <div className="relative z-[1] flex h-full flex-col">
                       <div className="flex items-start gap-3">
-                        <span className="text-2xl">{vibe.emoji}</span>
+                        <span className="text-2xl animate-float" aria-hidden>{vibe.emoji}</span>
                         <div className="flex-1">
                           <div className={`text-xs font-semibold uppercase tracking-[0.2em] opacity-75 ${vibe.accent}`}>
                             {vibe.label}
@@ -293,87 +226,93 @@ export default function Cases() {
                       </div>
                       <a
                         href={`/cases/${it.slug}`}
-                        className={`mt-auto inline-flex items-center gap-1 pt-4 text-sm font-semibold tracking-wide ${vibe.link}`}
+                        className={`mt-auto inline-flex items-center gap-1 pt-4 text-sm font-semibold tracking-wide transition-colors duration-300 ${vibe.link}`}
                       >
                         <span>Подробнее →</span>
-                        <span aria-hidden>↗</span>
+                        <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-0.5">↗</span>
                       </a>
                     </div>
                   </Card>
                 </div>
               );
             })}
-
           </div>
         </div>
 
         {/* Tablet/Desktop grid */}
-        <div className="hidden md:grid grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {cases.map((c) => {
+        <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-4">
+          {cases.map((c, index) => {
             const resultId = `case-${c.slug}-result`;
+            const vibe = getCaseVibe(c.slug, index);
             return (
               <Card
                 key={c.slug}
-                className="flex flex-col focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--ring))] focus-within:shadow-md gap-3 h-full hover:translate-y-[1px] p-6 transition"
+                className={`group relative flex flex-col overflow-hidden border border-transparent p-6 text-slate-900 transition-all duration-500 ease-out hover:-translate-y-1 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--ring))] focus-visible:ring-offset-2 dark:text-white ${vibe.surface} ${vibe.shadow}`}
                 role="article"
                 aria-labelledby={`case-${c.slug}-title`}
                 aria-describedby={c.result ? resultId : undefined}
               >
-                <div>
-                  <h3
-                    id={`case-${c.slug}-title`}
-                    className="text-xl font-semibold leading-snug"
-                  >
-                    {c.title}
-                    {c.status && (
-                      <span className={statusChip(c.status)}>{c.status}</span>
-                    )}
-                    {c.nda && <span className={ndaChip}>NDA</span>}
-                  </h3>
-                  <p className="mt-1 text-sm opacity-80">{c.teaser}</p>
-                </div>
-
-                {c.result && (
-                  <div id={resultId} className="result-callout mt-2 text-sm">
-                    {c.result}
+                <span
+                  aria-hidden
+                  className={`pointer-events-none absolute -right-12 -top-16 h-44 w-44 rounded-full blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 ${vibe.halo}`}
+                />
+                <div className="relative z-[1] flex flex-col gap-3">
+                  <div>
+                    <div className={`inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.2em] opacity-75 ${vibe.accent}`}>
+                      <span aria-hidden className="text-lg">{vibe.emoji}</span>
+                      {vibe.label}
+                    </div>
+                    <h3
+                      id={`case-${c.slug}-title`}
+                      className="mt-2 text-xl font-semibold leading-snug"
+                    >
+                      {c.title}
+                      {c.status && (
+                        <span className={statusChip(c.status)}>{c.status}</span>
+                      )}
+                      {c.nda && <span className={ndaChip}>NDA</span>}
+                    </h3>
+                    <p className="mt-1 text-sm text-slate-800/90 dark:text-slate-100/90">{c.teaser}</p>
                   </div>
-                )}
-
-                {c.metrics && c.metrics.length > 0 && (
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {c.metrics.map((m, i) => (
+                  {c.result && (
+                    <div id={resultId} className="result-callout mt-2 text-sm">
+                      {c.result}
+                    </div>
+                  )}
+                  {c.metrics && c.metrics.length > 0 && (
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {c.metrics.map((m, i) => (
+                        <span
+                          key={i}
+                          className={metricChip(m)}
+                          title={m.note || ''}
+                        >
+                          <span className="mr-1 opacity-70">{m.label}:</span>{' '}
+                          {m.value}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <div className="mt-2 flex flex-wrap gap-2 text-xs">
+                    {c.tags.map((t) => (
                       <span
-                        key={i}
-                        className={metricChip(m)}
-                        title={m.note || ''}
+                        key={t}
+                        className={`rounded-full px-3 py-1 text-xs font-medium ${vibe.chip}`}
                       >
-                        <span className="mr-1 opacity-70">{m.label}:</span>{' '}
-                        {m.value}
+                        {t}
                       </span>
                     ))}
                   </div>
-                )}
-
-                <div className="mt-2 flex flex-wrap gap-2 text-xs">
-                  {c.tags.map((t) => (
-                    <span
-                      key={t}
-                      className="rounded-full border border-border px-3 py-1 opacity-80"
-                    >
-                      {t}
-                    </span>
-                  ))}
                 </div>
-
-                <div className="mt-auto flex flex-wrap items-center gap-3 pt-2">
+                <div className="relative z-[1] mt-auto flex flex-wrap items-center gap-3 pt-4">
                   <Button
                     variant="primary"
                     href={`/cases/${c.slug}`}
                     aria-label={`Читать разбор: ${c.title}`}
+                    className="transition-transform duration-300 hover:translate-x-0.5"
                   >
                     Читать разбор
                   </Button>
-
                   {c.ctas?.map((cta) => (
                     <Button
                       key={cta.label}
@@ -386,6 +325,7 @@ export default function Cases() {
                           : undefined
                       }
                       aria-label={`${cta.label}: ${c.title}`}
+                      className="transition-transform duration-300 hover:-translate-y-0.5"
                     >
                       {cta.label}
                     </Button>
