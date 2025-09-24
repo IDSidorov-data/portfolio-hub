@@ -1,4 +1,4 @@
-import { getCaseSlugs, readCaseBySlug } from "@/lib/mdx";
+﻿import { getCaseSlugs, readCaseBySlug } from "@/lib/mdx";
 import Container from "@/components/Container";
 import type { Metadata } from "next";
 import { compileMDX } from "next-mdx-remote/rsc";
@@ -7,7 +7,8 @@ import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
 import rehypePrettyCode from "rehype-pretty-code";
 
-import CaseMeta from '@/components/CaseMeta';
+import CaseHero from '@/components/CaseHero';
+import CaseReadingProgress from '@/components/CaseReadingProgress';
 import CaseCTA from '@/components/CaseCTA';
 
 const prettyCodeOptions = {
@@ -27,7 +28,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { frontmatter } = readCaseBySlug(params.slug);
   return {
-    title: `${frontmatter.title} — Иван Сидоров`,
+    title: `${frontmatter.title} - case study`,
     description: frontmatter.summary ?? "",
     openGraph: {
       title: frontmatter.title,
@@ -57,27 +58,33 @@ export default async function CasePage({
   });
 
   return (
-    <Container className="py-10 sm:py-16">
-      {/* Заголовок и описание */}
-      <h1 className="text-3xl md:text-4xl font-bold">{frontmatter.title}</h1>
-      <p className="case-summary mt-2 text-base md:text-lg opacity-80">
-        {frontmatter.summary}
-      </p>
+    <>
+      <CaseReadingProgress />
 
-      {/* ✅ блок с ролью, длительностью, статусом и тегами */}
-      <CaseMeta
-        role={frontmatter.role}
-        duration={frontmatter.duration}
-        status={frontmatter.status}
-        tags={frontmatter.tags}
-      />
+      <div className="py-10 sm:py-16">
+        <Container>
+          <CaseHero
+            slug={params.slug}
+            title={frontmatter.title}
+            summary={frontmatter.summary}
+            role={frontmatter.role}
+            duration={frontmatter.duration}
+            status={frontmatter.status}
+            tags={frontmatter.tags}
+            links={frontmatter.links}
+          />
+        </Container>
+      </div>
 
-      {/* Контент статьи */}
-      <article className="prose prose-zinc dark:prose-invert max-w-none mt-8">
-        {rendered}
-      </article>
+      <Container className="pb-12 sm:pb-16">
+        <article className="prose prose-zinc dark:prose-invert max-w-none">
+          {rendered}
+        </article>
 
-      <CaseCTA result={frontmatter?.result} />
-    </Container>
+        <CaseCTA result={frontmatter?.result} />
+      </Container>
+    </>
   );
 }
+
+
