@@ -1,4 +1,6 @@
-﻿import { getCaseSlugs, readCaseBySlug } from "@/lib/mdx";
+﻿import React from "react";
+
+import { getCaseSlugs, readCaseBySlug } from "@/lib/mdx";
 import Container from "@/components/Container";
 import type { Metadata } from "next";
 import { compileMDX } from "next-mdx-remote/rsc";
@@ -10,12 +12,43 @@ import rehypePrettyCode from "rehype-pretty-code";
 import CaseHero from '@/components/CaseHero';
 import CaseReadingProgress from '@/components/CaseReadingProgress';
 import CaseCTA from '@/components/CaseCTA';
+import CaseSectionIsland from '@/components/CaseSectionIsland';
 
 const prettyCodeOptions = {
   theme: { light: "github-light", dark: "github-dark" },
   keepBackground: false,
   defaultLang: "text",
 };
+
+function partitionContent(rendered: React.ReactNode) {
+  const nodes = React.Children.toArray(rendered);
+  const intro: React.ReactNode[] = [];
+  const sections: Array<{ heading: React.ReactElement; body: React.ReactNode[] }> = [];
+
+  let current: { heading: React.ReactElement; body: React.ReactNode[] } | null = null;
+
+  nodes.forEach((node) => {
+    if (React.isValidElement(node) && typeof node.type === 'string' && node.type === 'h2') {
+      if (current) {
+        sections.push(current);
+      }
+      current = { heading: node, body: [] };
+      return;
+    }
+
+    if (current) {
+      current.body.push(node);
+    } else {
+      intro.push(node);
+    }
+  });
+
+  if (current) {
+    sections.push(current);
+  }
+
+  return { intro, sections };
+}
 
 export async function generateStaticParams() {
   return getCaseSlugs().map((f) => ({ slug: f.replace(/\.mdx$/, "") }));
@@ -38,6 +71,8 @@ export async function generateMetadata({
   };
 }
 
+const toneCycle = ['neutral', 'cool', 'warm', 'iris'] as const;
+
 export default async function CasePage({
   params,
 }: {
@@ -56,6 +91,8 @@ export default async function CasePage({
       },
     },
   });
+
+  const { intro, sections } = partitionContent(rendered);
 
   return (
     <>
@@ -76,15 +113,38 @@ export default async function CasePage({
         </Container>
       </div>
 
-      <Container className="pb-12 sm:pb-16">
-        <article className="prose prose-zinc dark:prose-invert max-w-none">
-          {rendered}
-        </article>
+      <Container className="pb-14 sm:pb-20">
+        <div className="space-y-8 sm:space-y-10">
+          {intro.length > 0 && (
+            <CaseSectionIsland tone="neutral" delay={40}>
+              <div className="case-article space-y-4">
+                {intro}
+              </div>
+            </CaseSectionIsland>
+          )}
+
+          {sections.map((section, index) => {
+            const tone = toneCycle[index % toneCycle.length];
+            const clonedHeading = React.cloneElement(section.heading, {
+              className:
+                'text-2xl font-semibold leading-tight text-slate-900 tracking-tight dark:text-white',
+            });
+
+            return (
+              <CaseSectionIsland tone={tone} delay={80 + index * 80} key={section.heading.props.id ?? index}>
+                <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  {clonedHeading}
+                </header>
+                <div className="case-article space-y-4">
+                  {section.body}
+                </div>
+              </CaseSectionIsland>
+            );
+          })}
+        </div>
 
         <CaseCTA result={frontmatter?.result} />
       </Container>
     </>
   );
 }
-
-

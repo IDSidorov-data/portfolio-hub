@@ -1,53 +1,52 @@
-"use client";
+﻿"use client";
+
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 export default function CaseCTA({ result }: { result?: string }) {
-  const goBrief: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
-    e.preventDefault(); e.stopPropagation();
-    if (typeof window !== 'undefined') window.location.assign('/#brief');
+  const handleBrief: React.MouseEventHandler<HTMLAnchorElement> = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (typeof window !== 'undefined') {
+      window.location.assign('/#brief');
+    }
   };
+
   return (
-    // 1) обёртка для подсветки
-    <div className="not-prose relative mt-12">
-      {/* Хало-подсветка под карточкой */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 rounded-3xl blur-xl opacity-80"
-        style={{
-          background:
-            // нейтральный радиальный градиент — работает в обеих темах
-            'radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,0.10), rgba(255,255,255,0.04) 45%, transparent 70%)',
-        }}
-      />
+    <div className="not-prose relative mt-14">
+      <div className="absolute inset-0 -z-10 blur-3xl opacity-70" aria-hidden>
+        <div className="h-full w-full rounded-3xl bg-gradient-to-br from-sky-400/30 via-indigo-500/20 to-purple-500/25 dark:from-sky-500/25 dark:via-indigo-600/20 dark:to-purple-600/25" />
+      </div>
+      <div className="relative overflow-hidden rounded-3xl border border-white/20 bg-gradient-to-br from-white/90 via-white/70 to-white/80 text-slate-900 shadow-[0_24px_60px_-32px_rgba(15,23,42,0.5)] backdrop-blur-xl dark:border-white/10 dark:from-slate-900/80 dark:via-slate-900/60 dark:to-slate-900/70 dark:text-white">
+        <div className="pointer-events-none absolute -top-20 right-20 h-56 w-56 rounded-full bg-white/30 blur-3xl dark:bg-white/10" aria-hidden />
+        <div className="relative z-[1] flex flex-col gap-8 p-6 sm:p-8 md:flex-row md:items-center md:justify-between">
+          <div className="max-w-2xl space-y-3">
+            <span className="inline-flex items-center gap-2 rounded-full border border-slate-200/60 bg-white/70 px-4 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-slate-700/80 dark:border-white/10 dark:bg-white/10 dark:text-white/85">
+              Следующий шаг
+            </span>
+            <h3 className="text-2xl font-semibold leading-tight sm:text-3xl">
+              Готовы обсудить свой проект?
+            </h3>
+            <p className="text-base text-slate-700/85 dark:text-slate-200/85">
+              {result
+                ? result
+                : 'Коллекция инструментов, экспериментов и продакшн-сборок уже обкатана. Расскажите о задаче — соберём MVP или усилим текущую команду.'}
+            </p>
+          </div>
 
-      {/* 2) сама карточка — плотнее фон + кольцо + тень */}
-      <div
-        className="rounded-2xl border border-white/12 bg-white/65 text-black backdrop-blur-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.6)] ring-1 ring-black/5
-                      dark:border-white/10 dark:bg-white/[0.07] dark:text-inherit dark:ring-white/[0.06]"
-      >
-        <div className="p-5 md:p-6">
-          <div className="text-sm uppercase tracking-wide opacity-70 mb-1">Результат</div>
-
-          {result ? (
-            <div className="text-lg font-medium">{result}</div>
-          ) : (
-            <div className="text-lg font-medium">
-              Готов обсудить, как применить этот подход в вашем проекте.
-            </div>
-          )}
-
-          <div className="mt-4">
-                        <Link
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <Link
               href="/#brief"
-              replace
-              prefetch={false}
               scroll={false}
-              onClick={goBrief}
-              aria-label="Перейти к форме обсуждения проекта"
-              className="no-underline inline-flex items-center rounded-xl px-4 py-2 border border-black/10 bg-white/80 dark:border-white/15 dark:bg-white/10 dark:hover:bg-white/14 hover:bg-white/90"
+              onClick={handleBrief}
+              className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/20 transition hover:-translate-y-0.5 hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
             >
-              Обсудить проект
+              Заполнить бриф
+            </Link>
+            <Link
+              href="/#cases"
+              className="inline-flex items-center justify-center rounded-xl border border-slate-300/70 bg-white/60 px-6 py-3 text-sm font-semibold text-slate-900 shadow-sm transition hover:-translate-y-0.5 hover:bg-white/80 dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
+            >
+              Посмотреть ещё кейсы
             </Link>
           </div>
         </div>
