@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 
+import { badgeBaseClass } from '@/lib/badge';
+
 export default function CaseCTA({ result }: { result?: string }) {
   const handleBrief: React.MouseEventHandler<HTMLAnchorElement> = (event) => {
     event.preventDefault();
@@ -10,6 +12,8 @@ export default function CaseCTA({ result }: { result?: string }) {
       window.location.assign('/#brief');
     }
   };
+
+  const badgeClass = `${badgeBaseClass} backdrop-blur border border-slate-200/60 bg-white/70 text-slate-700/85 dark:border-white/10 dark:bg-white/10 dark:text-white/85`;
 
   return (
     <div className="not-prose relative mt-14">
@@ -20,16 +24,12 @@ export default function CaseCTA({ result }: { result?: string }) {
         <div className="pointer-events-none absolute -top-20 right-20 h-56 w-56 rounded-full bg-white/30 blur-3xl dark:bg-white/10" aria-hidden />
         <div className="relative z-[1] flex flex-col gap-8 p-6 sm:p-8 md:flex-row md:items-center md:justify-between">
           <div className="max-w-2xl space-y-3">
-            <span className="inline-flex items-center gap-2 rounded-full border border-slate-200/60 bg-white/70 px-4 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-slate-700/80 dark:border-white/10 dark:bg-white/10 dark:text-white/85">
-              Следующий шаг
-            </span>
-            <h3 className="text-2xl font-semibold leading-tight sm:text-3xl">
-              Готовы обсудить свой проект?
-            </h3>
+            <span className={badgeClass}>Следующий шаг</span>
+            <h3 className="text-2xl font-semibold leading-tight sm:text-3xl">Готовы обсудить свой проект?</h3>
             <p className="text-base text-slate-700/85 dark:text-slate-200/85">
               {result
                 ? result
-                : 'Коллекция инструментов, экспериментов и продакшн-сборок уже обкатана. Расскажите о задаче — соберём MVP или усилим текущую команду.'}
+                : 'Коллекция инструментов и продакшн-сборок уже обкатана. Расскажите о задаче — соберём MVP или усилим вашу команду.'}
             </p>
           </div>
 

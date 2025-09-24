@@ -1,6 +1,7 @@
 ﻿import Link from 'next/link';
 
 import CaseMeta from '@/components/CaseMeta';
+import { badgeBaseClass } from '@/lib/badge';
 import { getCaseVibe } from '@/lib/caseVibes';
 
 interface CaseLink {
@@ -30,7 +31,8 @@ export default function CaseHero({
   links,
 }: CaseHeroProps) {
   const vibe = getCaseVibe(slug);
-  const hasLinks = links && links.length > 0;
+  const hasLinks = Boolean(links && links.length > 0);
+  const badgeClass = `${badgeBaseClass} ${vibe.chip}`;
 
   return (
     <div className="relative overflow-hidden rounded-[2rem] border border-white/30 bg-white/75 text-slate-900 shadow-[0_32px_80px_-40px_rgba(15,23,42,0.55)] backdrop-blur-xl dark:border-white/10 dark:bg-white/10 dark:text-white">
@@ -42,11 +44,7 @@ export default function CaseHero({
             {vibe.emoji}
           </span>
           <div className="min-w-[220px] flex-1">
-            <span
-              className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em] opacity-85 backdrop-blur ${vibe.chip}`}
-            >
-              Case — {vibe.label}
-            </span>
+            <span className={badgeClass}>Case — {vibe.label}</span>
             <h1 className="mt-3 text-3xl font-bold leading-tight sm:text-4xl">{title}</h1>
             {summary && (
               <p className="mt-3 max-w-2xl text-base text-slate-700/85 dark:text-slate-100/85">

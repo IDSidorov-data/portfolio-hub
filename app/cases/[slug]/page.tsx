@@ -116,10 +116,8 @@ export default async function CasePage({
       <Container className="pb-14 sm:pb-20">
         <div className="space-y-8 sm:space-y-10">
           {intro.length > 0 && (
-            <CaseSectionIsland tone="neutral" delay={40}>
-              <div className="case-article space-y-4">
-                {intro}
-              </div>
+            <CaseSectionIsland tone="neutral">
+              <div className="case-article space-y-4">{intro}</div>
             </CaseSectionIsland>
           )}
 
@@ -131,13 +129,11 @@ export default async function CasePage({
             });
 
             return (
-              <CaseSectionIsland tone={tone} delay={80 + index * 80} key={section.heading.props.id ?? index}>
+              <CaseSectionIsland tone={tone} key={section.heading.props.id ?? index}>
                 <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   {clonedHeading}
                 </header>
-                <div className="case-article space-y-4">
-                  {section.body}
-                </div>
+                <div className="case-article space-y-4">{section.body}</div>
               </CaseSectionIsland>
             );
           })}

@@ -12,83 +12,83 @@
 
 const palette: CaseVibe[] = [
   {
-    emoji: '🎯',
-    label: 'A/B',
+    emoji: "🎯",
+    label: "A/B",
     surface:
-      'bg-gradient-to-br from-rose-100 via-orange-50/75 to-amber-100 dark:from-rose-500/25 dark:via-orange-500/15 dark:to-amber-500/15',
-    shadow: 'shadow-[0_18px_42px_-18px_rgba(244,114,182,0.35)]',
-    accent: 'text-rose-700 dark:text-rose-200',
+      "bg-gradient-to-br from-rose-200 via-pink-100 to-amber-100 dark:from-rose-600/45 dark:via-pink-500/35 dark:to-amber-400/30",
+    shadow: "shadow-[0_28px_52px_-26px_rgba(244,114,182,0.6)]",
+    accent: "text-rose-700 dark:text-rose-200",
     chip:
-      'bg-white/80 text-rose-700/90 border-white/40 shadow-sm dark:bg-white/10 dark:text-rose-100 dark:border-white/15',
-    link: 'text-rose-700 hover:text-rose-800 dark:text-rose-100 dark:hover:text-rose-50',
+      "backdrop-blur border border-rose-200/60 bg-white/85 text-rose-800 dark:border-rose-400/35 dark:bg-rose-500/25 dark:text-rose-50",
+    link: "text-rose-700 hover:text-rose-800 dark:text-rose-200 dark:hover:text-rose-100",
     glow:
-      'bg-gradient-to-br from-rose-200/50 via-orange-100/40 to-amber-200/30 dark:from-rose-500/25 dark:via-orange-500/20 dark:to-amber-500/15',
-    halo: 'bg-rose-200/50 dark:bg-rose-500/20',
+      "bg-gradient-to-br from-rose-200/65 via-pink-200/50 to-amber-200/45 dark:from-rose-500/35 dark:via-pink-500/30 dark:to-amber-400/25",
+    halo: "bg-rose-200/60 dark:bg-rose-500/30",
   },
   {
-    emoji: '🚚',
-    label: 'Ops',
+    emoji: "🚚",
+    label: "Ops",
     surface:
-      'bg-gradient-to-br from-emerald-100 via-sky-50/80 to-lime-100 dark:from-emerald-500/20 dark:via-sky-500/12 dark:to-lime-500/12',
-    shadow: 'shadow-[0_18px_42px_-18px_rgba(16,185,129,0.32)]',
-    accent: 'text-emerald-700 dark:text-emerald-200',
+      "bg-gradient-to-br from-emerald-100 via-sky-50/80 to-lime-100 dark:from-emerald-500/25 dark:via-sky-500/18 dark:to-lime-500/18",
+    shadow: "shadow-[0_24px_48px_-24px_rgba(16,185,129,0.38)]",
+    accent: "text-emerald-700 dark:text-emerald-200",
     chip:
-      'bg-white/80 text-emerald-700/90 border-white/40 shadow-sm dark:bg-white/10 dark:text-emerald-100 dark:border-white/15',
-    link: 'text-emerald-700 hover:text-emerald-800 dark:text-emerald-100 dark:hover:text-emerald-50',
+      "backdrop-blur border border-emerald-200/60 bg-white/85 text-emerald-800 dark:border-emerald-400/35 dark:bg-emerald-500/25 dark:text-emerald-50",
+    link: "text-emerald-700 hover:text-emerald-800 dark:text-emerald-200 dark:hover:text-emerald-100",
     glow:
-      'bg-gradient-to-br from-emerald-200/45 via-sky-100/40 to-lime-200/35 dark:from-emerald-500/25 dark:via-sky-500/20 dark:to-lime-500/15',
-    halo: 'bg-emerald-200/50 dark:bg-emerald-500/25',
+      "bg-gradient-to-br from-emerald-200/55 via-sky-200/45 to-lime-200/40 dark:from-emerald-500/30 dark:via-sky-500/24 dark:to-lime-500/20",
+    halo: "bg-emerald-200/55 dark:bg-emerald-500/28",
   },
   {
-    emoji: '🧠',
-    label: 'Modeling',
+    emoji: "🧠",
+    label: "Modeling",
     surface:
-      'bg-gradient-to-br from-violet-100 via-indigo-50/75 to-sky-100 dark:from-violet-500/20 dark:via-indigo-500/15 dark:to-sky-500/12',
-    shadow: 'shadow-[0_18px_42px_-18px_rgba(129,140,248,0.32)]',
-    accent: 'text-violet-700 dark:text-violet-200',
+      "bg-gradient-to-br from-violet-100 via-indigo-50/75 to-sky-100 dark:from-violet-500/25 dark:via-indigo-500/18 dark:to-sky-500/16",
+    shadow: "shadow-[0_24px_48px_-24px_rgba(129,140,248,0.36)]",
+    accent: "text-violet-700 dark:text-violet-200",
     chip:
-      'bg-white/80 text-violet-700/90 border-white/40 shadow-sm dark:bg-white/10 dark:text-violet-100 dark:border-white/15',
-    link: 'text-violet-700 hover:text-violet-800 dark:text-violet-100 dark:hover:text-violet-50',
+      "backdrop-blur border border-violet-200/60 bg-white/85 text-violet-800 dark:border-violet-400/35 dark:bg-violet-500/25 dark:text-violet-50",
+    link: "text-violet-700 hover:text-violet-800 dark:text-violet-200 dark:hover:text-violet-100",
     glow:
-      'bg-gradient-to-br from-violet-200/45 via-indigo-100/40 to-sky-200/35 dark:from-violet-500/25 dark:via-indigo-500/20 dark:to-sky-500/15',
-    halo: 'bg-violet-200/50 dark:bg-violet-500/25',
+      "bg-gradient-to-br from-violet-200/55 via-indigo-200/45 to-sky-200/40 dark:from-violet-500/30 dark:via-indigo-500/22 dark:to-sky-500/18",
+    halo: "bg-violet-200/55 dark:bg-violet-500/28",
   },
   {
-    emoji: '🤖',
-    label: 'AI',
+    emoji: "🤖",
+    label: "AI",
     surface:
-      'bg-gradient-to-br from-slate-100 via-indigo-50/80 to-sky-100 dark:from-slate-200/22 dark:via-slate-300/18 dark:to-indigo-400/18',
-    shadow: 'shadow-[0_18px_42px_-18px_rgba(148,163,184,0.45)]',
-    accent: 'text-slate-700 dark:text-slate-200',
+      "bg-gradient-to-br from-slate-100 via-indigo-50/80 to-sky-100 dark:from-slate-200/28 dark:via-slate-300/20 dark:to-indigo-400/22",
+    shadow: "shadow-[0_26px_52px_-24px_rgba(148,163,184,0.45)]",
+    accent: "text-slate-700 dark:text-slate-200",
     chip:
-      'bg-white/80 text-slate-700/90 border-white/40 shadow-sm dark:bg-slate-200/15 dark:text-slate-50 dark:border-slate-200/25',
-    link: 'text-indigo-600 hover:text-indigo-700 dark:text-indigo-200 dark:hover:text-indigo-100',
+      "backdrop-blur border border-slate-200/60 bg-white/85 text-slate-800 dark:border-slate-400/35 dark:bg-slate-500/25 dark:text-slate-50",
+    link: "text-indigo-600 hover:text-indigo-700 dark:text-indigo-200 dark:hover:text-indigo-100",
     glow:
-      'bg-gradient-to-br from-slate-200/60 via-indigo-200/45 to-sky-200/35 dark:from-slate-200/25 dark:via-indigo-300/20 dark:to-cyan-300/18',
-    halo: 'bg-slate-200/60 dark:bg-slate-300/30',
+      "bg-gradient-to-br from-slate-200/60 via-indigo-200/45 to-sky-200/35 dark:from-slate-200/28 dark:via-indigo-300/22 dark:to-cyan-300/18",
+    halo: "bg-slate-200/60 dark:bg-slate-300/30",
   },
   {
-    emoji: '🛠️',
-    label: 'Automation',
+    emoji: "🛠️",
+    label: "Automation",
     surface:
-      'bg-gradient-to-br from-amber-100 via-orange-50/75 to-lime-100 dark:from-amber-500/20 dark:via-orange-500/12 dark:to-lime-500/12',
-    shadow: 'shadow-[0_18px_42px_-18px_rgba(251,191,36,0.34)]',
-    accent: 'text-amber-700 dark:text-amber-200',
+      "bg-gradient-to-br from-amber-100 via-orange-50/75 to-lime-100 dark:from-amber-500/25 dark:via-orange-500/18 dark:to-lime-500/18",
+    shadow: "shadow-[0_24px_48px_-24px_rgba(251,191,36,0.38)]",
+    accent: "text-amber-700 dark:text-amber-200",
     chip:
-      'bg-white/80 text-amber-700/90 border-white/40 shadow-sm dark:bg-white/10 dark:text-amber-100 dark:border-white/15',
-    link: 'text-amber-700 hover:text-amber-800 dark:text-amber-100 dark:hover:text-amber-50',
+      "backdrop-blur border border-amber-200/60 bg-white/85 text-amber-800 dark:border-amber-400/35 dark:bg-amber-500/25 dark:text-amber-50",
+    link: "text-amber-700 hover:text-amber-800 dark:text-amber-200 dark:hover:text-amber-100",
     glow:
-      'bg-gradient-to-br from-amber-200/45 via-orange-100/40 to-lime-200/35 dark:from-amber-500/25 dark:via-orange-500/20 dark:to-lime-500/15',
-    halo: 'bg-amber-200/50 dark:bg-amber-500/25',
+      "bg-gradient-to-br from-amber-200/55 via-orange-200/45 to-lime-200/40 dark:from-amber-500/30 dark:via-orange-500/24 dark:to-lime-500/20",
+    halo: "bg-amber-200/55 dark:bg-amber-500/28",
   },
 ];
 
 const bySlug: Record<string, CaseVibe> = {
-  'ab-test-mobile-game': palette[0],
-  'logistics-calculator': palette[1],
+  "ab-test-mobile-game": palette[0],
+  "logistics-calculator": palette[1],
   scenario: palette[2],
-  'loki-assistant': palette[3],
-  'rpa-bot': palette[4],
+  "loki-assistant": palette[3],
+  "rpa-bot": palette[4],
 };
 
 export function getCaseVibe(slug: string, fallbackIndex = 0): CaseVibe {

@@ -3,6 +3,7 @@ import Card from '@/components/Card';
 import Button from '@/components/Button';
 import * as React from 'react';
 
+import { badgeBaseClass } from '@/lib/badge';
 import { getCaseVibe } from '@/lib/caseVibes';
 
 type Metric = {
@@ -33,26 +34,24 @@ type CaseItem = {
 
 const statusChip = (status?: CaseItem['status']) => {
   if (!status) return '';
-  const base =
-    'ml-2 inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] uppercase tracking-wide backdrop-blur';
+  const base = `${badgeBaseClass} backdrop-blur border border-white/30 bg-white/40 text-slate-700 dark:border-white/15 dark:bg-white/10 dark:text-white`;
   switch (status) {
     case 'prod':
-      return `${base} border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300`;
+      return `${base} text-emerald-700 dark:text-emerald-200`;
     case 'delivered':
-      return `${base} border-cyan-500/30 bg-cyan-500/10 text-cyan-700 dark:text-cyan-200`;
+      return `${base} text-cyan-700 dark:text-cyan-200`;
     case 'ready':
-      return `${base} border-indigo-500/30 bg-indigo-500/10 text-indigo-700 dark:text-indigo-200`;
+      return `${base} text-indigo-700 dark:text-indigo-200`;
     case 'demo':
-      return `${base} border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-200`;
+      return `${base} text-amber-600 dark:text-amber-200`;
     case 'pilot':
-      return `${base} border-sky-500/30 bg-sky-500/10 text-sky-600 dark:text-sky-200`;
+      return `${base} text-sky-600 dark:text-sky-200`;
     default:
       return base;
   }
 };
 
-const ndaChip =
-  'ml-2 inline-flex items-center rounded-full border px-2 py-0.5 border-fuchsia-500/30 bg-fuchsia-500/10 text-fuchsia-600 dark:text-fuchsia-300';
+const ndaChip = `${badgeBaseClass} backdrop-blur border border-fuchsia-300/60 bg-white/50 text-fuchsia-700 dark:border-fuchsia-400/35 dark:bg-fuchsia-500/20 dark:text-fuchsia-50`;
 
 const metricChip = (m: Metric) =>
   `chip ${m.positive ? 'chip-positive' : 'chip-neutral'}`;
@@ -85,7 +84,7 @@ const cases: CaseItem[] = [
       'Мгновенный расчёт и индикатор “выгодно/убыточно”. Интервью → pivot к калькулятору ценообразования (MVP v2).',
     tags: ['Streamlit', 'Python', 'Product Discovery'],
     result:
-      'Предотвращена лишняя разработка (~200 ч экономии); MVP собран за 5 часов.',
+      'Предотвращена лишняя разработка (~200 часов); MVP собран за 5 часов.',
     metrics: [{ label: 'Экономия', value: '~200 ч разработки', positive: true }],
     status: 'delivered',
     ctas: [
@@ -116,7 +115,7 @@ const cases: CaseItem[] = [
       'Песочница юнит-экономики: профили доходов/затрат, what-if и чувствительность; каскадный пересчёт, расширяемые модули.',
     tags: ['Analytics', 'Modeling', 'Core', 'What-if', 'Sensitivity'],
     result:
-      'Архитектура: модульное ядро + профили; детерминированный граф и пресеты для быстрых ответов.',
+      'Архитектура: модульное ядро + профили; детерминированный граф расчётов и пресеты для быстрых ответов.',
     status: 'ready',
     ctas: [
       {
@@ -137,10 +136,10 @@ const cases: CaseItem[] = [
     slug: 'loki-assistant',
     title: 'LOKI — голосовой AI-ассистент',
     teaser:
-      'Три слоя: локальные команды, LLM-классификация, визуальный анализ. Async/await + httpx → низкая задержка; потоковый TTS с прерыванием.',
+      'Три контура: локальные команды, LLM-классификация, визуальный анализ. Async/await + httpx → низкая задержка; потоковый TTS с прерыванием.',
     tags: ['Async/await', 'httpx', 'Whisper', 'Piper TTS', 'Gemini', 'Python/Poetry'],
     result:
-      'Асинхронная архитектура, мгновенный отклик и самокоррекция сценариев; все ключевые настройки в .env.',
+      'Асинхронная архитектура, быстрый отклик и самокоррекция сценариев; ключевые настройки — в .env.',
     status: 'demo',
     ctas: [
       {
@@ -180,9 +179,10 @@ export default function Cases() {
             role="list"
             aria-label="Кейсы"
           >
-            {cases.map((it, i) => {
-              const vibe = getCaseVibe(it.slug, i);
+            {cases.map((it, index) => {
+              const vibe = getCaseVibe(it.slug, index);
               const metric = it.metrics?.[0];
+              const badgeClass = `${badgeBaseClass} ${vibe.chip}`;
 
               return (
                 <div key={it.slug} className="snap-start snap-always" role="listitem">
@@ -199,23 +199,19 @@ export default function Cases() {
                         <span className="text-2xl animate-float" aria-hidden>
                           {vibe.emoji}
                         </span>
-                        <span
-                          className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] ${vibe.chip}`}
-                        >
-                          {vibe.label}
-                        </span>
+                        <span className={badgeClass}>{vibe.label}</span>
                       </div>
-                      <h3 className="sr-only">{it.title}</h3>
-                      <p className="mt-3 text-sm leading-5 text-slate-800/90 dark:text-slate-100/90">{it.teaser}</p>
+                      <h3 className="mt-3 text-base font-semibold leading-snug">{it.title}</h3>
+                      <p className="mt-2 text-sm leading-5 text-slate-800/90 dark:text-slate-100/90">{it.teaser}</p>
                       {metric && (
-                        <div className={`mt-4 inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-semibold ${vibe.chip}`}>
+                        <div className={`${badgeBaseClass} mt-4 inline-flex items-center gap-2 backdrop-blur border border-white/40 bg-white/75 text-[11px] font-semibold text-slate-700 dark:border-white/15 dark:bg-white/10 dark:text-white`}>
                           <span className="opacity-75">{metric.label}</span>
                           <span>{metric.value}</span>
                         </div>
                       )}
                       <div className="mt-4 flex flex-wrap gap-2 text-[11px] font-semibold">
                         {it.tags.slice(0, 3).map((tag) => (
-                          <span key={tag} className={`rounded-full px-3 py-1 ${vibe.chip}`}>
+                          <span key={tag} className={`${badgeBaseClass} backdrop-blur border border-white/35 bg-white/70 text-slate-700 dark:border-white/15 dark:bg-white/10 dark:text-white`}>
                             {tag}
                           </span>
                         ))}
@@ -242,6 +238,7 @@ export default function Cases() {
           {cases.map((c, index) => {
             const resultId = `case-${c.slug}-result`;
             const vibe = getCaseVibe(c.slug, index);
+            const badgeClass = `${badgeBaseClass} ${vibe.chip}`;
 
             return (
               <Card
@@ -256,27 +253,20 @@ export default function Cases() {
                   className={`pointer-events-none absolute -right-12 -top-16 h-44 w-44 rounded-full blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 ${vibe.halo}`}
                 />
                 <div className="relative z-[1] flex flex-col gap-3">
-                  <div>
-                    <div
-                      className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] ${vibe.chip}`}
-                    >
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className={badgeClass}>
                       <span aria-hidden className="text-lg">
                         {vibe.emoji}
                       </span>
                       {vibe.label}
-                    </div>
-                    <h3
-                      id={`case-${c.slug}-title`}
-                      className="mt-2 text-xl font-semibold leading-snug"
-                    >
-                      {c.title}
-                      {c.status && (
-                        <span className={statusChip(c.status)}>{c.status}</span>
-                      )}
-                      {c.nda && <span className={ndaChip}>NDA</span>}
-                    </h3>
-                    <p className="mt-1 text-sm text-slate-800/85 dark:text-slate-100/85">{c.teaser}</p>
+                    </span>
+                    {c.status && <span className={statusChip(c.status)}>{c.status}</span>}
+                    {c.nda && <span className={ndaChip}>NDA</span>}
                   </div>
+                  <h3 id={`case-${c.slug}-title`} className="text-xl font-semibold leading-snug">
+                    {c.title}
+                  </h3>
+                  <p className="text-sm text-slate-800/85 dark:text-slate-100/85">{c.teaser}</p>
 
                   {c.result && (
                     <div
@@ -304,7 +294,7 @@ export default function Cases() {
 
                   <div className="mt-2 flex flex-wrap gap-2 text-xs">
                     {c.tags.map((t) => (
-                      <span key={t} className={`rounded-full px-3 py-1 ${vibe.chip}`}>
+                      <span key={t} className={`${badgeBaseClass} backdrop-blur border border-white/35 bg-white/70 text-slate-700 dark:border-white/15 dark:bg-white/10 dark:text-white`}>
                         {t}
                       </span>
                     ))}
