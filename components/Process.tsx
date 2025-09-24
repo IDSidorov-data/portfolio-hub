@@ -67,15 +67,15 @@ const steps = [
   },
   {
     title: 'Запуск MVP',
-    text: 'Собираю рабочий прототип за 1–3 недели: backend, интеграции, UI. Настраиваем метрики и доступы, готовим к релизу.',
+    text: 'Собираю рабочий прототип за 1–3 недели: backend, интеграции, UI. Настроим события и отчётность, чтобы мерить эффект.',
   },
   {
-    title: 'Рост и масштабирование',
-    text: 'Подключаем эксперименты, автоматизации, отчёты. Разворачиваем аналитику и улучшаем ключевые показатели.',
+    title: 'Рост и эксперименты',
+    text: 'A/B, аналитика, автоматизация: улучшаем продукт, собираем данные, уменьшаем ручной труд.',
   },
   {
-    title: 'Поддержка и развитие',
-    text: 'Передаю проект, документирую процессы и остаюсь на связи. Могу помогать с дальнейшими итерациями и развитием команды.',
+    title: 'Поддержка и передача',
+    text: 'Документация, контроль качества, передача знаний команде. Помогаю запустить и не потерять темп.',
   },
 ];
 
@@ -83,13 +83,14 @@ export default function Process() {
   return (
     <section id="process" className="py-16 sm:py-24">
       <Container className="px-0 md:px-5 ">
-        <h2 className="mb-6 text-3xl font-semibold">Как я работаю</h2>
+        <h2 className="mb-6 text-2xl font-semibold">Как я работаю</h2>
 
+        {/* Mobile */}
         <div className="mt-2 block md:hidden">
           <div
             className="grid auto-cols-[85%] grid-flow-col gap-4 snap-x snap-mandatory overflow-x-auto scroll-px-4 px-4 [scrollbar-width:none] [-webkit-overflow-scrolling:touch]"
             role="list"
-            aria-label="Как я работаю"
+            aria-label="Процесс"
           >
             {steps.map((step, index) => {
               const vibe = stepVibes[index % stepVibes.length];
@@ -101,10 +102,7 @@ export default function Process() {
                     className={`group relative h-full overflow-hidden border border-transparent p-6 text-slate-900 transition-all duration-500 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/70 dark:text-white ${vibe.surface} ${vibe.shadow}`}
                     variant="default"
                   >
-                    <span
-                      aria-hidden
-                      className={`absolute -right-10 -top-14 h-36 w-36 rounded-full blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 ${vibe.halo}`}
-                    />
+                    <span aria-hidden className={`absolute -right-10 -top-14 h-36 w-36 rounded-full blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 ${vibe.halo}`} />
                     <div className="relative z-[1] flex h-full flex-col gap-3">
                       <span className={badgeClass}>
                         <span aria-hidden className="text-lg">{vibe.emoji}</span>
@@ -112,8 +110,8 @@ export default function Process() {
                       </span>
                       <p className="text-sm leading-5 text-slate-800/90 dark:text-slate-100/90">{step.text}</p>
                       <div className={`${badgeBaseClass} ${vibe.chip} mt-auto inline-flex items-center gap-2 text-[11px]`}>
-                        <span aria-hidden>→</span>
-                        <span>Следующий шаг рядом</span>
+                        <span aria-hidden>🌟</span>
+                        <span>Next step is close</span>
                       </div>
                     </div>
                   </Card>
@@ -123,6 +121,7 @@ export default function Process() {
           </div>
         </div>
 
+        {/* Desktop */}
         <div className="mt-6 hidden items-stretch gap-4 md:flex">
           {steps.map((step, index) => {
             const vibe = stepVibes[index % stepVibes.length];
@@ -134,10 +133,7 @@ export default function Process() {
                   className={`group relative h-full max-w-sm overflow-hidden border border-transparent p-6 text-slate-900 transition-all duration-500 ease-out hover:-translate-y-1 hover:shadow-xl dark:text-white ${vibe.surface} ${vibe.shadow}`}
                   variant="default"
                 >
-                  <span
-                    aria-hidden
-                    className={`pointer-events-none absolute -right-10 -top-14 h-36 w-36 rounded-full blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 ${vibe.halo}`}
-                  />
+                  <span aria-hidden className={`pointer-events-none absolute -right-10 -top-14 h-36 w-36 rounded-full blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 ${vibe.halo}`} />
                   <span className={badgeClass}>
                     <span aria-hidden className="text-lg">{vibe.emoji}</span>
                     {step.title}
