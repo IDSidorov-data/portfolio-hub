@@ -52,9 +52,7 @@ export default function Nav({ backToCases = false, caseId }: NavProps) {
               <Link href="https://t.me" className="opacity-80 hover:opacity-100">
                 Telegram
               </Link>
-              <div className="hidden md:flex rounded-lg p-1.5 hover:bg-[rgb(var(--muted))] transition">
-                <BackgroundToggle aria-label="Переключить фон" />
-              </div>
+              <BackgroundToggle className="hidden md:inline-flex items-center gap-1" aria-label="Переключить фон" />
             </div>
           </div>
         </nav>
