@@ -100,16 +100,18 @@ export default async function CasePage({
 
       <section className="py-10 sm:py-16">
         <Container>
-          <CaseHero
-            slug={params.slug}
-            title={frontmatter.title}
-            summary={frontmatter.summary}
-            role={frontmatter.role}
-            duration={frontmatter.duration}
-            status={frontmatter.status}
-            tags={frontmatter.tags}
-            links={frontmatter.links}
-          />
+          <div className="mx-auto w-full max-w-[62rem]">
+            <CaseHero
+              slug={params.slug}
+              title={frontmatter.title}
+              summary={frontmatter.summary}
+              role={frontmatter.role}
+              duration={frontmatter.duration}
+              status={frontmatter.status}
+              tags={frontmatter.tags}
+              links={frontmatter.links}
+            />
+          </div>
         </Container>
       </section>
 
@@ -142,9 +144,8 @@ export default async function CasePage({
                 </CaseSectionIsland>
               );
             })}
+            <CaseCTA result={frontmatter?.result} />
           </div>
-
-          <CaseCTA result={frontmatter?.result} />
         </Container>
       </section>
     </>

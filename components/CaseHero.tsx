@@ -4,7 +4,6 @@ import Button from '@/components/Button';
 import Card from '@/components/Card';
 import CaseMeta from '@/components/CaseMeta';
 import Badge from '@/components/primitives/Badge';
-import BackButton from '@/components/BackButton';
 import { getCaseVibe } from '@/lib/caseVibes';
 
 interface CaseLink {
@@ -46,9 +45,6 @@ export default function CaseHero({
         className={`pointer-events-none absolute -right-24 -top-28 h-60 w-60 rounded-full blur-3xl opacity-60 ${vibe.halo}`}
       />
       <div className="relative z-[1] flex flex-col gap-6">
-        <div className="self-start">
-          <BackButton caseId={slug} />
-        </div>
         <header className="flex flex-wrap items-start gap-4">
           <span
             aria-hidden

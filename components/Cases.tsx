@@ -292,7 +292,7 @@ function CaseCard({ item, index }: CaseCardProps) {
         {item.result ? (
           <p
             id={`${cardId}-result`}
-            className="case-card__result rounded-xl border border-white/40 bg-white/70 p-4 text-sm font-medium text-slate-700 backdrop-blur dark:border-white/20 dark:bg-white/10 dark:text-slate-100"
+            className="case-card__result rounded-xl p-4 text-sm font-medium leading-6 backdrop-blur"
           >
             {item.result}
           </p>
@@ -338,7 +338,7 @@ function CaseCard({ item, index }: CaseCardProps) {
           <Button
             variant="accent"
             href={`/cases/${item.slug}`}
-            className="min-h-[44px] px-5"
+            className="case-card__cta case-card__cta--accent case-card__cta--primary min-h-[44px] px-5"
             data-qa={`cta-view-case-${item.slug}`}
             onClick={() => {
               trackClick({ action: 'cta_primary' });
@@ -347,22 +347,30 @@ function CaseCard({ item, index }: CaseCardProps) {
           >
             Смотреть кейс
           </Button>
-          {item.ctas?.map((cta, ctaIndex) => (
-            <Button
-              key={cta.label}
-              variant={cta.variant || 'secondary'}
-              href={cta.href}
-              target={cta.kind === 'external' ? '_blank' : undefined}
-              rel={cta.kind === 'external' ? 'noopener noreferrer' : undefined}
-              className="min-h-[44px] px-4"
-              data-qa={`cta-case-${item.slug}-${ctaIndex}-${toDataQa(cta.label)}`}
-              onClick={() => {
-                trackClick({ action: 'cta_secondary', label: cta.label, href: cta.href });
-              }}
-            >
-              {cta.label}
-            </Button>
-          ))}
+          {item.ctas?.map((cta, ctaIndex) => {
+            const variant = cta.variant || 'secondary';
+            const accentTone = variant === 'accent';
+
+            return (
+              <Button
+                key={cta.label}
+                variant={variant}
+                href={cta.href}
+                target={cta.kind === 'external' ? '_blank' : undefined}
+                rel={cta.kind === 'external' ? 'noopener noreferrer' : undefined}
+                className={clsx(
+                  'case-card__cta min-h-[44px] px-4',
+                  accentTone ? 'case-card__cta--accent' : 'case-card__cta--secondary'
+                )}
+                data-qa={`cta-case-${item.slug}-${ctaIndex}-${toDataQa(cta.label)}`}
+                onClick={() => {
+                  trackClick({ action: 'cta_secondary', label: cta.label, href: cta.href });
+                }}
+              >
+                {cta.label}
+              </Button>
+            );
+          })}
         </footer>
       </Card>
     </li>
