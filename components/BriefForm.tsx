@@ -194,7 +194,8 @@ export default function BriefForm({ defaultSource }: { defaultSource?: string })
         <button
           type="submit"
           disabled={loading}
-          className="rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-60"
+          className="rounded bg-blue-600 px-4 py-2 text-white transition disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400"
+          data-qa="brief-submit"
         >
           {loading ? 'Отправка…' : 'Отправить'}
         </button>

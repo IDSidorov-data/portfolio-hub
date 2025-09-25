@@ -1,7 +1,6 @@
 ﻿import React from "react";
 
 import { getCaseSlugs, readCaseBySlug } from "@/lib/mdx";
-import Container from "@/components/Container";
 import type { Metadata } from "next";
 import { compileMDX } from "next-mdx-remote/rsc";
 
@@ -13,6 +12,7 @@ import CaseHero from '@/components/CaseHero';
 import CaseReadingProgress from '@/components/CaseReadingProgress';
 import CaseCTA from '@/components/CaseCTA';
 import CaseSectionIsland from '@/components/CaseSectionIsland';
+import Container from "@/components/Container";
 import BackButton from '@/components/BackButton';
 
 const prettyCodeOptions = {
@@ -99,10 +99,10 @@ export default async function CasePage({
     <>
       <CaseReadingProgress />
 
-      <div className="py-10 sm:py-16">
+      <section className="py-10 sm:py-16">
         <Container>
           <div className="mb-6 flex justify-start">
-            <BackButton />
+            <BackButton caseId={params.slug} />
           </div>
           <CaseHero
             slug={params.slug}
@@ -115,15 +115,15 @@ export default async function CasePage({
             links={frontmatter.links}
           />
         </Container>
-      </div>
+      </section>
 
-      <Container className="pb-14 sm:pb-20">
-        <div className="mx-auto w-full px-4 sm:px-6 max-w-3xl lg:max-w-4xl xl:max-w-5xl">
+      <section className="pb-16 sm:pb-20">
+        <div className="mx-auto w-full max-w-[68rem] px-5 sm:px-6 lg:px-8">
           <div className="space-y-8 sm:space-y-10">
           {intro.length > 0 && (
             <CaseSectionIsland tone="neutral">
               <div className="case-article">
-                <div className="mx-auto max-w-[72ch] space-y-4">{intro}</div>
+                <div className="mx-auto w-full space-y-4 md:max-w-[72ch]">{intro}</div>
               </div>
             </CaseSectionIsland>
           )}
@@ -141,7 +141,7 @@ export default async function CasePage({
                   {clonedHeading}
                 </header>
                 <div className="case-article">
-                  <div className="mx-auto max-w-[72ch] space-y-4">{section.body}</div>
+                  <div className="mx-auto w-full space-y-4 md:max-w-[72ch]">{section.body}</div>
                 </div>
               </CaseSectionIsland>
             );
@@ -150,7 +150,7 @@ export default async function CasePage({
       </div>
 
         <CaseCTA result={frontmatter?.result} />
-      </Container>
+      </section>
     </>
   );
 }

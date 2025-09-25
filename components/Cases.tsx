@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
 
 import Container from '@/components/Container';
@@ -11,6 +10,7 @@ import Badge from '@/components/primitives/Badge';
 import MetricBadge from '@/components/primitives/MetricBadge';
 import { useCardAnalytics } from '@/components/hooks/useCardAnalytics';
 import { getCaseVibe } from '@/lib/caseVibes';
+import { sendEvent } from '@/lib/analytics';
 import type { BadgeTone } from '@/lib/badge';
 
 type Metric = {
@@ -157,7 +157,123 @@ const statusTone: Record<NonNullable<CaseItem['status']>, BadgeTone> = {
   ready: 'purple',
 };
 
+function toDataQa(value: string) {
+  const normalized = value
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9\u0400-\u04FF-]/g, '');
+
+  return normalized.length > 0 ? normalized : 'cta';
+}
+
 export default function Cases() {
+  const listRef = React.useRef<HTMLUListElement | null>(null);
+  const metricsRef = React.useRef({ item: 0, gap: 0 });
+  const rafRef = React.useRef<number>();
+  const [activeIndex, setActiveIndex] = React.useState(0);
+
+  React.useEffect(() => {
+    const node = listRef.current;
+    if (!node || typeof window === 'undefined') {
+      return;
+    }
+
+    const computeMetrics = () => {
+      const firstItem = node.querySelector(':scope > li') as HTMLElement | null;
+      if (!firstItem) {
+        return;
+      }
+      const styles = window.getComputedStyle(node);
+      const gap = parseFloat(styles.columnGap || styles.gap || '0');
+      metricsRef.current = {
+        item: firstItem.getBoundingClientRect().width,
+        gap: Number.isFinite(gap) ? gap : 0,
+      };
+    };
+
+    computeMetrics();
+
+    const handleResize = () => computeMetrics();
+
+    if (!('ResizeObserver' in window)) {
+      window.addEventListener('resize', handleResize);
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }
+
+    const resizeObserver = new ResizeObserver(handleResize);
+    resizeObserver.observe(node);
+    node.querySelectorAll(':scope > li').forEach((child) => resizeObserver.observe(child));
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  React.useEffect(() => {
+    return () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, []);
+
+  const scrollToIndex = React.useCallback((nextIndex: number) => {
+    const node = listRef.current;
+    if (!node) return;
+    const { item, gap } = metricsRef.current;
+    if (!item) return;
+    const clamped = Math.max(0, Math.min(nextIndex, cases.length - 1));
+    const offset = clamped * (item + gap);
+    node.scrollTo({ left: offset, behavior: 'smooth' });
+  }, []);
+
+  const handleCarouselKeyDown = React.useCallback(
+    (event: React.KeyboardEvent<HTMLUListElement>) => {
+      if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') {
+        return;
+      }
+      event.preventDefault();
+      const delta = event.key === 'ArrowRight' ? 1 : -1;
+      scrollToIndex(activeIndex + delta);
+    },
+    [activeIndex, scrollToIndex]
+  );
+
+  const handleScroll = React.useCallback(() => {
+    if (typeof window === 'undefined') return;
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+    }
+    rafRef.current = window.requestAnimationFrame(() => {
+      const node = listRef.current;
+      if (!node) return;
+      const { item, gap } = metricsRef.current;
+      if (!item) return;
+      const rawIndex = node.scrollLeft / (item + gap || 1);
+      const nextIndex = Math.round(rawIndex);
+      const clamped = Math.max(0, Math.min(nextIndex, cases.length - 1));
+      setActiveIndex((prev) => (prev === clamped ? prev : clamped));
+    });
+  }, []);
+
+  const reportedIndexRef = React.useRef(0);
+  React.useEffect(() => {
+    if (activeIndex === reportedIndexRef.current) {
+      return;
+    }
+    const current = cases[activeIndex];
+    if (!current) {
+      return;
+    }
+    reportedIndexRef.current = activeIndex;
+    sendEvent('carousel_swipe', { case_id: current.slug, position: activeIndex });
+  }, [activeIndex]);
+
   return (
     <section id="cases" className="py-16 sm:py-24">
       <Container>
@@ -171,11 +287,33 @@ export default function Cases() {
           </p>
         </header>
 
-        <ul className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-3" role="list">
-          {cases.map((item, index) => (
-            <CaseCard key={item.slug} item={item} index={index} />
-          ))}
-        </ul>
+        <div role="group" aria-roledescription="carousel" aria-label="Кейсы">
+          <ul
+            ref={listRef}
+            className="case-carousel"
+            role="list"
+            tabIndex={0}
+            onKeyDown={handleCarouselKeyDown}
+            onScroll={handleScroll}
+          >
+            {cases.map((item, index) => (
+              <CaseCard key={item.slug} item={item} index={index} />
+            ))}
+          </ul>
+          <div className="mt-4 flex justify-center gap-2 md:hidden" aria-hidden="true">
+            {cases.map((caseItem, index) => (
+              <span
+                key={caseItem.slug}
+                className={clsx(
+                  'h-1.5 w-6 rounded-full transition-colors',
+                  activeIndex === index
+                    ? 'bg-white/80 shadow-[0_0_8px_rgba(0,0,0,0.25)] dark:bg-slate-100'
+                    : 'bg-slate-300/60 dark:bg-slate-600/60'
+                )}
+              />
+            ))}
+          </div>
+        </div>
       </Container>
     </section>
   );
@@ -187,7 +325,6 @@ type CaseCardProps = {
 };
 
 function CaseCard({ item, index }: CaseCardProps) {
-  const router = useRouter();
   const vibe = getCaseVibe(item.slug, index);
   const { ref, trackClick } = useCardAnalytics<HTMLLIElement>({
     id: item.slug,
@@ -195,35 +332,6 @@ function CaseCard({ item, index }: CaseCardProps) {
     index,
     payload: { title: item.title },
   });
-
-  React.useEffect(() => {
-    router.prefetch?.(`/cases/${item.slug}`);
-  }, [item.slug, router]);
-
-  const handleNavigate = React.useCallback(() => {
-    trackClick({ action: 'open' });
-    router.push(`/cases/${item.slug}`);
-  }, [item.slug, router, trackClick]);
-
-  const handleCardClick = React.useCallback(
-    (event: React.MouseEvent<HTMLDivElement>) => {
-      if ((event.target as HTMLElement).closest('[data-prevent-card]')) {
-        return;
-      }
-      handleNavigate();
-    },
-    [handleNavigate]
-  );
-
-  const handleKeyDown = React.useCallback(
-    (event: React.KeyboardEvent<HTMLDivElement>) => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        handleNavigate();
-      }
-    },
-    [handleNavigate]
-  );
 
   const tags = item.tags || [];
   const mobileMax = 3;
@@ -235,13 +343,13 @@ function CaseCard({ item, index }: CaseCardProps) {
   return (
     <li ref={ref} className="group/card list-none">
       <Card
-        role="link"
-        tabIndex={0}
         aria-labelledby={`${cardId}-title`}
         aria-describedby={item.result ? `${cardId}-result` : undefined}
-        className={`relative flex h-full flex-col gap-4 transition md:hover:-translate-y-1 md:hover:shadow-lg motion-reduce:md:hover:translate-y-0 ${vibe.surface} ${vibe.shadow}`}
-        onClick={handleCardClick}
-        onKeyDown={handleKeyDown}
+        className={clsx(
+          'case-card relative flex h-full flex-col gap-4 transition md:hover:-translate-y-1 md:hover:shadow-lg motion-reduce:md:hover:translate-y-0',
+          vibe.surface,
+          vibe.shadow
+        )}
       >
         <span
           aria-hidden
@@ -264,17 +372,17 @@ function CaseCard({ item, index }: CaseCardProps) {
         </header>
         <h3
           id={`${cardId}-title`}
-          className="mt-2 text-lg font-semibold leading-tight text-slate-900 line-clamp-2 md:mt-3 dark:text-white"
+          className="case-card__title mt-2 text-lg font-semibold leading-tight text-slate-900 line-clamp-2 md:mt-3 dark:text-white"
         >
           {item.title}
         </h3>
-        <p className="text-sm leading-6 text-slate-600 line-clamp-2 dark:text-slate-300">
+        <p className="case-card__desc text-sm leading-6 text-slate-600 line-clamp-2 dark:text-slate-200">
           {item.teaser}
         </p>
         {item.result ? (
           <p
             id={`${cardId}-result`}
-            className="rounded-xl border border-white/40 bg-white/70 p-4 text-sm font-medium text-slate-700 backdrop-blur dark:border-white/15 dark:bg-white/10 dark:text-slate-200"
+            className="case-card__result rounded-xl border border-white/40 bg-white/70 p-4 text-sm font-medium text-slate-700 backdrop-blur dark:border-white/20 dark:bg-white/10 dark:text-slate-100"
           >
             {item.result}
           </p>
@@ -321,25 +429,24 @@ function CaseCard({ item, index }: CaseCardProps) {
             variant="primary"
             href={`/cases/${item.slug}`}
             className="min-h-[44px] px-5"
-            data-prevent-card
-            onClick={(event) => {
-              event.stopPropagation();
+            data-qa={`cta-view-case-${item.slug}`}
+            onClick={() => {
               trackClick({ action: 'cta_primary' });
+              sendEvent('view_case', { case_id: item.slug, position: index });
             }}
           >
             Смотреть кейс
           </Button>
-          {item.ctas?.map((cta) => (
+          {item.ctas?.map((cta, ctaIndex) => (
             <Button
               key={cta.label}
               variant={cta.variant || 'secondary'}
               href={cta.href}
               target={cta.kind === 'external' ? '_blank' : undefined}
               rel={cta.kind === 'external' ? 'noopener noreferrer' : undefined}
-              data-prevent-card
               className="min-h-[44px] px-4"
-              onClick={(event) => {
-                event.stopPropagation();
+              data-qa={`cta-case-${item.slug}-${ctaIndex}-${toDataQa(cta.label)}`}
+              onClick={() => {
                 trackClick({ action: 'cta_secondary', label: cta.label, href: cta.href });
               }}
             >

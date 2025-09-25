@@ -9,9 +9,11 @@ type Props = {
   className?: string;
   children: React.ReactNode;
   target?: string; // важно для внешних ссылок
-  rel?: string;    // важно для внешних ссылок
+  rel?: string; // важно для внешних ссылок
   onClick?: React.MouseEventHandler<HTMLAnchorElement | HTMLButtonElement>;
-} & React.ButtonHTMLAttributes<HTMLButtonElement>;
+} &
+  React.ButtonHTMLAttributes<HTMLButtonElement> &
+  React.AnchorHTMLAttributes<HTMLAnchorElement>;
 
 export default function Button({
   variant = "primary",
@@ -42,15 +44,30 @@ export default function Button({
   const cls = `${base} ${styles} ${className}`.trim();
 
   if (href) {
+    const { type: _buttonType, ...anchorRest } = rest as React.AnchorHTMLAttributes<HTMLAnchorElement>;
     return (
-      <Link href={href} className={cls} target={target} rel={rel} onClick={onClick}>
+      <Link
+        href={href}
+        className={cls}
+        target={target}
+        rel={rel}
+        onClick={onClick as React.MouseEventHandler<HTMLAnchorElement>}
+        {...anchorRest}
+      >
         {children}
       </Link>
     );
   }
 
+  const { type, ...buttonRest } = rest;
+
   return (
-    <button className={cls} onClick={onClick} {...rest}>
+    <button
+      type={type ?? 'button'}
+      className={cls}
+      onClick={onClick as React.MouseEventHandler<HTMLButtonElement>}
+      {...buttonRest}
+    >
       {children}
     </button>
   );

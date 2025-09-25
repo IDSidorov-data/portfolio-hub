@@ -39,12 +39,14 @@ export default function CaseCTA({ result }: { result?: string }) {
               scroll={false}
               onClick={handleBrief}
               className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/20 transition md:hover:-translate-y-0.5 md:hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
+              data-qa="case-cta-brief"
             >
               Оставить заявку
             </Link>
             <Link
               href="/#cases"
               className="inline-flex min-h-[44px] items-center justify-center rounded-xl border border-slate-300/70 bg-white/60 px-6 py-3 text-sm font-semibold text-slate-900 shadow-sm transition md:hover:-translate-y-0.5 md:hover:bg-white/80 dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
+              data-qa="case-cta-more"
             >
               Посмотреть ещё проекты
             </Link>

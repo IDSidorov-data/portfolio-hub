@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import Button from '@/components/Button'
 import ThemeToggle from '@/components/ThemeToggle'
 import BackgroundToggle from '@/components/BackgroundToggle' // ← вернули
 
@@ -14,11 +13,6 @@ export default function Nav({ backToCases = false }: { backToCases?: boolean }) 
         <nav className="flex h-14 items-center justify-between">
           {/* левая группа не раздувает ширину */}
           <div className="flex items-center gap-3 min-w-0 shrink-0">
-            {backToCases && (
-              <Button variant="secondary" href="/" className="px-3 py-1.5">
-                ← Назад
-              </Button>
-            )}
             <Link
               href="/"
               className="font-semibold hidden max-w-[60vw] md:inline text-sm truncate"

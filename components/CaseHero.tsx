@@ -74,7 +74,7 @@ export default function CaseHero({
 
         {hasLinks ? (
           <div className="flex flex-wrap gap-3">
-            {links!.map(({ label, href }) => {
+            {links!.map(({ label, href }, linkIndex) => {
               const isExternal = /^https?:/i.test(href);
               return (
                 <Button
@@ -84,6 +84,7 @@ export default function CaseHero({
                   target={isExternal ? '_blank' : undefined}
                   rel={isExternal ? 'noopener noreferrer' : undefined}
                   className="min-h-[44px] px-5"
+                  data-qa={`case-link-${slug}-${linkIndex}`}
                 >
                   {label}
                 </Button>

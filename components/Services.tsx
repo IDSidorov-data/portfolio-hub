@@ -225,6 +225,7 @@ function ServiceCard({ service, index }: ServiceCardProps) {
             href="#brief"
             className="mt-2 w-full min-h-[44px] justify-center text-sm font-semibold md:w-auto"
             onClick={() => trackClick({ action: 'brief' })}
+            data-qa={`service-${service.id}-cta`}
           >
             Обсудить проект
           </Button>
