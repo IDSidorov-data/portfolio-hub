@@ -20,7 +20,7 @@ export default function BackButton({ caseId }: { caseId?: string }) {
           window.location.href = "/#cases";
         }
       }}
-      className="inline-flex items-center gap-1 text-sm font-medium text-slate-700 opacity-80 transition hover:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[rgb(var(--accent))] dark:text-slate-200 md:-ml-2"
+      className="inline-flex items-center gap-1 text-sm font-medium text-slate-700 opacity-80 transition hover:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[rgb(var(--accent))] dark:text-slate-200 md:-ml-4 lg:-ml-8 xl:-ml-10"
     >
       ← Назад
     </button>

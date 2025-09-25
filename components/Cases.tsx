@@ -253,6 +253,7 @@ function CaseCard({ item, index }: CaseCardProps) {
   return (
     <li ref={ref} className="group/card list-none">
       <Card
+        variant="plain"
         aria-labelledby={`${cardId}-title`}
         aria-describedby={item.result ? `${cardId}-result` : undefined}
         className={clsx(
