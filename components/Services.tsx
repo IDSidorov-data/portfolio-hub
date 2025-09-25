@@ -1,10 +1,13 @@
 'use client';
 
+import clsx from '@/lib/clsx';
+
 import Container from '@/components/Container';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
 import Badge from '@/components/primitives/Badge';
 import { useCardAnalytics } from '@/components/hooks/useCardAnalytics';
+import { useSnapCarousel } from '@/components/hooks/useSnapCarousel';
 import type { BadgeTone } from '@/lib/badge';
 
 type Service = {
@@ -133,6 +136,8 @@ const serviceVibes: Record<Service['id'], ServiceVibe> = {
 };
 
 export default function Services() {
+  const { listRef, activeIndex, handleKeyDown, handleScroll } = useSnapCarousel(services.length);
+
   return (
     <section id="services" className="py-16 sm:py-24">
       <Container>
@@ -146,11 +151,35 @@ export default function Services() {
           </p>
         </header>
 
-        <ul className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-3" role="list">
-          {services.map((service, index) => (
-            <ServiceCard key={service.id} service={service} index={index} />
-          ))}
-        </ul>
+        <div role="group" aria-roledescription="carousel" aria-label="Услуги">
+          <ul
+            ref={listRef}
+            className="case-carousel"
+            role="list"
+            tabIndex={0}
+            onKeyDown={handleKeyDown}
+            onScroll={handleScroll}
+          >
+            {services.map((service, index) => (
+              <ServiceCard key={service.id} service={service} index={index} />
+            ))}
+          </ul>
+          {services.length > 1 ? (
+            <div className="mt-4 flex justify-center gap-2 md:hidden" aria-hidden="true">
+              {services.map((service, index) => (
+                <span
+                  key={service.id}
+                  className={clsx(
+                    'h-1.5 w-6 rounded-full transition-colors',
+                    activeIndex === index
+                      ? 'bg-white/80 shadow-[0_0_8px_rgba(0,0,0,0.25)] dark:bg-slate-100'
+                      : 'bg-slate-300/60 dark:bg-slate-600/60'
+                  )}
+                />
+              ))}
+            </div>
+          ) : null}
+        </div>
       </Container>
     </section>
   );
@@ -221,7 +250,7 @@ function ServiceCard({ service, index }: ServiceCardProps) {
             {service.budget}
           </Badge>
           <Button
-            variant="primary"
+            variant="accent"
             href="#brief"
             className="mt-2 w-full min-h-[44px] justify-center text-sm font-semibold md:w-auto"
             onClick={() => trackClick({ action: 'brief' })}

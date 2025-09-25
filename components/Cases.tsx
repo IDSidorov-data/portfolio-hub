@@ -9,6 +9,7 @@ import Button from '@/components/Button';
 import Badge from '@/components/primitives/Badge';
 import MetricBadge from '@/components/primitives/MetricBadge';
 import { useCardAnalytics } from '@/components/hooks/useCardAnalytics';
+import { useSnapCarousel } from '@/components/hooks/useSnapCarousel';
 import { getCaseVibe } from '@/lib/caseVibes';
 import { sendEvent } from '@/lib/analytics';
 import type { BadgeTone } from '@/lib/badge';
@@ -168,98 +169,7 @@ function toDataQa(value: string) {
 }
 
 export default function Cases() {
-  const listRef = React.useRef<HTMLUListElement | null>(null);
-  const metricsRef = React.useRef({ item: 0, gap: 0 });
-  const rafRef = React.useRef<number>();
-  const [activeIndex, setActiveIndex] = React.useState(0);
-
-  React.useEffect(() => {
-    const node = listRef.current;
-    if (!node || typeof window === 'undefined') {
-      return;
-    }
-
-    const computeMetrics = () => {
-      const firstItem = node.querySelector(':scope > li') as HTMLElement | null;
-      if (!firstItem) {
-        return;
-      }
-      const styles = window.getComputedStyle(node);
-      const gap = parseFloat(styles.columnGap || styles.gap || '0');
-      metricsRef.current = {
-        item: firstItem.getBoundingClientRect().width,
-        gap: Number.isFinite(gap) ? gap : 0,
-      };
-    };
-
-    computeMetrics();
-
-    const handleResize = () => computeMetrics();
-
-    if (typeof ResizeObserver === 'undefined') {
-      window.addEventListener('resize', handleResize);
-      return () => {
-        window.removeEventListener('resize', handleResize);
-      };
-    }
-
-    const resizeObserver = new ResizeObserver(handleResize);
-    resizeObserver.observe(node);
-    node.querySelectorAll(':scope > li').forEach((child) => resizeObserver.observe(child));
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      resizeObserver.disconnect();
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
-  React.useEffect(() => {
-    return () => {
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-      }
-    };
-  }, []);
-
-  const scrollToIndex = React.useCallback((nextIndex: number) => {
-    const node = listRef.current;
-    if (!node) return;
-    const { item, gap } = metricsRef.current;
-    if (!item) return;
-    const clamped = Math.max(0, Math.min(nextIndex, cases.length - 1));
-    const offset = clamped * (item + gap);
-    node.scrollTo({ left: offset, behavior: 'smooth' });
-  }, []);
-
-  const handleCarouselKeyDown = React.useCallback(
-    (event: React.KeyboardEvent<HTMLUListElement>) => {
-      if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') {
-        return;
-      }
-      event.preventDefault();
-      const delta = event.key === 'ArrowRight' ? 1 : -1;
-      scrollToIndex(activeIndex + delta);
-    },
-    [activeIndex, scrollToIndex]
-  );
-
-  const handleScroll = React.useCallback(() => {
-    if (typeof window === 'undefined') return;
-    if (rafRef.current) {
-      cancelAnimationFrame(rafRef.current);
-    }
-    rafRef.current = window.requestAnimationFrame(() => {
-      const node = listRef.current;
-      if (!node) return;
-      const { item, gap } = metricsRef.current;
-      if (!item) return;
-      const rawIndex = node.scrollLeft / (item + gap || 1);
-      const nextIndex = Math.round(rawIndex);
-      const clamped = Math.max(0, Math.min(nextIndex, cases.length - 1));
-      setActiveIndex((prev) => (prev === clamped ? prev : clamped));
-    });
-  }, []);
+  const { listRef, activeIndex, handleKeyDown, handleScroll } = useSnapCarousel(cases.length);
 
   const reportedIndexRef = React.useRef(0);
   React.useEffect(() => {
@@ -293,7 +203,7 @@ export default function Cases() {
             className="case-carousel"
             role="list"
             tabIndex={0}
-            onKeyDown={handleCarouselKeyDown}
+            onKeyDown={handleKeyDown}
             onScroll={handleScroll}
           >
             {cases.map((item, index) => (
@@ -426,7 +336,7 @@ function CaseCard({ item, index }: CaseCardProps) {
         </div>
         <footer className="mt-auto flex flex-wrap items-center gap-3 pt-2">
           <Button
-            variant="primary"
+            variant="accent"
             href={`/cases/${item.slug}`}
             className="min-h-[44px] px-5"
             data-qa={`cta-view-case-${item.slug}`}

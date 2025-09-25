@@ -459,9 +459,13 @@
 
 /* ---------- Cases carousel ---------- */
 .case-carousel {
+  --snap-mobile-width: minmax(78%, calc(100% - 3.5rem));
+  --snap-sm-width: minmax(65%, calc(100% - 4rem));
+  --snap-md-columns: repeat(2, minmax(0, 1fr));
+  --snap-lg-columns: repeat(3, minmax(0, 1fr));
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: minmax(78%, calc(100% - 3.5rem));
+  grid-auto-columns: var(--snap-mobile-width);
   gap: 0.75rem;
   list-style: none;
   margin: 0;
@@ -483,7 +487,7 @@
 
 @media (min-width: 640px) {
   .case-carousel {
-    grid-auto-columns: minmax(65%, calc(100% - 4rem));
+    grid-auto-columns: var(--snap-sm-width);
     gap: 1rem;
   }
 }
@@ -492,7 +496,7 @@
   .case-carousel {
     grid-auto-flow: row;
     grid-auto-columns: initial;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: var(--snap-md-columns);
     gap: 1.5rem;
     overflow: visible;
     scroll-snap-type: none;
@@ -507,7 +511,7 @@
 
 @media (min-width: 1024px) {
   .case-carousel {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: var(--snap-lg-columns);
   }
 }
 
