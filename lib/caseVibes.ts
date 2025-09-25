@@ -20,7 +20,7 @@ const palette: CaseVibe[] = [
     label: "A/B",
     tone: "rose",
     surface:
-      "bg-gradient-to-br from-rose-50 via-pink-50/80 to-amber-50 dark:from-rose-500/15 dark:via-pink-500/15 dark:to-amber-500/15",
+      "bg-gradient-to-br from-rose-50 via-pink-50/80 to-amber-50 dark:from-rose-500/35 dark:via-pink-500/25 dark:to-amber-500/25",
     shadow: "shadow-[0_28px_52px_-26px_rgba(244,114,182,0.6)]",
     accent: "text-rose-700 dark:text-rose-200",
     chip:
