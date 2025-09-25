@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import clsx from 'clsx';
+import clsx from '@/lib/clsx';
 
 import Container from '@/components/Container';
 import Card from '@/components/Card';
@@ -196,7 +196,7 @@ export default function Cases() {
 
     const handleResize = () => computeMetrics();
 
-    if (!('ResizeObserver' in window)) {
+    if (typeof ResizeObserver === 'undefined') {
       window.addEventListener('resize', handleResize);
       return () => {
         window.removeEventListener('resize', handleResize);
