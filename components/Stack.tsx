@@ -1,7 +1,10 @@
-﻿import Container from '@/components/Container';
-import Card from '@/components/Card';
+'use client';
 
-import { badgeBaseClass } from '@/lib/badge';
+import Container from '@/components/Container';
+import Card from '@/components/Card';
+import Badge from '@/components/primitives/Badge';
+import { useCardAnalytics } from '@/components/hooks/useCardAnalytics';
+import type { BadgeTone } from '@/lib/badge';
 
 type StackSection = {
   id: string;
@@ -13,8 +16,6 @@ type StackSection = {
   badge: string;
   surface: string;
   shadow: string;
-  chip: string;
-  accent: string;
   halo: string;
 };
 
@@ -33,9 +34,6 @@ const sections: StackSection[] = [
     surface:
       'bg-gradient-to-br from-sky-100 via-blue-50 to-emerald-100 dark:from-sky-500/20 dark:via-blue-500/12 dark:to-emerald-500/12',
     shadow: 'shadow-[0_18px_40px_-18px_rgba(56,189,248,0.32)]',
-    chip:
-      'backdrop-blur border border-sky-200/60 bg-white/85 text-sky-800 dark:border-sky-400/35 dark:bg-sky-500/25 dark:text-sky-50',
-    accent: 'text-sky-700 dark:text-sky-200',
     halo: 'bg-sky-200/45 dark:bg-sky-500/20',
   },
   {
@@ -52,9 +50,6 @@ const sections: StackSection[] = [
     surface:
       'bg-gradient-to-br from-purple-100 via-violet-50 to-indigo-100 dark:from-purple-500/20 dark:via-violet-500/12 dark:to-indigo-500/12',
     shadow: 'shadow-[0_18px_40px_-18px_rgba(167,139,250,0.32)]',
-    chip:
-      'backdrop-blur border border-purple-200/60 bg-white/85 text-purple-800 dark:border-purple-400/35 dark:bg-purple-500/25 dark:text-purple-50',
-    accent: 'text-purple-700 dark:text-purple-200',
     halo: 'bg-purple-200/45 dark:bg-purple-500/20',
   },
   {
@@ -71,9 +66,6 @@ const sections: StackSection[] = [
     surface:
       'bg-gradient-to-br from-amber-100 via-orange-50 to-lime-100 dark:from-amber-500/20 dark:via-orange-500/12 dark:to-lime-500/12',
     shadow: 'shadow-[0_18px_40px_-18px_rgba(251,191,36,0.32)]',
-    chip:
-      'backdrop-blur border border-amber-200/60 bg-white/85 text-amber-800 dark:border-amber-400/35 dark:bg-amber-500/25 dark:text-amber-50',
-    accent: 'text-amber-700 dark:text-amber-200',
     halo: 'bg-amber-200/45 dark:bg-amber-500/20',
   },
   {
@@ -90,106 +82,119 @@ const sections: StackSection[] = [
     surface:
       'bg-gradient-to-br from-rose-100 via-pink-50 to-emerald-100 dark:from-rose-500/20 dark:via-pink-500/12 dark:to-emerald-500/12',
     shadow: 'shadow-[0_18px_40px_-18px_rgba(244,114,182,0.32)]',
-    chip:
-      'backdrop-blur border border-rose-200/60 bg-white/85 text-rose-800 dark:border-rose-400/35 dark:bg-rose-500/25 dark:text-rose-50',
-    accent: 'text-rose-700 dark:text-rose-200',
     halo: 'bg-rose-200/45 dark:bg-rose-500/20',
   },
 ];
+const toneBySection: Record<StackSection['id'], BadgeTone> = {
+  analytics: 'sky',
+  backend: 'purple',
+  automation: 'emerald',
+  product: 'rose',
+};
 
 export default function Stack() {
   return (
     <section id="stack" className="py-16 sm:py-24">
-      <Container className="px-0 md:px-5 ">
-        <h2 className="mb-6 text-3xl font-semibold">Стек и технологии</h2>
-        <p className="mb-8 max-w-2xl text-base text-slate-700/85 dark:text-slate-200/85">
-          Что именно делаю и из каких компонентов собираю решения.
-        </p>
+      <Container>
+        <header className="mb-8 space-y-3">
+          <p className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+            Технологии
+          </p>
+          <h2 className="text-3xl font-semibold leading-tight md:text-4xl">Стек и инструменты</h2>
+          <p className="max-w-3xl text-base text-slate-600 dark:text-slate-300">
+            Подбираем инструменты под задачу: аналитика, backend, автоматизация и продуктовые интерфейсы.
+          </p>
+        </header>
 
-        {/* Mobile carousel */}
-        <div className="md:hidden mt-2">
-          <div
-            className="grid auto-cols-[85%] grid-flow-col gap-4 snap-x snap-mandatory overflow-x-auto scroll-px-4 px-4 [scrollbar-width:none] [-webkit-overflow-scrolling:touch]"
-            role="list"
-            aria-label="Стек и технологии"
-          >
-            {sections.map((section) => (
-              <div key={section.id} className="snap-start snap-always" role="listitem">
-                <Card
-                  variant="default"
-                  className={`group relative h-full overflow-hidden border border-transparent p-6 text-slate-900 shadow-[0_18px_40px_-20px_rgba(15,23,42,0.22)] transition-all duration-500 ease-out dark:text-white ${section.surface} ${section.shadow}`}
-                  aria-labelledby={`stack-${section.id}-title`}
-                >
-                  <span
-                    aria-hidden
-                    className={`absolute -right-8 -top-12 h-32 w-32 rounded-full blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 ${section.halo}`}
-                  />
-                  <div className="relative z-[1] flex h-full flex-col gap-4">
-                    <span className={`${badgeBaseClass} ${section.chip}`}>
-                      <span aria-hidden className="text-lg">
-                        {section.emoji}
-                      </span>
-                      {section.badge}
-                    </span>
-                    <h3 id={`stack-${section.id}-title`} className="sr-only">
-                      {section.title}
-                    </h3>
-                    <p className="text-sm leading-5 text-slate-800/90 dark:text-slate-100/90">{section.intro}</p>
-                    <div className="flex flex-wrap gap-2 text-[11px] font-semibold">
-                      {section.chips.slice(0, 3).map((chip) => (
-                        <span key={chip} className={`${badgeBaseClass} ${section.chip}`}>
-                          {chip}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </Card>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Desktop grid */}
-        <div className="hidden md:grid grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {sections.map((section) => (
-            <Card
-              key={section.id}
-              className={`group relative flex h-full flex-col overflow-hidden border border-transparent p-6 text-slate-900 transition-all duration-500 ease-out hover:-translate-y-1 hover:shadow-xl dark:text-white ${section.surface} ${section.shadow}`}
-              role="article"
-              aria-labelledby={`stack-${section.id}-title-desktop`}
-            >
-              <span
-                aria-hidden
-                className={`pointer-events-none absolute -right-10 -top-14 h-36 w-36 rounded-full blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 ${section.halo}`}
-              />
-              <header className="relative z-[1] flex flex-col gap-3">
-                <span className={`${badgeBaseClass} ${section.chip}`}>
-                  <span aria-hidden className="text-lg">
-                    {section.emoji}
-                  </span>
-                  {section.badge}
-                </span>
-                <h3 id={`stack-${section.id}-title-desktop`} className="sr-only">
-                  {section.title}
-                </h3>
-              </header>
-              <p className="mt-1 text-sm text-slate-800/90 dark:text-slate-100/90">{section.intro}</p>
-              <ul className="mt-3 space-y-1 text-sm text-slate-800/90 dark:text-slate-100/90 list-disc pl-4">
-                {section.lines.map((line, idx) => (
-                  <li key={idx}>{line}</li>
-                ))}
-              </ul>
-              <div className="mt-4 flex flex-wrap gap-2 text-sm">
-                {section.chips.map((chip) => (
-                  <span key={chip} className={`${badgeBaseClass} ${section.chip}`}>
-                    {chip}
-                  </span>
-                ))}
-              </div>
-            </Card>
+        <ul className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-3" role="list">
+          {sections.map((section, index) => (
+            <StackCard key={section.id} section={section} index={index} />
           ))}
-        </div>
+        </ul>
       </Container>
     </section>
+  );
+}
+
+type StackCardProps = {
+  section: StackSection;
+  index: number;
+};
+
+function StackCard({ section, index }: StackCardProps) {
+  const tone = toneBySection[section.id] ?? 'slate';
+  const { ref } = useCardAnalytics<HTMLLIElement>({
+    id: section.id,
+    section: 'stack',
+    index,
+    payload: { title: section.title },
+  });
+
+  const cardId = `stack-${section.id}`;
+  const chips = section.chips ?? [];
+  const mobileMax = 3;
+  const desktopMax = 6;
+  const mobileOverflow = Math.max(0, chips.length - mobileMax);
+  const desktopOverflow = Math.max(0, chips.length - desktopMax);
+
+  return (
+    <li ref={ref} className="group/card list-none">
+      <Card
+        role="article"
+        aria-labelledby={`${cardId}-title`}
+        className={`relative flex h-full flex-col gap-3 transition md:hover:-translate-y-1 md:hover:shadow-lg motion-reduce:md:hover:translate-y-0 ${section.surface} ${section.shadow}`}
+      >
+        <span
+          aria-hidden
+          className={`pointer-events-none absolute -right-10 -top-12 h-32 w-32 rounded-full blur-3xl opacity-0 transition-opacity duration-500 md:group-hover/card:opacity-100 ${section.halo}`}
+        />
+        <header className="flex items-center gap-3">
+          <span className="inline-flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-white/80 text-2xl shadow-sm dark:bg-white/10">
+            {section.emoji}
+          </span>
+          <Badge tone={tone} size="sm">
+            {section.badge}
+          </Badge>
+        </header>
+        <h3
+          id={`${cardId}-title`}
+          className="mt-2 text-lg font-semibold leading-tight text-slate-900 line-clamp-2 md:mt-3 dark:text-white"
+        >
+          {section.title}
+        </h3>
+        <p className="text-sm leading-6 text-slate-600 dark:text-slate-300">
+          {section.intro}
+        </p>
+        <BulletList items={section.lines} className="mt-1 text-slate-600 dark:text-slate-300" />
+        <div className="mt-auto flex flex-wrap gap-2 pt-2">
+          {chips.map((chip, chipIndex) => (
+            <Badge
+              key={`${section.id}-chip-${chip}`}
+              tone={tone}
+              size="sm"
+              className={
+                chipIndex >= mobileMax
+                  ? chipIndex >= desktopMax
+                    ? 'hidden'
+                    : 'hidden md:inline-flex'
+                  : ''
+              }
+            >
+              {chip}
+            </Badge>
+          ))}
+          {mobileOverflow > 0 ? (
+            <Badge tone={tone} size="sm" className="md:hidden">
+              +{mobileOverflow}
+            </Badge>
+          ) : null}
+          {desktopOverflow > 0 ? (
+            <Badge tone={tone} size="sm" className="hidden md:inline-flex">
+              +{desktopOverflow}
+            </Badge>
+          ) : null}
+        </div>
+      </Card>
+    </li>
   );
 }

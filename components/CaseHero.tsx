@@ -1,7 +1,7 @@
-﻿import Link from 'next/link';
-
+import Button from '@/components/Button';
+import Card from '@/components/Card';
 import CaseMeta from '@/components/CaseMeta';
-import { badgeBaseClass } from '@/lib/badge';
+import Badge from '@/components/primitives/Badge';
 import { getCaseVibe } from '@/lib/caseVibes';
 
 interface CaseLink {
@@ -32,27 +32,36 @@ export default function CaseHero({
 }: CaseHeroProps) {
   const vibe = getCaseVibe(slug);
   const hasLinks = Boolean(links && links.length > 0);
-  const badgeClass = `${badgeBaseClass} ${vibe.chip}`;
 
   return (
-    <div className="relative overflow-hidden rounded-[2rem] border border-white/30 bg-white/75 text-slate-900 shadow-[0_32px_80px_-40px_rgba(15,23,42,0.55)] backdrop-blur-xl dark:border-white/10 dark:bg-white/10 dark:text-white">
-      <div aria-hidden className={`absolute inset-0 mix-blend-multiply ${vibe.glow}`} />
-      <div aria-hidden className={`absolute -right-24 -top-28 h-60 w-60 rounded-full blur-3xl opacity-60 ${vibe.halo}`} />
-      <div className="relative z-[1] flex flex-col gap-6 p-8 sm:p-10">
-        <div className="flex flex-wrap items-start gap-4">
-          <span className="text-4xl sm:text-5xl animate-float" aria-hidden>
+    <Card
+      variant="soft"
+      className={`relative overflow-hidden border border-white/30 text-slate-900 shadow-[0_32px_80px_-40px_rgba(15,23,42,0.4)] backdrop-blur-xl dark:border-white/10 dark:text-white ${vibe.surface} ${vibe.shadow}`}
+    >
+      <span
+        aria-hidden
+        className={`pointer-events-none absolute -right-24 -top-28 h-60 w-60 rounded-full blur-3xl opacity-60 ${vibe.halo}`}
+      />
+      <div className="relative z-[1] flex flex-col gap-6">
+        <header className="flex flex-wrap items-start gap-4">
+          <span
+            aria-hidden
+            className="inline-flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-3xl bg-white/80 text-4xl shadow-sm dark:bg-white/10"
+          >
             {vibe.emoji}
           </span>
           <div className="min-w-[220px] flex-1">
-            <span className={badgeClass}>Case — {vibe.label}</span>
-            <h1 className="mt-3 text-3xl font-bold leading-tight sm:text-4xl">{title}</h1>
-            {summary && (
-              <p className="mt-3 max-w-2xl text-base text-slate-700/85 dark:text-slate-100/85">
+            <Badge tone={vibe.tone} size="sm" leftIcon={vibe.emoji}>
+              Case · {vibe.label}
+            </Badge>
+            <h1 className="mt-3 text-3xl font-bold leading-tight md:text-4xl">{title}</h1>
+            {summary ? (
+              <p className="mt-3 max-w-2xl text-base text-slate-700/85 dark:text-slate-100/85 line-clamp-2">
                 {summary}
               </p>
-            )}
+            ) : null}
           </div>
-        </div>
+        </header>
 
         <CaseMeta
           role={role}
@@ -60,29 +69,29 @@ export default function CaseHero({
           status={status}
           tags={tags}
           appearance="glass"
-          toneClassName={vibe.chip}
+          tone={vibe.tone}
         />
 
-        {hasLinks && (
+        {hasLinks ? (
           <div className="flex flex-wrap gap-3">
             {links!.map(({ label, href }) => {
               const isExternal = /^https?:/i.test(href);
               return (
-                <Link
+                <Button
                   key={`${label}-${href}`}
                   href={href}
+                  variant="secondary"
                   target={isExternal ? '_blank' : undefined}
                   rel={isExternal ? 'noopener noreferrer' : undefined}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/85 px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:bg-white/95 dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
+                  className="min-h-[44px] px-5"
                 >
-                  <span>{label}</span>
-                  <span aria-hidden className="text-base">↗</span>
-                </Link>
+                  {label}
+                </Button>
               );
             })}
           </div>
-        )}
+        ) : null}
       </div>
-    </div>
+    </Card>
   );
 }

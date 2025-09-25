@@ -1,8 +1,8 @@
-﻿"use client";
+"use client";
 
 import Link from 'next/link';
 
-import { badgeBaseClass } from '@/lib/badge';
+import Badge from '@/components/primitives/Badge';
 
 export default function CaseCTA({ result }: { result?: string }) {
   const handleBrief: React.MouseEventHandler<HTMLAnchorElement> = (event) => {
@@ -13,8 +13,6 @@ export default function CaseCTA({ result }: { result?: string }) {
     }
   };
 
-  const badgeClass = `${badgeBaseClass} backdrop-blur border border-slate-200/60 bg-white/70 text-slate-700/85 dark:border-white/10 dark:bg-white/10 dark:text-white/85`;
-
   return (
     <div className="not-prose relative mt-14">
       <div className="absolute inset-0 -z-10 blur-3xl opacity-70" aria-hidden>
@@ -24,12 +22,14 @@ export default function CaseCTA({ result }: { result?: string }) {
         <div className="pointer-events-none absolute -top-20 right-20 h-56 w-56 rounded-full bg-white/30 blur-3xl dark:bg-white/10" aria-hidden />
         <div className="relative z-[1] flex flex-col gap-8 p-6 sm:p-8 md:flex-row md:items-center md:justify-between">
           <div className="max-w-2xl space-y-3">
-            <span className={badgeClass}>Следующий шаг</span>
-            <h3 className="text-2xl font-semibold leading-tight sm:text-3xl">Готовы обсудить свой проект?</h3>
+            <Badge tone="sky" size="sm" className="bg-white/80 dark:bg-white/10">
+              Готовы подключиться
+            </Badge>
+            <h3 className="text-2xl font-semibold leading-tight sm:text-3xl">Нужно обсудить похожий кейс?</h3>
             <p className="text-base text-slate-700/85 dark:text-slate-200/85">
               {result
                 ? result
-                : 'Коллекция инструментов и продакшн-сборок уже обкатана. Расскажите о задаче — соберём MVP или усилим вашу команду.'}
+                : 'Расскажите коротко о задаче — вернёмся с предложением в течение дня. Открыты к пилотам, MVP и постоянной поддержке.'}
             </p>
           </div>
 
@@ -38,15 +38,15 @@ export default function CaseCTA({ result }: { result?: string }) {
               href="/#brief"
               scroll={false}
               onClick={handleBrief}
-              className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/20 transition hover:-translate-y-0.5 hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
+              className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/20 transition md:hover:-translate-y-0.5 md:hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
             >
-              Заполнить бриф
+              Оставить заявку
             </Link>
             <Link
               href="/#cases"
-              className="inline-flex items-center justify-center rounded-xl border border-slate-300/70 bg-white/60 px-6 py-3 text-sm font-semibold text-slate-900 shadow-sm transition hover:-translate-y-0.5 hover:bg-white/80 dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
+              className="inline-flex min-h-[44px] items-center justify-center rounded-xl border border-slate-300/70 bg-white/60 px-6 py-3 text-sm font-semibold text-slate-900 shadow-sm transition md:hover:-translate-y-0.5 md:hover:bg-white/80 dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
             >
-              Посмотреть ещё кейсы
+              Посмотреть ещё проекты
             </Link>
           </div>
         </div>

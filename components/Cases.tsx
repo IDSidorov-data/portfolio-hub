@@ -1,10 +1,17 @@
-﻿import Container from '@/components/Container';
+'use client';
+
+import * as React from 'react';
+import { useRouter } from 'next/navigation';
+import clsx from 'clsx';
+
+import Container from '@/components/Container';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
-import * as React from 'react';
-
-import { badgeBaseClass } from '@/lib/badge';
+import Badge from '@/components/primitives/Badge';
+import MetricBadge from '@/components/primitives/MetricBadge';
+import { useCardAnalytics } from '@/components/hooks/useCardAnalytics';
 import { getCaseVibe } from '@/lib/caseVibes';
+import type { BadgeTone } from '@/lib/badge';
 
 type Metric = {
   label: string;
@@ -32,200 +39,315 @@ type CaseItem = {
   ctas?: CTA[];
 };
 
-const statusChip = (status?: CaseItem['status']) => {
-  if (!status) return '';
-  const base = `${badgeBaseClass} backdrop-blur border border-white/35 bg-white/55 text-slate-700 dark:border-white/20 dark:bg-white/10 dark:text-white`;
-  switch (status) {
-    case 'prod':
-      return `${base} text-emerald-700 dark:text-emerald-200`;
-    case 'delivered':
-      return `${base} text-cyan-700 dark:text-cyan-200`;
-    case 'ready':
-      return `${base} text-indigo-700 dark:text-indigo-200`;
-    case 'demo':
-      return `${base} text-amber-600 dark:text-amber-200`;
-    case 'pilot':
-      return `${base} text-sky-600 dark:text-sky-200`;
-    default:
-      return base;
-  }
-};
-
-const ndaChip = `${badgeBaseClass} backdrop-blur border border-fuchsia-400/40 bg-white/60 text-fuchsia-700 dark:border-fuchsia-400/35 dark:bg-fuchsia-500/25 dark:text-fuchsia-50`;
-
-const metricChip = (m: Metric) => `chip ${m.positive ? 'chip-positive' : 'chip-neutral'}`;
-
 const cases: CaseItem[] = [
   {
     slug: 'ab-test-mobile-game',
     title: 'A/B: Cookie Cats — gate_30',
-    teaser: 'D7 вырос статистически значимо → решение раскатить gate_30. Цепочка: ETL → Postgres → SQL → Z-тест.',
+    teaser:
+      'D7 вырос статистически значимо → решение раскатить gate_30. Цепочка: ETL → Postgres → SQL → Z-тест.',
     tags: ['Analytics', 'A/B', 'SQL', 'Python/statsmodels', 'PostgreSQL'],
     result: 'Рекомендация подтверждена: D7 ↑ +0.82 п.п. (p = 0.0016).',
-    metrics: [{ label: 'D7', value: '+0.82 п.п. (sig)', note: 'p = 0.0016', positive: true }],
+    metrics: [
+      { label: 'D7', value: '+0.82 п.п. (sig)', note: 'p = 0.0016', positive: true },
+    ],
     status: 'prod',
     ctas: [
-      { label: 'Код', href: 'https://github.com/IDSidorov-data/mobile-game-ab-test-analysis', kind: 'external', variant: 'accent' },
+      {
+        label: 'Код',
+        href: 'https://github.com/IDSidorov-data/mobile-game-ab-test-analysis',
+        kind: 'external',
+        variant: 'accent',
+      },
     ],
   },
   {
     slug: 'logistics-calculator',
     title: 'Логистика: калькулятор маржи (MVP)',
-    teaser: 'Мгновенный расчёт и индикатор “выгодно/убыточно”. Интервью → pivot к калькулятору ценообразования (MVP v2).',
+    teaser:
+      'Мгновенный расчёт и индикатор “выгодно/убыточно”. Интервью → pivot к калькулятору ценообразования (MVP v2).',
     tags: ['Streamlit', 'Python', 'Product Discovery'],
-    result: 'Предотвращена лишняя разработка (~200 ч экономии); MVP собран за 5 часов.',
+    result:
+      'Предотвращена лишняя разработка (~200 часов); MVP собран за 5 часов.',
     metrics: [{ label: 'Экономия', value: '~200 ч разработки', positive: true }],
     status: 'delivered',
     ctas: [
-      { label: 'Демо', href: 'https://log-calc.streamlit.app/', kind: 'external', variant: 'accent' },
-      { label: 'ТЗ v2', href: 'https://github.com/IDSidorov-data/logistics_calculator/blob/main/MVP_v2_SPEC.md', kind: 'external', variant: 'accent' },
-      { label: 'Код', href: 'https://github.com/IDSidorov-data/logistics_calculator', kind: 'external', variant: 'accent' },
+      {
+        label: 'Демо',
+        href: 'https://log-calc.streamlit.app/',
+        kind: 'external',
+        variant: 'accent',
+      },
+      {
+        label: 'ТЗ v2',
+        href: 'https://github.com/IDSidorov-data/logistics_calculator/blob/main/MVP_v2_SPEC.md',
+        kind: 'external',
+        variant: 'accent',
+      },
+      {
+        label: 'Код',
+        href: 'https://github.com/IDSidorov-data/logistics_calculator',
+        kind: 'external',
+        variant: 'accent',
+      },
     ],
   },
   {
     slug: 'scenario',
     title: 'Scenario: модульная платформа моделирования',
-    teaser: 'Песочница юнит-экономики: профили доходов/затрат, what-if и чувствительность; каскадный пересчёт, расширяемые модули.',
+    teaser:
+      'Песочница юнит-экономики: профили доходов/затрат, what-if и чувствительность; каскадный пересчёт, расширяемые модули.',
     tags: ['Analytics', 'Modeling', 'Core', 'What-if', 'Sensitivity'],
-    result: 'Архитектура: модульное ядро + профили; детерминированный граф и пресеты для быстрых ответов.',
+    result:
+      'Архитектура: модульное ядро + профили; детерминированный граф расчётов и пресеты для быстрых ответов.',
     status: 'ready',
     ctas: [
-      { label: 'Код (core)', href: 'https://github.com/IDSidorov-data/scenario-core', kind: 'external', variant: 'accent' },
-      { label: 'Прототип', href: 'https://github.com/IDSidorov-data/scenario-proto', kind: 'external', variant: 'accent' },
+      {
+        label: 'Код (core)',
+        href: 'https://github.com/IDSidorov-data/scenario-core',
+        kind: 'external',
+        variant: 'accent',
+      },
+      {
+        label: 'Код (landing)',
+        href: 'https://github.com/IDSidorov-data/scenario-landing',
+        kind: 'external',
+        variant: 'accent',
+      },
     ],
   },
   {
     slug: 'loki-assistant',
-    title: 'LOKI: ассистент для интерфейса',
-    teaser: 'Лёгкий ассистент на базе LLМ для интерфейса: контекст, быстрые действия и внедрение без боли.',
-    tags: ['AI', 'Next.js', 'LLM', 'Assistant'],
+    title: 'LOKI — голосовой AI-ассистент',
+    teaser:
+      'Три контура: локальные команды, LLM-классификация, визуальный анализ. Async/await + httpx → низкая задержка; потоковый TTS с прерыванием.',
+    tags: ['Async/await', 'httpx', 'Whisper', 'Piper TTS', 'Gemini', 'Python/Poetry'],
+    result:
+      'Асинхронная архитектура, быстрый отклик и самокоррекция сценариев; ключевые настройки — в .env.',
     status: 'demo',
+    ctas: [
+      {
+        label: 'Код',
+        href: 'https://github.com/IDSidorov-data/loki-reborn-ai-assistant',
+        kind: 'external',
+        variant: 'accent',
+      },
+    ],
   },
   {
     slug: 'rpa-bot',
-    title: 'RPA: сценарии и интеграции',
-    teaser: 'Телеграм‑боты, интеграции, парсинг документов и рассылки. Экономия времени и меньше рутины.',
-    tags: ['Automation', 'aiogram', 'Playwright', 'RPA'],
-    status: 'delivered',
+    title: 'RPA-бот',
+    teaser:
+      'Автопарсинг сайта → Telegram. Раньше: сайт → Excel → Telegram. Теперь: сайт → Telegram без ручной рутины.',
+    tags: ['Python', 'Браузерная автоматизация', 'API-интеграции', 'Мониторинг', 'Excel', 'Telegram'],
+    result:
+      'Ключевой отчёт: 7 мин → 15 сек (−96%); экономия ~300 000 ₽/мес при текущем объёме.',
+    metrics: [
+      { label: 'Время', value: '7 мин → 15 сек', positive: true },
+      { label: 'Экономия', value: '~300k ₽/мес', note: 'оценка', positive: true },
+    ],
+    nda: true,
   },
 ];
 
+const statusTone: Record<NonNullable<CaseItem['status']>, BadgeTone> = {
+  prod: 'emerald',
+  delivered: 'sky',
+  pilot: 'sky',
+  demo: 'amber',
+  ready: 'purple',
+};
+
 export default function Cases() {
   return (
-    <section id="cases" className="py-12 sm:py-16">
-      <Container className="px-0 md:px-5">
-        <h2 className="mb-6 text-2xl font-semibold">Кейсы</h2>
+    <section id="cases" className="py-16 sm:py-24">
+      <Container>
+        <header className="mb-8 space-y-3">
+          <p className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+            Кейсы
+          </p>
+          <h2 className="text-3xl font-semibold leading-tight md:text-4xl">Результаты и прототипы</h2>
+          <p className="max-w-2xl text-base text-slate-600 dark:text-slate-300">
+            Выборка проектов с измеримыми результатами, готовыми демо и открытым кодом.
+          </p>
+        </header>
 
-        {/* Mobile carousel (cards) */}
-        <div className="md:hidden mt-2">
-          <div className="grid auto-cols-[85%] grid-flow-col gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory [overscroll-behavior-x:contain] [-webkit-overflow-scrolling:touch] touch-pan-x scroll-px-4 px-4 overscroll-x-contain" role="list" aria-label="Кейсы">
-            {cases.map((c, index) => {
-              const vibe = getCaseVibe(c.slug, index);
-              const badgeClass = `${badgeBaseClass} ${vibe.chip}`;
-
-              return (
-                <div key={c.slug} className="snap-start snap-always" role="listitem">
-                  <Card className={`group relative h-full overflow-hidden border border-transparent p-6 text-slate-900 transition-all duration-500 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--ring))] dark:text-white ${vibe.surface} ${vibe.shadow}`} variant="default">
-                    <span aria-hidden className={`absolute -right-10 -top-14 h-36 w-36 rounded-full blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 ${vibe.halo}`} />
-                    <div className="relative z-[1] flex h-full flex-col gap-3">
-                      <div className="flex items-center gap-2">
-                        <span className={badgeClass}>
-                          <span aria-hidden className="text-lg">{vibe.emoji}</span>
-                          {vibe.label}
-                        </span>
-                        {c.status && <span className={statusChip(c.status)}>{c.status}</span>}
-                        {c.nda && <span className={ndaChip}>NDA</span>}
-                      </div>
-                      <div className="text-base font-semibold leading-snug">{c.title}</div>
-                      <p className="text-sm opacity-85">{c.teaser}</p>
-                      <a href={`/cases/${c.slug}`} className={`mt-auto inline-flex items-center gap-1 pt-4 text-sm font-semibold tracking-wide transition-colors duration-300 ${vibe.link}`}>
-                        <span>Подробнее →</span>
-                        <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-0.5">↗</span>
-                      </a>
-                    </div>
-                  </Card>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Desktop grid */}
-        <div className="hidden md:grid grid-cols-2 gap-4 lg:grid-cols-3">
-          {cases.map((c, index) => {
-            const vibe = getCaseVibe(c.slug, index);
-            const badgeClass = `${badgeBaseClass} ${vibe.chip}`;
-            const resultId = `case-${c.slug}-result`;
-
-            return (
-              <Card
-                key={c.slug}
-                className={`group relative flex flex-col overflow-hidden border border-transparent p-6 text-slate-900 transition-all duration-500 ease-out hover:-translate-y-1 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--ring))] focus-visible:ring-offset-2 dark:text-white ${vibe.surface} ${vibe.shadow}`}
-                role="article"
-                aria-labelledby={`case-${c.slug}-title`}
-                aria-describedby={c.result ? resultId : undefined}
-              >
-                <span aria-hidden className={`pointer-events-none absolute -right-12 -top-16 h-44 w-44 rounded-full blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 ${vibe.halo}`} />
-                <div className="relative z-[1] flex flex-col gap-3">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className={badgeClass}>
-                      <span aria-hidden className="text-lg">{vibe.emoji}</span>
-                      {vibe.label}
-                    </span>
-                    {c.status && <span className={statusChip(c.status)}>{c.status}</span>}
-                    {c.nda && <span className={ndaChip}>NDA</span>}
-                  </div>
-                  <h3 id={`case-${c.slug}-title`} className="text-xl font-semibold leading-snug">{c.title}</h3>
-                  <p className="text-sm text-slate-800/85 dark:text-slate-100/85">{c.teaser}</p>
-
-                  {c.result && (
-                    <div id={resultId} className="rounded-2xl border border-white/40 bg-white/65 p-4 text-sm font-medium text-slate-800 shadow-sm backdrop-blur dark:border-white/15 dark:bg-white/5 dark:text-slate-100">
-                      {c.result}
-                    </div>
-                  )}
-
-                  {c.metrics && c.metrics.length > 0 && (
-                    <div className="mt-2 flex flex-wrap gap-2">
-                      {c.metrics.map((m, i) => (
-                        <span key={i} className={metricChip(m)} title={m.note || ''}>
-                          <span className="mr-1 opacity-70">{m.label}:</span> {m.value}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
-                  <div className="mt-2 flex flex-wrap gap-2 text-xs">
-                    {c.tags.map((t) => (
-                      <span key={t} className={`${badgeBaseClass} border border-white/35 bg-white/70 text-slate-700 shadow-sm backdrop-blur dark:border-white/15 dark:bg-white/10 dark:text-white`}>
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="relative z-[1] mt-auto flex flex-wrap items-center gap-3 pt-4">
-                  <Button variant="primary" href={`/cases/${c.slug}`} aria-label={`Читать разбор: ${c.title}`} className="transition-transform duration-300 hover:translate-x-0.5">
-                    Читать разбор
-                  </Button>
-                  {c.ctas?.map((cta) => (
-                    <Button
-                      key={cta.label}
-                      variant={cta.variant || 'secondary'}
-                      href={cta.href}
-                      target={cta.kind === 'external' ? '_blank' : undefined}
-                      rel={cta.kind === 'external' ? 'noopener noreferrer' : undefined}
-                      aria-label={`${cta.label}: ${c.title}`}
-                      className="transition-transform duration-300 hover:-translate-y-0.5"
-                    >
-                      {cta.label}
-                    </Button>
-                  ))}
-                </div>
-              </Card>
-            );
-          })}
-        </div>
+        <ul className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-3" role="list">
+          {cases.map((item, index) => (
+            <CaseCard key={item.slug} item={item} index={index} />
+          ))}
+        </ul>
       </Container>
     </section>
+  );
+}
+
+type CaseCardProps = {
+  item: CaseItem;
+  index: number;
+};
+
+function CaseCard({ item, index }: CaseCardProps) {
+  const router = useRouter();
+  const vibe = getCaseVibe(item.slug, index);
+  const { ref, trackClick } = useCardAnalytics<HTMLLIElement>({
+    id: item.slug,
+    section: 'cases',
+    index,
+    payload: { title: item.title },
+  });
+
+  React.useEffect(() => {
+    router.prefetch?.(`/cases/${item.slug}`);
+  }, [item.slug, router]);
+
+  const handleNavigate = React.useCallback(() => {
+    trackClick({ action: 'open' });
+    router.push(`/cases/${item.slug}`);
+  }, [item.slug, router, trackClick]);
+
+  const handleCardClick = React.useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      if ((event.target as HTMLElement).closest('[data-prevent-card]')) {
+        return;
+      }
+      handleNavigate();
+    },
+    [handleNavigate]
+  );
+
+  const handleKeyDown = React.useCallback(
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        handleNavigate();
+      }
+    },
+    [handleNavigate]
+  );
+
+  const tags = item.tags || [];
+  const mobileMax = 3;
+  const desktopMax = 6;
+  const mobileOverflow = Math.max(0, tags.length - mobileMax);
+  const desktopOverflow = Math.max(0, tags.length - desktopMax);
+  const cardId = `case-${item.slug}`;
+
+  return (
+    <li ref={ref} className="group/card list-none">
+      <Card
+        role="link"
+        tabIndex={0}
+        aria-labelledby={`${cardId}-title`}
+        aria-describedby={item.result ? `${cardId}-result` : undefined}
+        className={`relative flex h-full flex-col gap-4 transition md:hover:-translate-y-1 md:hover:shadow-lg motion-reduce:md:hover:translate-y-0 ${vibe.surface} ${vibe.shadow}`}
+        onClick={handleCardClick}
+        onKeyDown={handleKeyDown}
+      >
+        <span
+          aria-hidden
+          className={`pointer-events-none absolute -right-10 -top-14 h-36 w-36 rounded-full blur-3xl opacity-0 transition-opacity duration-500 md:group-hover/card:opacity-100 ${vibe.halo}`}
+        />
+        <header className="flex flex-wrap items-center gap-2">
+          <Badge tone={vibe.tone} size="sm" leftIcon={vibe.emoji}>
+            {vibe.label}
+          </Badge>
+          {item.status ? (
+            <Badge tone={statusTone[item.status] ?? 'slate'} size="sm">
+              {item.status.toUpperCase()}
+            </Badge>
+          ) : null}
+          {item.nda ? (
+            <Badge tone="rose" size="sm">
+              NDA
+            </Badge>
+          ) : null}
+        </header>
+        <h3
+          id={`${cardId}-title`}
+          className="mt-2 text-lg font-semibold leading-tight text-slate-900 line-clamp-2 md:mt-3 dark:text-white"
+        >
+          {item.title}
+        </h3>
+        <p className="text-sm leading-6 text-slate-600 line-clamp-2 dark:text-slate-300">
+          {item.teaser}
+        </p>
+        {item.result ? (
+          <p
+            id={`${cardId}-result`}
+            className="rounded-xl border border-white/40 bg-white/70 p-4 text-sm font-medium text-slate-700 backdrop-blur dark:border-white/15 dark:bg-white/10 dark:text-slate-200"
+          >
+            {item.result}
+          </p>
+        ) : null}
+        {item.metrics && item.metrics.length > 0 ? (
+          <div className="flex flex-wrap gap-2">
+            {item.metrics.map((metric, metricIndex) => (
+              <MetricBadge
+                key={`${item.slug}-metric-${metricIndex}`}
+                value={metric.value}
+                label={metric.label}
+                direction={metric.positive === false ? 'down' : 'up'}
+              />
+            ))}
+          </div>
+        ) : null}
+        <div className="flex flex-wrap gap-2">
+          {tags.map((tag, tagIndex) => (
+            <Badge
+              key={tag}
+              tone="slate"
+              size="sm"
+              className={clsx(
+                tagIndex >= mobileMax && 'hidden md:inline-flex',
+                tagIndex >= desktopMax && 'hidden'
+              )}
+            >
+              {tag}
+            </Badge>
+          ))}
+          {mobileOverflow > 0 ? (
+            <Badge tone="slate" size="sm" className="md:hidden">
+              +{mobileOverflow}
+            </Badge>
+          ) : null}
+          {desktopOverflow > 0 ? (
+            <Badge tone="slate" size="sm" className="hidden md:inline-flex">
+              +{desktopOverflow}
+            </Badge>
+          ) : null}
+        </div>
+        <footer className="mt-auto flex flex-wrap items-center gap-3 pt-2">
+          <Button
+            variant="primary"
+            href={`/cases/${item.slug}`}
+            className="min-h-[44px] px-5"
+            data-prevent-card
+            onClick={(event) => {
+              event.stopPropagation();
+              trackClick({ action: 'cta_primary' });
+            }}
+          >
+            Смотреть кейс
+          </Button>
+          {item.ctas?.map((cta) => (
+            <Button
+              key={cta.label}
+              variant={cta.variant || 'secondary'}
+              href={cta.href}
+              target={cta.kind === 'external' ? '_blank' : undefined}
+              rel={cta.kind === 'external' ? 'noopener noreferrer' : undefined}
+              data-prevent-card
+              className="min-h-[44px] px-4"
+              onClick={(event) => {
+                event.stopPropagation();
+                trackClick({ action: 'cta_secondary', label: cta.label, href: cta.href });
+              }}
+            >
+              {cta.label}
+            </Button>
+          ))}
+        </footer>
+      </Card>
+    </li>
   );
 }

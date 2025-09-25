@@ -13,6 +13,7 @@ import CaseHero from '@/components/CaseHero';
 import CaseReadingProgress from '@/components/CaseReadingProgress';
 import CaseCTA from '@/components/CaseCTA';
 import CaseSectionIsland from '@/components/CaseSectionIsland';
+import BackButton from '@/components/BackButton';
 
 const prettyCodeOptions = {
   theme: { light: "github-light", dark: "github-dark" },
@@ -100,6 +101,9 @@ export default async function CasePage({
 
       <div className="py-10 sm:py-16">
         <Container>
+          <div className="mb-6 flex justify-start">
+            <BackButton />
+          </div>
           <CaseHero
             slug={params.slug}
             title={frontmatter.title}
@@ -114,10 +118,13 @@ export default async function CasePage({
       </div>
 
       <Container className="pb-14 sm:pb-20">
-        <div className="space-y-8 sm:space-y-10">
+        <div className="mx-auto w-full px-4 sm:px-6 max-w-3xl lg:max-w-4xl xl:max-w-5xl">
+          <div className="space-y-8 sm:space-y-10">
           {intro.length > 0 && (
             <CaseSectionIsland tone="neutral">
-              <div className="case-article space-y-4">{intro}</div>
+              <div className="case-article">
+                <div className="mx-auto max-w-[72ch] space-y-4">{intro}</div>
+              </div>
             </CaseSectionIsland>
           )}
 
@@ -133,11 +140,14 @@ export default async function CasePage({
                 <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   {clonedHeading}
                 </header>
-                <div className="case-article space-y-4">{section.body}</div>
+                <div className="case-article">
+                  <div className="mx-auto max-w-[72ch] space-y-4">{section.body}</div>
+                </div>
               </CaseSectionIsland>
             );
           })}
         </div>
+      </div>
 
         <CaseCTA result={frontmatter?.result} />
       </Container>

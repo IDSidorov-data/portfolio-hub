@@ -2,6 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import Analytics from "@/components/Analytics";
 import ThemeScript from "@/components/ThemeScript";
+import ScrollMemory from "@/components/ScrollMemory";
 import Providers from "./providers";
 import dynamic from "next/dynamic";
 
@@ -38,6 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <BackgroundFXGate />
           <div className="relative z-10">{children}</div>
         </Providers>
+        <ScrollMemory />
         <Analytics />
       </body>
     </html>
