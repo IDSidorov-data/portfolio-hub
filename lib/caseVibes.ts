@@ -20,7 +20,7 @@ const palette: CaseVibe[] = [
     label: "A/B",
     tone: "rose",
     surface:
-      "bg-gradient-to-br from-rose-50 via-pink-50/80 to-amber-50 dark:from-rose-500/55 dark:via-pink-500/40 dark:to-amber-500/38",
+      "bg-gradient-to-br from-rose-50 via-pink-50/80 to-amber-50 dark:from-rose-900/80 dark:via-pink-900/65 dark:to-amber-900/60",
     shadow: "shadow-[0_28px_52px_-26px_rgba(244,114,182,0.6)]",
     accent: "text-rose-700 dark:text-rose-200",
     chip:
@@ -35,7 +35,7 @@ const palette: CaseVibe[] = [
     label: "Ops",
     tone: "emerald",
     surface:
-      "bg-gradient-to-br from-emerald-50 via-lime-50/80 to-sky-50 dark:from-emerald-500/45 dark:via-lime-500/40 dark:to-sky-500/40",
+      "bg-gradient-to-br from-emerald-50 via-lime-50/80 to-sky-50 dark:from-emerald-900/78 dark:via-lime-900/60 dark:to-sky-900/65",
     shadow: "shadow-[0_24px_48px_-24px_rgba(16,185,129,0.38)]",
     accent: "text-emerald-700 dark:text-emerald-200",
     chip:
@@ -50,7 +50,7 @@ const palette: CaseVibe[] = [
     label: "Modeling",
     tone: "purple",
     surface:
-      "bg-gradient-to-br from-purple-50 via-violet-50/80 to-rose-50 dark:from-purple-500/45 dark:via-violet-500/38 dark:to-rose-500/38",
+      "bg-gradient-to-br from-purple-50 via-violet-50/80 to-rose-50 dark:from-purple-900/78 dark:via-violet-900/62 dark:to-rose-900/60",
     shadow: "shadow-[0_24px_48px_-24px_rgba(129,140,248,0.36)]",
     accent: "text-violet-700 dark:text-violet-200",
     chip:
@@ -65,7 +65,7 @@ const palette: CaseVibe[] = [
     label: "AI",
     tone: "slate",
     surface:
-      "bg-gradient-to-br from-sky-50 via-cyan-50/80 to-emerald-50 dark:from-sky-500/45 dark:via-cyan-500/40 dark:to-emerald-500/40",
+      "bg-gradient-to-br from-sky-50 via-cyan-50/80 to-emerald-50 dark:from-sky-950/80 dark:via-cyan-900/62 dark:to-emerald-900/60",
     shadow: "shadow-[0_26px_52px_-24px_rgba(148,163,184,0.45)]",
     accent: "text-slate-700 dark:text-slate-200",
     chip:
@@ -80,7 +80,7 @@ const palette: CaseVibe[] = [
     label: "Automation",
     tone: "amber",
     surface:
-      "bg-gradient-to-br from-amber-50 via-orange-50/80 to-lime-50 dark:from-amber-500/45 dark:via-orange-500/40 dark:to-lime-500/40",
+      "bg-gradient-to-br from-amber-50 via-orange-50/80 to-lime-50 dark:from-amber-900/78 dark:via-orange-900/62 dark:to-lime-900/58",
     shadow: "shadow-[0_24px_48px_-24px_rgba(251,191,36,0.38)]",
     accent: "text-amber-700 dark:text-amber-200",
     chip:
