@@ -3,6 +3,7 @@
 import Container from '@/components/Container';
 import Card from '@/components/Card';
 import Badge from '@/components/primitives/Badge';
+import BulletList from '@/components/primitives/BulletList';
 import { useCardAnalytics } from '@/components/hooks/useCardAnalytics';
 import type { BadgeTone } from '@/lib/badge';
 
