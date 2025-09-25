@@ -1,7 +1,6 @@
 ﻿import React from "react";
 
 import { getCaseSlugs, readCaseBySlug } from "@/lib/mdx";
-import Container from "@/components/Container";
 import type { Metadata } from "next";
 import { compileMDX } from "next-mdx-remote/rsc";
 
@@ -13,7 +12,7 @@ import CaseHero from '@/components/CaseHero';
 import CaseReadingProgress from '@/components/CaseReadingProgress';
 import CaseCTA from '@/components/CaseCTA';
 import CaseSectionIsland from '@/components/CaseSectionIsland';
-import BackButton from '@/components/BackButton';
+import Container from "@/components/Container";
 
 const prettyCodeOptions = {
   theme: { light: "github-light", dark: "github-dark" },
@@ -99,58 +98,56 @@ export default async function CasePage({
     <>
       <CaseReadingProgress />
 
-      <div className="py-10 sm:py-16">
+      <section className="py-10 sm:py-16">
         <Container>
-          <div className="mb-6 flex justify-start">
-            <BackButton />
+          <div className="mx-auto w-full max-w-[62rem]">
+            <CaseHero
+              slug={params.slug}
+              title={frontmatter.title}
+              summary={frontmatter.summary}
+              role={frontmatter.role}
+              duration={frontmatter.duration}
+              status={frontmatter.status}
+              tags={frontmatter.tags}
+              links={frontmatter.links}
+            />
           </div>
-          <CaseHero
-            slug={params.slug}
-            title={frontmatter.title}
-            summary={frontmatter.summary}
-            role={frontmatter.role}
-            duration={frontmatter.duration}
-            status={frontmatter.status}
-            tags={frontmatter.tags}
-            links={frontmatter.links}
-          />
         </Container>
-      </div>
+      </section>
 
-      <Container className="pb-14 sm:pb-20">
-        <div className="mx-auto w-full px-4 sm:px-6 max-w-3xl lg:max-w-4xl xl:max-w-5xl">
-          <div className="space-y-8 sm:space-y-10">
-          {intro.length > 0 && (
-            <CaseSectionIsland tone="neutral">
-              <div className="case-article">
-                <div className="mx-auto max-w-[72ch] space-y-4">{intro}</div>
-              </div>
-            </CaseSectionIsland>
-          )}
-
-          {sections.map((section, index) => {
-            const tone = toneCycle[index % toneCycle.length];
-            const clonedHeading = React.cloneElement(section.heading, {
-              className:
-                'text-2xl font-semibold leading-tight text-slate-900 tracking-tight dark:text-white',
-            });
-
-            return (
-              <CaseSectionIsland tone={tone} key={section.heading.props.id ?? index}>
-                <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  {clonedHeading}
-                </header>
+      <section className="pb-16 sm:pb-20">
+        <Container>
+          <div className="mx-auto w-full max-w-[62rem] space-y-8 sm:space-y-10">
+            {intro.length > 0 && (
+              <CaseSectionIsland tone="neutral" className="mx-auto w-full">
                 <div className="case-article">
-                  <div className="mx-auto max-w-[72ch] space-y-4">{section.body}</div>
+                  <div className="mx-auto w-full max-w-[62rem] space-y-4">{intro}</div>
                 </div>
               </CaseSectionIsland>
-            );
-          })}
-        </div>
-      </div>
+            )}
 
-        <CaseCTA result={frontmatter?.result} />
-      </Container>
+            {sections.map((section, index) => {
+              const tone = toneCycle[index % toneCycle.length];
+              const clonedHeading = React.cloneElement(section.heading, {
+                className:
+                  'text-2xl font-semibold leading-tight text-slate-900 tracking-tight dark:text-white',
+              });
+
+              return (
+                <CaseSectionIsland tone={tone} key={section.heading.props.id ?? index} className="mx-auto w-full">
+                  <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    {clonedHeading}
+                  </header>
+                  <div className="case-article">
+                    <div className="mx-auto w-full max-w-[62rem] space-y-4">{section.body}</div>
+                  </div>
+                </CaseSectionIsland>
+              );
+            })}
+            <CaseCTA result={frontmatter?.result} />
+          </div>
+        </Container>
+      </section>
     </>
   );
 }

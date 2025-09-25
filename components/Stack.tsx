@@ -1,10 +1,13 @@
 'use client';
 
+import clsx from '@/lib/clsx';
+
 import Container from '@/components/Container';
 import Card from '@/components/Card';
 import Badge from '@/components/primitives/Badge';
 import BulletList from '@/components/primitives/BulletList';
 import { useCardAnalytics } from '@/components/hooks/useCardAnalytics';
+import { useSnapCarousel } from '@/components/hooks/useSnapCarousel';
 import type { BadgeTone } from '@/lib/badge';
 
 type StackSection = {
@@ -33,7 +36,7 @@ const sections: StackSection[] = [
     emoji: '📊',
     badge: 'Аналитика и метрики',
     surface:
-      'bg-gradient-to-br from-sky-100 via-blue-50 to-emerald-100 dark:from-sky-500/20 dark:via-blue-500/12 dark:to-emerald-500/12',
+      'bg-gradient-to-br from-sky-50 via-blue-50/85 to-emerald-50 dark:from-sky-500/28 dark:via-blue-500/22 dark:to-emerald-500/22',
     shadow: 'shadow-[0_18px_40px_-18px_rgba(56,189,248,0.32)]',
     halo: 'bg-sky-200/45 dark:bg-sky-500/20',
   },
@@ -49,7 +52,7 @@ const sections: StackSection[] = [
     emoji: '🧩',
     badge: 'Backend / API',
     surface:
-      'bg-gradient-to-br from-purple-100 via-violet-50 to-indigo-100 dark:from-purple-500/20 dark:via-violet-500/12 dark:to-indigo-500/12',
+      'bg-gradient-to-br from-purple-50 via-violet-50/85 to-indigo-50 dark:from-purple-500/28 dark:via-violet-500/22 dark:to-indigo-500/22',
     shadow: 'shadow-[0_18px_40px_-18px_rgba(167,139,250,0.32)]',
     halo: 'bg-purple-200/45 dark:bg-purple-500/20',
   },
@@ -65,7 +68,7 @@ const sections: StackSection[] = [
     emoji: '🤖',
     badge: 'TG-боты и автоматизация',
     surface:
-      'bg-gradient-to-br from-amber-100 via-orange-50 to-lime-100 dark:from-amber-500/20 dark:via-orange-500/12 dark:to-lime-500/12',
+      'bg-gradient-to-br from-amber-50 via-orange-50/85 to-lime-50 dark:from-amber-500/28 dark:via-orange-500/22 dark:to-lime-500/22',
     shadow: 'shadow-[0_18px_40px_-18px_rgba(251,191,36,0.32)]',
     halo: 'bg-amber-200/45 dark:bg-amber-500/20',
   },
@@ -81,7 +84,7 @@ const sections: StackSection[] = [
     emoji: '🚀',
     badge: 'Сайты и интерфейсы',
     surface:
-      'bg-gradient-to-br from-rose-100 via-pink-50 to-emerald-100 dark:from-rose-500/20 dark:via-pink-500/12 dark:to-emerald-500/12',
+      'bg-gradient-to-br from-rose-50 via-pink-50/85 to-emerald-50 dark:from-rose-500/28 dark:via-pink-500/22 dark:to-emerald-500/22',
     shadow: 'shadow-[0_18px_40px_-18px_rgba(244,114,182,0.32)]',
     halo: 'bg-rose-200/45 dark:bg-rose-500/20',
   },
@@ -94,6 +97,8 @@ const toneBySection: Record<StackSection['id'], BadgeTone> = {
 };
 
 export default function Stack() {
+  const { listRef, activeIndex, handleKeyDown, handleScroll } = useSnapCarousel(sections.length);
+
   return (
     <section id="stack" className="py-16 sm:py-24">
       <Container>
@@ -107,11 +112,35 @@ export default function Stack() {
           </p>
         </header>
 
-        <ul className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-3" role="list">
-          {sections.map((section, index) => (
-            <StackCard key={section.id} section={section} index={index} />
-          ))}
-        </ul>
+        <div role="group" aria-roledescription="carousel" aria-label="Стек и инструменты">
+          <ul
+            ref={listRef}
+            className="case-carousel"
+            role="list"
+            tabIndex={0}
+            onKeyDown={handleKeyDown}
+            onScroll={handleScroll}
+          >
+            {sections.map((section, index) => (
+              <StackCard key={section.id} section={section} index={index} />
+            ))}
+          </ul>
+          {sections.length > 1 ? (
+            <div className="mt-4 flex justify-center gap-2 md:hidden" aria-hidden="true">
+              {sections.map((section, index) => (
+                <span
+                  key={section.id}
+                  className={clsx(
+                    'h-1.5 w-6 rounded-full transition-colors',
+                    activeIndex === index
+                      ? 'bg-white/80 shadow-[0_0_8px_rgba(0,0,0,0.25)] dark:bg-slate-100'
+                      : 'bg-slate-300/60 dark:bg-slate-600/60'
+                  )}
+                />
+              ))}
+            </div>
+          ) : null}
+        </div>
       </Container>
     </section>
   );

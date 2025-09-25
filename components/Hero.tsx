@@ -22,6 +22,8 @@ export default function Hero({ onOpenBooking }: { onOpenBooking: () => void }) {
             variant="accent"
             href={TG_URL}
             onClick={() => sendEvent('click_tg_primary', { source: 'hero' })}
+            data-qa="cta-hero-telegram"
+            className="min-h-[44px]"
           >
             Написать в Telegram
           </Button>
@@ -29,6 +31,8 @@ export default function Hero({ onOpenBooking }: { onOpenBooking: () => void }) {
           <Button
             variant="secondary"
             onClick={() => document.getElementById('brief')?.scrollIntoView({ behavior: 'smooth' })}
+            data-qa="cta-hero-brief"
+            className="min-h-[44px]"
           >
             Оставить бриф проекта
           </Button>
@@ -37,6 +41,8 @@ export default function Hero({ onOpenBooking }: { onOpenBooking: () => void }) {
             variant="secondary"
             href={RESUME_URL}
             onClick={() => sendEvent('click_resume_pdf')}
+            data-qa="cta-hero-resume"
+            className="min-h-[44px]"
           >
             Скачать резюме (PDF)
           </Button>
@@ -44,6 +50,8 @@ export default function Hero({ onOpenBooking }: { onOpenBooking: () => void }) {
           <Button
             variant="secondary"
             onClick={() => { sendEvent('tg_booking_click_placeholder', { source: 'hero' }); onOpenBooking(); }}
+            data-qa="cta-hero-booking"
+            className="min-h-[44px]"
           >
             Записаться на 15-мин (скоро)
           </Button>

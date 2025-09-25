@@ -1,5 +1,5 @@
 import * as React from "react";
-import clsx from "clsx";
+import clsx from "@/lib/clsx";
 import { badgeBaseClass, badgeToneClass, type BadgeTone } from "@/lib/badge";
 
 type BadgeProps = React.HTMLAttributes<HTMLSpanElement> & {

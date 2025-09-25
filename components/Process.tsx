@@ -1,10 +1,14 @@
 'use client';
 
+import clsx from '@/lib/clsx';
+
 import Container from '@/components/Container';
 import Card from '@/components/Card';
 import Badge from '@/components/primitives/Badge';
 import { useCardAnalytics } from '@/components/hooks/useCardAnalytics';
+import { useSnapCarousel } from '@/components/hooks/useSnapCarousel';
 import type { BadgeTone } from '@/lib/badge';
+import type { CSSProperties } from 'react';
 
 const steps = [
   {
@@ -74,6 +78,11 @@ const stepVibes: StepVibe[] = [
 ];
 
 export default function Process() {
+  const { listRef, activeIndex, handleKeyDown, handleScroll } = useSnapCarousel(steps.length);
+  const carouselStyle = {
+    '--snap-lg-columns': 'repeat(2, minmax(0, 1fr))',
+  } as CSSProperties;
+
   return (
     <section id="process" className="py-16 sm:py-24">
       <Container>
@@ -87,11 +96,36 @@ export default function Process() {
           </p>
         </header>
 
-        <ul className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2 md:gap-6" role="list">
-          {steps.map((step, index) => (
-            <StepCard key={step.title} step={step} index={index} />
-          ))}
-        </ul>
+        <div role="group" aria-roledescription="carousel" aria-label="Процесс">
+          <ul
+            ref={listRef}
+            className="case-carousel"
+            role="list"
+            tabIndex={0}
+            onKeyDown={handleKeyDown}
+            onScroll={handleScroll}
+            style={carouselStyle}
+          >
+            {steps.map((step, index) => (
+              <StepCard key={step.title} step={step} index={index} />
+            ))}
+          </ul>
+          {steps.length > 1 ? (
+            <div className="mt-4 flex justify-center gap-2 md:hidden" aria-hidden="true">
+              {steps.map((step, index) => (
+                <span
+                  key={step.title}
+                  className={clsx(
+                    'h-1.5 w-6 rounded-full transition-colors',
+                    activeIndex === index
+                      ? 'bg-white/80 shadow-[0_0_8px_rgba(0,0,0,0.25)] dark:bg-slate-100'
+                      : 'bg-slate-300/60 dark:bg-slate-600/60'
+                  )}
+                />
+              ))}
+            </div>
+          ) : null}
+        </div>
       </Container>
     </section>
   );

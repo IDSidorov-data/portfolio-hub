@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import clsx from "@/lib/clsx";
 import * as React from "react";
 
 type BulletListProps = {
