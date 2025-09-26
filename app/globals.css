@@ -129,13 +129,13 @@
 
 .prose ul>li::marker,
 .prose ol>li::marker {
-  color: color-mix(in oklab, rgb(var(--foreground)) 88%, rgb(var(--background)) 12%);
+  color: rgb(var(--foreground));
   font-weight: 800;
 }
 
 .dark .prose ul>li::marker,
 .dark .prose ol>li::marker {
-  color: color-mix(in oklab, white 80%, rgb(24 24 27) 20%);
+  color: rgb(var(--foreground));
 }
 
 /* inline-код в тексте */
