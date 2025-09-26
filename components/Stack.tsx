@@ -36,9 +36,9 @@ const sections: StackSection[] = [
     emoji: '📊',
     badge: 'Аналитика и метрики',
     surface:
-      'bg-gradient-to-br from-sky-50 via-blue-50/85 to-emerald-50 dark:from-sky-500/28 dark:via-blue-500/22 dark:to-emerald-500/22',
-    shadow: 'shadow-[0_18px_40px_-18px_rgba(56,189,248,0.32)]',
-    halo: 'bg-sky-200/45 dark:bg-sky-500/20',
+      'bg-gradient-to-br from-amber-50 via-orange-50/80 to-rose-50 dark:from-amber-500/15 dark:via-orange-500/15 dark:to-rose-500/15',
+    shadow: 'shadow-[0_20px_40px_-22px_rgba(245,158,11,0.35)]',
+    halo: 'bg-amber-200/40 dark:bg-amber-500/20',
   },
   {
     id: 'backend',
@@ -52,9 +52,9 @@ const sections: StackSection[] = [
     emoji: '🧩',
     badge: 'Backend / API',
     surface:
-      'bg-gradient-to-br from-purple-50 via-violet-50/85 to-indigo-50 dark:from-purple-500/28 dark:via-violet-500/22 dark:to-indigo-500/22',
-    shadow: 'shadow-[0_18px_40px_-18px_rgba(167,139,250,0.32)]',
-    halo: 'bg-purple-200/45 dark:bg-purple-500/20',
+      'bg-gradient-to-br from-sky-50 via-cyan-50/80 to-emerald-50 dark:from-sky-500/15 dark:via-cyan-500/15 dark:to-emerald-500/15',
+    shadow: 'shadow-[0_20px_40px_-22px_rgba(14,165,233,0.32)]',
+    halo: 'bg-sky-200/40 dark:bg-sky-500/20',
   },
   {
     id: 'automation',
@@ -68,9 +68,9 @@ const sections: StackSection[] = [
     emoji: '🤖',
     badge: 'TG-боты и автоматизация',
     surface:
-      'bg-gradient-to-br from-amber-50 via-orange-50/85 to-lime-50 dark:from-amber-500/28 dark:via-orange-500/22 dark:to-lime-500/22',
-    shadow: 'shadow-[0_18px_40px_-18px_rgba(251,191,36,0.32)]',
-    halo: 'bg-amber-200/45 dark:bg-amber-500/20',
+      'bg-gradient-to-br from-emerald-50 via-lime-50/80 to-sky-50 dark:from-emerald-500/15 dark:via-lime-500/15 dark:to-sky-500/15',
+    shadow: 'shadow-[0_20px_40px_-22px_rgba(16,185,129,0.32)]',
+    halo: 'bg-emerald-200/40 dark:bg-emerald-500/20',
   },
   {
     id: 'product',
@@ -84,16 +84,16 @@ const sections: StackSection[] = [
     emoji: '🚀',
     badge: 'Сайты и интерфейсы',
     surface:
-      'bg-gradient-to-br from-rose-50 via-pink-50/85 to-emerald-50 dark:from-rose-500/28 dark:via-pink-500/22 dark:to-emerald-500/22',
-    shadow: 'shadow-[0_18px_40px_-18px_rgba(244,114,182,0.32)]',
-    halo: 'bg-rose-200/45 dark:bg-rose-500/20',
+      'bg-gradient-to-br from-purple-50 via-violet-50/80 to-rose-50 dark:from-purple-500/15 dark:via-violet-500/15 dark:to-rose-500/15',
+    shadow: 'shadow-[0_20px_40px_-22px_rgba(147,51,234,0.32)]',
+    halo: 'bg-purple-200/40 dark:bg-purple-500/20',
   },
 ];
 const toneBySection: Record<StackSection['id'], BadgeTone> = {
-  analytics: 'sky',
-  backend: 'purple',
+  analytics: 'amber',
+  backend: 'sky',
   automation: 'emerald',
-  product: 'rose',
+  product: 'purple',
 };
 
 export default function Stack() {

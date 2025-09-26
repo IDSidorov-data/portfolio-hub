@@ -57,7 +57,7 @@ const cases: CaseItem[] = [
         label: 'Код',
         href: 'https://github.com/IDSidorov-data/mobile-game-ab-test-analysis',
         kind: 'external',
-        variant: 'accent',
+        variant: 'ghost',
       },
     ],
   },
@@ -76,7 +76,7 @@ const cases: CaseItem[] = [
         label: 'Демо',
         href: 'https://log-calc.streamlit.app/',
         kind: 'external',
-        variant: 'accent',
+        variant: 'ghost',
       },
       {
         label: 'ТЗ v2',
@@ -88,7 +88,7 @@ const cases: CaseItem[] = [
         label: 'Код',
         href: 'https://github.com/IDSidorov-data/logistics_calculator',
         kind: 'external',
-        variant: 'accent',
+        variant: 'ghost',
       },
     ],
   },
@@ -106,13 +106,13 @@ const cases: CaseItem[] = [
         label: 'Код (core)',
         href: 'https://github.com/IDSidorov-data/scenario-core',
         kind: 'external',
-        variant: 'accent',
+        variant: 'ghost',
       },
       {
         label: 'Код (landing)',
         href: 'https://github.com/IDSidorov-data/scenario-landing',
         kind: 'external',
-        variant: 'accent',
+        variant: 'ghost',
       },
     ],
   },
@@ -130,7 +130,7 @@ const cases: CaseItem[] = [
         label: 'Код',
         href: 'https://github.com/IDSidorov-data/loki-reborn-ai-assistant',
         kind: 'external',
-        variant: 'accent',
+        variant: 'ghost',
       },
     ],
   },
@@ -253,7 +253,6 @@ function CaseCard({ item, index }: CaseCardProps) {
   return (
     <li ref={ref} className="group/card list-none">
       <Card
-        variant="plain"
         aria-labelledby={`${cardId}-title`}
         aria-describedby={item.result ? `${cardId}-result` : undefined}
         className={clsx(
@@ -337,9 +336,9 @@ function CaseCard({ item, index }: CaseCardProps) {
         </div>
         <footer className="mt-auto flex flex-wrap items-center gap-3 pt-2">
           <Button
-            variant="accent"
+            variant="ghost"
             href={`/cases/${item.slug}`}
-            className="case-card__cta case-card__cta--accent case-card__cta--primary min-h-[44px] px-5"
+            className="case-card__cta case-card__cta--primary min-h-[44px] px-5"
             data-qa={`cta-view-case-${item.slug}`}
             onClick={() => {
               trackClick({ action: 'cta_primary' });
@@ -350,7 +349,12 @@ function CaseCard({ item, index }: CaseCardProps) {
           </Button>
           {item.ctas?.map((cta, ctaIndex) => {
             const variant = cta.variant || 'secondary';
+            const normalizedLabel = cta.label.toLowerCase().trim();
+            const isCodeLike = normalizedLabel.startsWith('код');
+            const isDemo = normalizedLabel.startsWith('демо');
+            const isTz = normalizedLabel.startsWith('тз');
             const accentTone = variant === 'accent';
+            const blueTone = isCodeLike || isDemo || isTz || accentTone;
 
             return (
               <Button
@@ -361,7 +365,7 @@ function CaseCard({ item, index }: CaseCardProps) {
                 rel={cta.kind === 'external' ? 'noopener noreferrer' : undefined}
                 className={clsx(
                   'case-card__cta min-h-[44px] px-4',
-                  accentTone ? 'case-card__cta--accent' : 'case-card__cta--secondary'
+                  blueTone ? 'case-card__cta--blue' : 'case-card__cta--secondary'
                 )}
                 data-qa={`cta-case-${item.slug}-${ctaIndex}-${toDataQa(cta.label)}`}
                 onClick={() => {

@@ -250,9 +250,9 @@ function ServiceCard({ service, index }: ServiceCardProps) {
             {service.budget}
           </Badge>
           <Button
-            variant="accent"
+            variant="secondary"
             href="#brief"
-            className="mt-2 w-full min-h-[44px] justify-center text-sm font-semibold md:w-auto"
+            className="mt-2 w-full min-h-[44px] justify-center rounded-xl border border-transparent bg-black text-sm font-semibold text-white shadow-sm ring-1 ring-transparent transition hover:bg-neutral-900 focus-visible:outline-sky-500 md:w-auto dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
             onClick={() => trackClick({ action: 'brief' })}
             data-qa={`service-${service.id}-cta`}
           >
