@@ -1,5 +1,7 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ButtonHTMLAttributes } from 'react';
+
+import clsx from '@/lib/clsx';
 
 const KEY = 'bg-mode'; // 'dynamic' | 'static'
 
@@ -8,7 +10,11 @@ function prefersReduced() {
   return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
 }
 
-export default function BackgroundToggle() {
+type BackgroundToggleProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+  className?: string;
+};
+
+export default function BackgroundToggle({ className = '', ...rest }: BackgroundToggleProps) {
   const [mode, setMode] = useState<'dynamic' | 'static'>('dynamic');
 
   useEffect(() => {
@@ -29,8 +35,12 @@ export default function BackgroundToggle() {
     <button
       type="button"
       onClick={toggle}
-      className="text-sm px-3 py-1.5 rounded-xl border bg-background/60 hover:bg-background/80"
+      className={clsx(
+        'text-sm font-medium opacity-80 transition hover:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[rgb(var(--accent))]',
+        className
+      )}
       title="Переключить фон"
+      {...rest}
     >
       Фон: {mode === 'dynamic' ? 'динамический' : 'статичный'}
     </button>

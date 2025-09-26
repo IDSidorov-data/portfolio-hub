@@ -15,16 +15,25 @@ export default function Footer() {
             variant="secondary"
             href={TG_URL}
             onClick={() => sendEvent('click_tg_primary', { source: 'footer' })}
+            data-qa="cta-footer-telegram"
+            className="min-h-[44px]"
           >
             Telegram
           </Button>
-          <Button variant="secondary" href={GITHUB_URL}>
+          <Button
+            variant="secondary"
+            href={GITHUB_URL}
+            data-qa="cta-footer-github"
+            className="min-h-[44px]"
+          >
             GitHub
           </Button>
           <Button
             variant="secondary"
             href={RESUME_URL}
             onClick={() => sendEvent('click_resume_pdf')}
+            data-qa="cta-footer-resume"
+            className="min-h-[44px]"
           >
             Резюме (PDF)
           </Button>
