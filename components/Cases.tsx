@@ -69,9 +69,7 @@ const cases: CaseItem[] = [
     tags: ['Streamlit', 'Python', 'Product Discovery'],
     result:
       'Предотвращена лишняя разработка (~200 часов); MVP собран за 5 часов.',
-    metrics: [
-      { label: 'Экономия разработки', value: '~200 ч', note: 'оценка', positive: true },
-    ],
+    metrics: [{ label: '', value: 'Экономия ~200 ч разработки', positive: true }],
     status: 'delivered',
     ctas: [
       {
@@ -145,8 +143,8 @@ const cases: CaseItem[] = [
     result:
       'Ключевой отчёт: 7 мин → 15 сек (−96%); экономия ~300 000 ₽/мес при текущем объёме.',
     metrics: [
-      { label: 'Время отчёта', value: '7 мин → 15 сек', note: '−96%', positive: true },
-      { label: 'Экономия бюджета', value: '~300k ₽/мес', note: 'оценка', positive: true },
+      { label: '', value: 'Время отчета с 7 мин до 15 сек', positive: true },
+      { label: '', value: 'Экономия ~300k ₽/мес', note: 'оценка', positive: true },
     ],
     nda: true,
   },
@@ -300,14 +298,13 @@ function CaseCard({ item, index }: CaseCardProps) {
           </p>
         ) : null}
         {item.metrics && item.metrics.length > 0 ? (
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2">
             {item.metrics.map((metric, metricIndex) => (
               <MetricBadge
                 key={`${item.slug}-metric-${metricIndex}`}
                 value={metric.value}
                 label={metric.label}
-                note={metric.note}
-                positive={metric.positive}
+                direction={metric.positive === false ? 'down' : 'up'}
               />
             ))}
           </div>
