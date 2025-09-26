@@ -34,7 +34,7 @@ export default function BackButton({ caseId, className }: BackButtonProps) {
         "dark:border-[color:color-mix(in_oklab,_rgb(var(--accent))_30%,_rgb(var(--border))_70%)]",
         "dark:bg-[color:color-mix(in_oklab,_rgb(var(--accent))_22%,_rgb(var(--background))_78%)]",
         "dark:text-[color:color-mix(in_oklab,_rgb(var(--accent-foreground))_65%,_rgb(var(--foreground))_35%)]",
-        "-ml-2 sm:-ml-3 md:-ml-8 lg:-ml-16 xl:-ml-24 2xl:-ml-32",
+        "sm:-ml-3 md:-ml-8 lg:-ml-16 xl:-ml-24 2xl:-ml-32",
         className
       )}
     >
