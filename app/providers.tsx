@@ -7,7 +7,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       attribute="class"          // вешает .dark на <html>
       defaultTheme="system"      // стартуем от системной темы
       enableSystem               // можно выключить, если не нужно
-      storageKey="site-theme"    // ключ в localStorage (опционально)
+      storageKey="theme"         // ключ в localStorage синхронизирован с ThemeScript
       disableTransitionOnChange  // без миганий при переключении
     >
       {children}
