@@ -3,6 +3,7 @@ import Link from 'next/link'
 import BackButton from '@/components/BackButton'
 import ThemeToggle from '@/components/ThemeToggle'
 import BackgroundToggle from '@/components/BackgroundToggle' // ← вернули
+import { GITHUB_URL, TG_URL } from '@/lib/constants'
 
 type NavProps = {
   backToCases?: boolean
@@ -45,10 +46,10 @@ export default function Nav({ backToCases = false, caseId }: NavProps) {
                 <Link href="/#process" className="opacity-80 hover:opacity-100">
                   Процесс
                 </Link>
-                <Link href="https://github.com" className="opacity-80 hover:opacity-100">
+                <Link href={GITHUB_URL} className="opacity-80 hover:opacity-100">
                   GitHub
                 </Link>
-                <Link href="https://t.me" className="opacity-80 hover:opacity-100">
+                <Link href={TG_URL} className="opacity-80 hover:opacity-100">
                   Telegram
                 </Link>
                 <BackgroundToggle className="hidden md:inline-flex items-center gap-1" aria-label="Переключить фон" />
