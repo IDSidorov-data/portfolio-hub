@@ -8,7 +8,7 @@ type MetricBadgeProps = {
 };
 
 export default function MetricBadge({ value, unit, label, direction }: MetricBadgeProps) {
-  const arrow = direction === "down" ? "v" : direction === "up" ? "^" : null;
+  const arrow = direction === "down" ? "↓" : direction === "up" ? "↑" : null;
   return (
     <Badge tone="emerald" size="sm" aria-label={label ? `${label}: ${value}${unit ?? ""}` : undefined}>
       {arrow ? <span aria-hidden>{arrow}</span> : null}
