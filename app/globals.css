@@ -127,15 +127,14 @@
   margin: .3rem 0;
 }
 
-.prose ul>li::marker,
-.prose ol>li::marker {
-  color: rgb(var(--foreground));
+.prose ul>li::marker {
+  color: rgb(var(--accent));
   font-weight: 800;
 }
 
-.dark .prose ul>li::marker,
-.dark .prose ol>li::marker {
-  color: rgb(var(--foreground));
+.prose ol>li::marker {
+  color: color-mix(in oklab, rgb(var(--accent)) 80%, rgb(var(--foreground)) 20%);
+  font-weight: 800;
 }
 
 /* inline-код в тексте */
