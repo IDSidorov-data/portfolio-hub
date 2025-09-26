@@ -349,11 +349,12 @@ function CaseCard({ item, index }: CaseCardProps) {
           </Button>
           {item.ctas?.map((cta, ctaIndex) => {
             const variant = cta.variant || 'secondary';
-            const normalizedLabel = cta.label.toLowerCase();
+            const normalizedLabel = cta.label.toLowerCase().trim();
             const isCodeLike = normalizedLabel.startsWith('код');
             const isDemo = normalizedLabel.startsWith('демо');
-            const whiteTone = isCodeLike || isDemo;
+            const isTz = normalizedLabel.startsWith('тз');
             const accentTone = variant === 'accent';
+            const blueTone = isCodeLike || isDemo || isTz || accentTone;
 
             return (
               <Button
@@ -364,11 +365,7 @@ function CaseCard({ item, index }: CaseCardProps) {
                 rel={cta.kind === 'external' ? 'noopener noreferrer' : undefined}
                 className={clsx(
                   'case-card__cta min-h-[44px] px-4',
-                  whiteTone
-                    ? 'case-card__cta--light'
-                    : accentTone
-                    ? 'case-card__cta--accent'
-                    : 'case-card__cta--secondary'
+                  blueTone ? 'case-card__cta--blue' : 'case-card__cta--secondary'
                 )}
                 data-qa={`cta-case-${item.slug}-${ctaIndex}-${toDataQa(cta.label)}`}
                 onClick={() => {
