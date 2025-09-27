@@ -8,7 +8,12 @@ type BulletListProps = {
 
 export default function BulletList({ items, className }: BulletListProps) {
   return (
-    <ul className={clsx("list-disc pl-5 space-y-1.5 marker:text-slate-400 dark:marker:text-slate-500 text-sm md:text-base", className)}>
+    <ul
+      className={clsx(
+        "list-disc pl-5 space-y-1.5 marker:text-slate-400 dark:marker:text-slate-200 text-sm md:text-base",
+        className,
+      )}
+    >
       {items.map((item, index) => (
         <li key={index} className="leading-relaxed">
           {item}

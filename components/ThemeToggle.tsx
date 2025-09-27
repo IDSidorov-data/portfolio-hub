@@ -34,7 +34,7 @@ export default function ThemeToggle({
   const isDark = resolvedTheme === "dark";
 
   const baseClass =
-    "inline-flex h-9 w-9 items-center justify-center rounded-lg border border-transparent bg-[rgb(var(--muted))]/50 text-lg transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[rgb(var(--accent))] hover:bg-[rgb(var(--muted))]/70";
+    "inline-flex h-9 w-9 items-center justify-center rounded-lg border border-transparent bg-transparent text-lg transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[rgb(var(--accent))] hover:bg-[rgb(var(--muted))]/50 dark:hover:bg-white/10";
 
   if (!mounted) {
     return (
