@@ -33,7 +33,7 @@ export default function Nav({ backToCases = false, caseId }: NavProps) {
 
             {/* правая группа не сжимается и не ломает ширину */}
             <div className="flex items-center gap-1.5 md:gap-4 shrink-0">
-              <div className="rounded-lg p-1.5 hover:bg-[rgb(var(--muted))] transition">
+              <div className="rounded-lg p-1.5">
                 <ThemeToggle aria-label="Переключить тему" />
               </div>
               <div className="flex items-center gap-1.5 md:gap-4">
