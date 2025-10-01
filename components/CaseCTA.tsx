@@ -3,8 +3,15 @@
 import Link from 'next/link';
 
 import Badge from '@/components/primitives/Badge';
+import { useCleanMode } from '@/lib/clean-mode';
 
 export default function CaseCTA({ result }: { result?: string }) {
+  const cleanMode = useCleanMode();
+
+  if (cleanMode) {
+    return null;
+  }
+
   const handleBrief: React.MouseEventHandler<HTMLAnchorElement> = (event) => {
     event.preventDefault();
     event.stopPropagation();

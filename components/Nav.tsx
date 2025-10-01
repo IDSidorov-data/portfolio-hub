@@ -1,9 +1,12 @@
-import Link from 'next/link'
+"use client";
 
-import BackButton from '@/components/BackButton'
-import ThemeToggle from '@/components/ThemeToggle'
-import BackgroundToggle from '@/components/BackgroundToggle' // ← вернули
-import { GITHUB_URL, TG_URL } from '@/lib/constants'
+import Link from 'next/link';
+
+import BackButton from '@/components/BackButton';
+import ThemeToggle from '@/components/ThemeToggle';
+import BackgroundToggle from '@/components/BackgroundToggle'; // ← вернули
+import { GITHUB_URL, TG_URL } from '@/lib/constants';
+import { useCleanMode } from '@/lib/clean-mode';
 
 type NavProps = {
   backToCases?: boolean
@@ -11,6 +14,9 @@ type NavProps = {
 }
 
 export default function Nav({ backToCases = false, caseId }: NavProps) {
+  const cleanMode = useCleanMode();
+  const sectionBase = cleanMode ? '/market' : '';
+
   return (
     // плотная плашка и там, и там
     <header
@@ -25,7 +31,7 @@ export default function Nav({ backToCases = false, caseId }: NavProps) {
 
           <div className="flex h-full w-full items-center justify-between gap-2 md:gap-3">
             <Link
-              href="/"
+              href={cleanMode ? '/market' : '/'}
               className="font-semibold hidden max-w-[60vw] md:inline text-sm truncate"
             >
               Иван Сидоров · Системный архитектор
@@ -37,27 +43,34 @@ export default function Nav({ backToCases = false, caseId }: NavProps) {
                 <ThemeToggle aria-label="Переключить тему" />
               </div>
               <div className="flex items-center gap-1.5 md:gap-4">
-                <Link href="/#services" className="opacity-80 hover:opacity-100">
+                <Link href={`${sectionBase}#services`} className="opacity-80 hover:opacity-100">
                   Услуги
                 </Link>
-                <Link href="/#cases" className="opacity-80 hover:opacity-100">
+                <Link href={`${sectionBase}#cases`} className="opacity-80 hover:opacity-100">
                   Кейсы
                 </Link>
-                <Link href="/#process" className="opacity-80 hover:opacity-100">
+                <Link href={`${sectionBase}#process`} className="opacity-80 hover:opacity-100">
                   Процесс
                 </Link>
-                <Link href={GITHUB_URL} className="opacity-80 hover:opacity-100">
-                  GitHub
-                </Link>
-                <Link href={TG_URL} className="opacity-80 hover:opacity-100">
-                  Telegram
-                </Link>
-                <BackgroundToggle className="hidden md:inline-flex items-center gap-1" aria-label="Переключить фон" />
+                {cleanMode ? null : (
+                  <Link href={GITHUB_URL} className="opacity-80 hover:opacity-100">
+                    GitHub
+                  </Link>
+                )}
+                {cleanMode ? null : (
+                  <Link href={TG_URL} className="opacity-80 hover:opacity-100">
+                    Telegram
+                  </Link>
+                )}
+                <BackgroundToggle
+                  className="hidden md:inline-flex items-center gap-1"
+                  aria-label="Переключить фон"
+                />
               </div>
             </div>
           </div>
         </nav>
       </div>
     </header>
-  )
+  );
 }

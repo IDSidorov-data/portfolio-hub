@@ -13,6 +13,8 @@ import { useSnapCarousel } from '@/components/hooks/useSnapCarousel';
 import { getCaseVibe } from '@/lib/caseVibes';
 import { sendEvent } from '@/lib/analytics';
 import type { BadgeTone } from '@/lib/badge';
+import { useCleanMode } from '@/lib/clean-mode';
+import { sanitizeContactText } from '@/lib/sanitize-contact';
 
 type Metric = {
   label: string;
@@ -170,19 +172,31 @@ function toDataQa(value: string) {
 
 export default function Cases() {
   const { listRef, activeIndex, handleKeyDown, handleScroll } = useSnapCarousel(cases.length);
+  const cleanMode = useCleanMode();
+  const displayedCases = React.useMemo(() => {
+    if (!cleanMode) {
+      return cases;
+    }
+    return cases.map((item) => ({
+      ...item,
+      teaser: sanitizeContactText(item.teaser),
+      tags: item.tags.map((tag) => sanitizeContactText(tag)),
+      result: item.result ? sanitizeContactText(item.result) : item.result,
+    }));
+  }, [cleanMode]);
 
   const reportedIndexRef = React.useRef(0);
   React.useEffect(() => {
     if (activeIndex === reportedIndexRef.current) {
       return;
     }
-    const current = cases[activeIndex];
+    const current = displayedCases[activeIndex];
     if (!current) {
       return;
     }
     reportedIndexRef.current = activeIndex;
     sendEvent('carousel_swipe', { case_id: current.slug, position: activeIndex });
-  }, [activeIndex]);
+  }, [activeIndex, displayedCases]);
 
   return (
     <section id="cases" className="py-16 sm:py-24">
@@ -206,12 +220,12 @@ export default function Cases() {
             onKeyDown={handleKeyDown}
             onScroll={handleScroll}
           >
-            {cases.map((item, index) => (
-              <CaseCard key={item.slug} item={item} index={index} />
+            {displayedCases.map((item, index) => (
+              <CaseCard key={item.slug} item={item} index={index} cleanMode={cleanMode} />
             ))}
           </ul>
           <div className="mt-4 flex justify-center gap-2 md:hidden" aria-hidden="true">
-            {cases.map((caseItem, index) => (
+            {displayedCases.map((caseItem, index) => (
               <span
                 key={caseItem.slug}
                 className={clsx(
@@ -232,9 +246,10 @@ export default function Cases() {
 type CaseCardProps = {
   item: CaseItem;
   index: number;
+  cleanMode: boolean;
 };
 
-function CaseCard({ item, index }: CaseCardProps) {
+function CaseCard({ item, index, cleanMode }: CaseCardProps) {
   const vibe = getCaseVibe(item.slug, index);
   const { ref, trackClick } = useCardAnalytics<HTMLLIElement>({
     id: item.slug,
@@ -337,7 +352,7 @@ function CaseCard({ item, index }: CaseCardProps) {
         <footer className="mt-auto flex flex-wrap items-center gap-3 pt-2">
           <Button
             variant="ghost"
-            href={`/cases/${item.slug}`}
+            href={`${cleanMode ? '/market/cases' : '/cases'}/${item.slug}`}
             className="case-card__cta case-card__cta--primary min-h-[44px] px-5"
             data-qa={`cta-view-case-${item.slug}`}
             onClick={() => {

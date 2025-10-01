@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 
 import { sendEvent } from "@/lib/analytics";
+import { useCleanMode } from "@/lib/clean-mode";
 import clsx from "@/lib/clsx";
 
 type BackButtonProps = {
@@ -12,6 +13,7 @@ type BackButtonProps = {
 
 export default function BackButton({ caseId, className }: BackButtonProps) {
   const router = useRouter();
+  const cleanMode = useCleanMode();
 
   return (
     <button
@@ -23,7 +25,7 @@ export default function BackButton({ caseId, className }: BackButtonProps) {
         if (window.history.length > 1) {
           router.back();
         } else {
-          window.location.href = "/#cases";
+          window.location.href = cleanMode ? "/market#cases" : "/#cases";
         }
       }}
       className={clsx(
