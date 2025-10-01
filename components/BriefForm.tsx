@@ -11,6 +11,13 @@ const DEADLINES = ["как можно скорее", "2–4 недели", "1–
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const TG_RE = /^[a-zA-Z0-9_]{3,32}$/;
 
+const BASE_FIELD_CLASSES =
+  "w-full rounded-md border border-slate-300 bg-white/80 px-3 py-2 text-slate-900 placeholder:text-slate-500 shadow-sm transition focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:border-slate-700 dark:bg-white/10 dark:text-slate-100 dark:placeholder:text-slate-400 dark:focus:ring-indigo-300";
+const SELECT_FIELD_CLASSES =
+  "w-full rounded-md border border-slate-300 bg-white/80 px-3 py-2 text-slate-900 shadow-sm transition focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:border-slate-700 dark:bg-white/10 dark:text-slate-100 dark:focus:ring-indigo-300";
+const FILE_INPUT_CLASSES =
+  "block w-full text-sm text-slate-900 transition focus:outline-none dark:text-slate-100 file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:bg-gradient-to-r file:from-purple-500 file:via-indigo-500 file:to-sky-500 file:px-4 file:py-2 file:font-semibold file:text-white file:transition file:hover:from-purple-400 file:hover:via-indigo-400 file:hover:to-sky-400 dark:file:from-purple-400 dark:file:via-indigo-400 dark:file:to-sky-400";
+
 async function compressImageIfNeeded(file: File, maxBytes: number): Promise<File> {
   if (!/^image\/(png|jpeg)$/.test(file.type) || file.size <= maxBytes) return file;
 
@@ -177,7 +184,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
           required
           minLength={2}
           maxLength={60}
-          className="w-full rounded border px-3 py-2"
+          className={BASE_FIELD_CLASSES}
           placeholder="Иван"
         />
       </div>
@@ -187,7 +194,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
           <label className="block text-sm mb-1">Telegram</label>
           <input
             name="telegram"
-            className="w-full rounded border px-3 py-2"
+            className={BASE_FIELD_CLASSES}
             placeholder="@username"
           />
         </div>
@@ -195,7 +202,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
           <label className="block text-sm mb-1">Email</label>
           <input
             name="email"
-            className="w-full rounded border px-3 py-2"
+            className={BASE_FIELD_CLASSES}
             type="email"
             placeholder="name@example.com"
           />
@@ -209,7 +216,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
           required
           minLength={20}
           maxLength={1500}
-          className="w-full rounded border px-3 py-2 h-36"
+          className={`h-36 ${BASE_FIELD_CLASSES}`}
           placeholder="Коротко опишите задачу, цель, ссылки..."
         />
       </div>
@@ -221,7 +228,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
             name="budget"
             value={budget}
             onChange={(event) => setBudget(event.target.value)}
-            className={`w-full rounded border px-3 py-2 ${budget ? "text-gray-900 dark:text-gray-100" : "text-gray-500"}`}
+            className={SELECT_FIELD_CLASSES}
           >
             <option value="" disabled hidden>
               Выберите
@@ -239,7 +246,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
             name="deadline"
             value={deadline}
             onChange={(event) => setDeadline(event.target.value)}
-            className={`w-full rounded border px-3 py-2 ${deadline ? "text-gray-900 dark:text-gray-100" : "text-gray-500"}`}
+            className={SELECT_FIELD_CLASSES}
           >
             <option value="" disabled hidden>
               Выберите
@@ -262,6 +269,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
           type="file"
           accept=".pdf,image/png,image/jpeg"
           onChange={(event) => setFile(event.target.files?.[0] || null)}
+          className={FILE_INPUT_CLASSES}
         />
       </div>
 
