@@ -12,11 +12,9 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const TG_RE = /^[a-zA-Z0-9_]{3,32}$/;
 
 const BASE_FIELD_CLASSES =
-  "w-full rounded-md border border-slate-300 bg-white/80 px-3 py-2 text-slate-900 placeholder:text-slate-500 shadow-sm transition focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:border-slate-700 dark:bg-white/10 dark:text-slate-100 dark:placeholder:text-slate-400 dark:focus:ring-indigo-300";
+  "w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-800 placeholder:text-slate-500 shadow-sm transition focus:border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-300/70 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-200 dark:placeholder:text-slate-400 dark:focus:border-indigo-400/70 dark:focus:ring-indigo-400/60";
 const SELECT_FIELD_CLASSES =
-  "w-full rounded-md border border-slate-300 bg-white/80 px-3 py-2 text-slate-900 shadow-sm transition focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:border-slate-700 dark:bg-white/10 dark:text-slate-100 dark:focus:ring-indigo-300";
-const FILE_INPUT_CLASSES =
-  "block w-full text-sm text-slate-900 transition focus:outline-none dark:text-slate-100 file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:bg-gradient-to-r file:from-purple-500 file:via-indigo-500 file:to-sky-500 file:px-4 file:py-2 file:font-semibold file:text-white file:transition file:hover:from-purple-400 file:hover:via-indigo-400 file:hover:to-sky-400 dark:file:from-purple-400 dark:file:via-indigo-400 dark:file:to-sky-400";
+  "w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-800 shadow-sm transition focus:border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-300/70 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-200 dark:focus:border-indigo-400/70 dark:focus:ring-indigo-400/60 dark:[color-scheme:dark]";
 
 async function compressImageIfNeeded(file: File, maxBytes: number): Promise<File> {
   if (!/^image\/(png|jpeg)$/.test(file.type) || file.size <= maxBytes) return file;
@@ -67,6 +65,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
   const [deadline, setDeadline] = useState("");
   const [startedAt] = useState<number>(() => Date.now());
   const formRef = useRef<HTMLFormElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!formRef.current) return;
@@ -147,9 +146,8 @@ export default function BriefForm({ maxUploadMB }: Props) {
       if (response.ok && json?.ok) {
         setStatus("ok");
         setFile(null);
-        const fileInput = formRef.current?.querySelector<HTMLInputElement>('input[name="file"]');
-        if (fileInput) {
-          fileInput.value = "";
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
         }
       } else {
         setStatus("error");
@@ -178,7 +176,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
       />
 
       <div>
-        <label className="block text-sm mb-1">Имя*</label>
+        <label className="block text-sm mb-1 text-slate-600 dark:text-slate-300">Имя*</label>
         <input
           name="name"
           required
@@ -191,7 +189,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm mb-1">Telegram</label>
+          <label className="block text-sm mb-1 text-slate-600 dark:text-slate-300">Telegram</label>
           <input
             name="telegram"
             className={BASE_FIELD_CLASSES}
@@ -199,7 +197,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
           />
         </div>
         <div>
-          <label className="block text-sm mb-1">Email</label>
+          <label className="block text-sm mb-1 text-slate-600 dark:text-slate-300">Email</label>
           <input
             name="email"
             className={BASE_FIELD_CLASSES}
@@ -210,7 +208,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
       </div>
 
       <div>
-        <label className="block text-sm mb-1">О проекте*</label>
+        <label className="block text-sm mb-1 text-slate-600 dark:text-slate-300">О проекте*</label>
         <textarea
           name="about"
           required
@@ -223,12 +221,12 @@ export default function BriefForm({ maxUploadMB }: Props) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm mb-1">Бюджет*</label>
+          <label className="block text-sm mb-1 text-slate-600 dark:text-slate-300">Бюджет*</label>
           <select
             name="budget"
             value={budget}
             onChange={(event) => setBudget(event.target.value)}
-            className={SELECT_FIELD_CLASSES}
+            className={`${SELECT_FIELD_CLASSES} ${!budget ? "text-slate-500 dark:text-slate-400" : ""}`}
           >
             <option value="" disabled hidden>
               Выберите
@@ -241,12 +239,12 @@ export default function BriefForm({ maxUploadMB }: Props) {
           </select>
         </div>
         <div>
-          <label className="block text-sm mb-1">Срок*</label>
+          <label className="block text-sm mb-1 text-slate-600 dark:text-slate-300">Срок*</label>
           <select
             name="deadline"
             value={deadline}
             onChange={(event) => setDeadline(event.target.value)}
-            className={SELECT_FIELD_CLASSES}
+            className={`${SELECT_FIELD_CLASSES} ${!deadline ? "text-slate-500 dark:text-slate-400" : ""}`}
           >
             <option value="" disabled hidden>
               Выберите
@@ -261,15 +259,29 @@ export default function BriefForm({ maxUploadMB }: Props) {
       </div>
 
       <div>
-        <label className="block text-sm mb-1">
+        <p className="block text-sm mb-1 text-slate-600 dark:text-slate-300">
           Файл (PDF/JPG/PNG, ≤ {effectiveMaxUploadMB} МБ)
-        </label>
+        </p>
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="inline-flex items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-2 focus:ring-offset-white dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-indigo-400 dark:focus:ring-offset-slate-900"
+          >
+            Выбрать файл
+          </button>
+          <span className="text-sm text-slate-600 dark:text-slate-300">
+            {file ? file.name : "Файл не выбран"}
+          </span>
+        </div>
         <input
+          ref={fileInputRef}
           name="file"
           type="file"
           accept=".pdf,image/png,image/jpeg"
           onChange={(event) => setFile(event.target.files?.[0] || null)}
-          className={FILE_INPUT_CLASSES}
+          className="sr-only"
+          tabIndex={-1}
         />
       </div>
 
