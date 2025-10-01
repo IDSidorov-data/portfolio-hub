@@ -15,6 +15,8 @@ type NavProps = {
 
 export default function Nav({ backToCases = false, caseId }: NavProps) {
   const cleanMode = useCleanMode();
+  const sectionBase = cleanMode ? '/market' : '';
+
   return (
     // плотная плашка и там, и там
     <header
@@ -29,7 +31,7 @@ export default function Nav({ backToCases = false, caseId }: NavProps) {
 
           <div className="flex h-full w-full items-center justify-between gap-2 md:gap-3">
             <Link
-              href="/"
+              href={cleanMode ? '/market' : '/'}
               className="font-semibold hidden max-w-[60vw] md:inline text-sm truncate"
             >
               Иван Сидоров · Системный архитектор
@@ -41,13 +43,13 @@ export default function Nav({ backToCases = false, caseId }: NavProps) {
                 <ThemeToggle aria-label="Переключить тему" />
               </div>
               <div className="flex items-center gap-1.5 md:gap-4">
-                <Link href="/#services" className="opacity-80 hover:opacity-100">
+                <Link href={`${sectionBase}#services`} className="opacity-80 hover:opacity-100">
                   Услуги
                 </Link>
-                <Link href="/#cases" className="opacity-80 hover:opacity-100">
+                <Link href={`${sectionBase}#cases`} className="opacity-80 hover:opacity-100">
                   Кейсы
                 </Link>
-                <Link href="/#process" className="opacity-80 hover:opacity-100">
+                <Link href={`${sectionBase}#process`} className="opacity-80 hover:opacity-100">
                   Процесс
                 </Link>
                 {cleanMode ? null : (
