@@ -1,1 +1,5 @@
-export { default } from "../(home)/page";
+import HomePageView from '@/components/HomePageView';
+
+export default function MarketPage() {
+  return <HomePageView cleanMode={true} />;
+}

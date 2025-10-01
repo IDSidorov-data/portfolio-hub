@@ -171,7 +171,7 @@ export default function Services() {
             onScroll={handleScroll}
           >
             {displayedServices.map((service, index) => (
-              <ServiceCard key={service.id} service={service} index={index} />
+              <ServiceCard key={service.id} service={service} index={index} cleanMode={cleanMode} />
             ))}
           </ul>
           {displayedServices.length > 1 ? (
@@ -198,9 +198,10 @@ export default function Services() {
 type ServiceCardProps = {
   service: Service;
   index: number;
+  cleanMode: boolean;
 };
 
-function ServiceCard({ service, index }: ServiceCardProps) {
+function ServiceCard({ service, index, cleanMode }: ServiceCardProps) {
   const vibe = serviceVibes[service.id] ?? serviceVibeFallback;
   const { ref, trackClick } = useCardAnalytics<HTMLLIElement>({
     id: service.id,
@@ -259,15 +260,21 @@ function ServiceCard({ service, index }: ServiceCardProps) {
           <Badge tone={vibe.tone} size="sm" leftIcon="💸">
             {service.budget}
           </Badge>
-          <Button
-            variant="secondary"
-            href="#brief"
-            className="mt-2 w-full min-h-[44px] justify-center rounded-xl border border-transparent bg-black text-sm font-semibold text-white shadow-sm ring-1 ring-transparent transition hover:bg-neutral-900 focus-visible:outline-sky-500 md:w-auto dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
-            onClick={() => trackClick({ action: 'brief' })}
-            data-qa={`service-${service.id}-cta`}
-          >
-            Обсудить проект
-          </Button>
+          {cleanMode ? (
+            <p className="mt-2 w-full text-sm font-medium text-slate-600 dark:text-slate-300">
+              Для связи используйте чат площадки.
+            </p>
+          ) : (
+            <Button
+              variant="secondary"
+              href="#brief"
+              className="mt-2 w-full min-h-[44px] justify-center rounded-xl border border-transparent bg-black text-sm font-semibold text-white shadow-sm ring-1 ring-transparent transition hover:bg-neutral-900 focus-visible:outline-sky-500 md:w-auto dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
+              onClick={() => trackClick({ action: 'brief' })}
+              data-qa={`service-${service.id}-cta`}
+            >
+              Обсудить проект
+            </Button>
+          )}
         </footer>
       </Card>
     </li>

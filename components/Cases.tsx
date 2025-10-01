@@ -221,7 +221,7 @@ export default function Cases() {
             onScroll={handleScroll}
           >
             {displayedCases.map((item, index) => (
-              <CaseCard key={item.slug} item={item} index={index} />
+              <CaseCard key={item.slug} item={item} index={index} cleanMode={cleanMode} />
             ))}
           </ul>
           <div className="mt-4 flex justify-center gap-2 md:hidden" aria-hidden="true">
@@ -246,9 +246,10 @@ export default function Cases() {
 type CaseCardProps = {
   item: CaseItem;
   index: number;
+  cleanMode: boolean;
 };
 
-function CaseCard({ item, index }: CaseCardProps) {
+function CaseCard({ item, index, cleanMode }: CaseCardProps) {
   const vibe = getCaseVibe(item.slug, index);
   const { ref, trackClick } = useCardAnalytics<HTMLLIElement>({
     id: item.slug,
@@ -351,7 +352,7 @@ function CaseCard({ item, index }: CaseCardProps) {
         <footer className="mt-auto flex flex-wrap items-center gap-3 pt-2">
           <Button
             variant="ghost"
-            href={`/cases/${item.slug}`}
+            href={`${cleanMode ? '/market/cases' : '/cases'}/${item.slug}`}
             className="case-card__cta case-card__cta--primary min-h-[44px] px-5"
             data-qa={`cta-view-case-${item.slug}`}
             onClick={() => {
