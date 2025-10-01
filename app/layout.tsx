@@ -5,6 +5,7 @@ import ThemeScript from "@/components/ThemeScript";
 import ScrollMemory from "@/components/ScrollMemory";
 import Providers from "./providers";
 import dynamic from "next/dynamic";
+import CleanModeRootProvider from "@/components/CleanModeRootProvider";
 
 const BackgroundFXGate = dynamic(() => import("@/components/BackgroundFXGate"), { ssr: false });
 
@@ -36,8 +37,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       {/* .page-bg остаётся как fallback на случай отключённого WebGL */}
       <body className="page-bg min-h-dvh antialiased min-h-screen overflow-x-hidden">
         <Providers>
-          <BackgroundFXGate />
-          <div className="relative z-10">{children}</div>
+          <CleanModeRootProvider value={false}>
+            <BackgroundFXGate />
+            <div className="relative z-10">{children}</div>
+          </CleanModeRootProvider>
         </Providers>
         <ScrollMemory />
         <Analytics />

@@ -1,9 +1,12 @@
-import Link from 'next/link'
+"use client";
 
-import BackButton from '@/components/BackButton'
-import ThemeToggle from '@/components/ThemeToggle'
-import BackgroundToggle from '@/components/BackgroundToggle' // ← вернули
-import { GITHUB_URL, TG_URL } from '@/lib/constants'
+import Link from 'next/link';
+
+import BackButton from '@/components/BackButton';
+import ThemeToggle from '@/components/ThemeToggle';
+import BackgroundToggle from '@/components/BackgroundToggle'; // ← вернули
+import { GITHUB_URL, TG_URL } from '@/lib/constants';
+import { useCleanMode } from '@/lib/clean-mode';
 
 type NavProps = {
   backToCases?: boolean
@@ -11,6 +14,7 @@ type NavProps = {
 }
 
 export default function Nav({ backToCases = false, caseId }: NavProps) {
+  const cleanMode = useCleanMode();
   return (
     // плотная плашка и там, и там
     <header
@@ -46,18 +50,25 @@ export default function Nav({ backToCases = false, caseId }: NavProps) {
                 <Link href="/#process" className="opacity-80 hover:opacity-100">
                   Процесс
                 </Link>
-                <Link href={GITHUB_URL} className="opacity-80 hover:opacity-100">
-                  GitHub
-                </Link>
-                <Link href={TG_URL} className="opacity-80 hover:opacity-100">
-                  Telegram
-                </Link>
-                <BackgroundToggle className="hidden md:inline-flex items-center gap-1" aria-label="Переключить фон" />
+                {cleanMode ? null : (
+                  <Link href={GITHUB_URL} className="opacity-80 hover:opacity-100">
+                    GitHub
+                  </Link>
+                )}
+                {cleanMode ? null : (
+                  <Link href={TG_URL} className="opacity-80 hover:opacity-100">
+                    Telegram
+                  </Link>
+                )}
+                <BackgroundToggle
+                  className="hidden md:inline-flex items-center gap-1"
+                  aria-label="Переключить фон"
+                />
               </div>
             </div>
           </div>
         </nav>
       </div>
     </header>
-  )
+  );
 }

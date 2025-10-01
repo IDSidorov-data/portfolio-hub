@@ -9,6 +9,8 @@ import Badge from '@/components/primitives/Badge';
 import { useCardAnalytics } from '@/components/hooks/useCardAnalytics';
 import { useSnapCarousel } from '@/components/hooks/useSnapCarousel';
 import type { BadgeTone } from '@/lib/badge';
+import { useCleanMode } from '@/lib/clean-mode';
+import { sanitizeContactText } from '@/lib/sanitize-contact';
 
 type Service = {
   id: string;
@@ -137,6 +139,14 @@ const serviceVibes: Record<Service['id'], ServiceVibe> = {
 
 export default function Services() {
   const { listRef, activeIndex, handleKeyDown, handleScroll } = useSnapCarousel(services.length);
+  const cleanMode = useCleanMode();
+  const displayedServices = cleanMode
+    ? services.map((service) => ({
+        ...service,
+        desc: sanitizeContactText(service.desc),
+        tasks: service.tasks.map((task) => sanitizeContactText(task)),
+      }))
+    : services;
 
   return (
     <section id="services" className="py-16 sm:py-24">
@@ -160,13 +170,13 @@ export default function Services() {
             onKeyDown={handleKeyDown}
             onScroll={handleScroll}
           >
-            {services.map((service, index) => (
+            {displayedServices.map((service, index) => (
               <ServiceCard key={service.id} service={service} index={index} />
             ))}
           </ul>
-          {services.length > 1 ? (
+          {displayedServices.length > 1 ? (
             <div className="mt-4 flex justify-center gap-2 md:hidden" aria-hidden="true">
-              {services.map((service, index) => (
+              {displayedServices.map((service, index) => (
                 <span
                   key={service.id}
                   className={clsx(

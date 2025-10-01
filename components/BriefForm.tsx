@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { z } from 'zod';
 import { useRouter } from 'next/navigation';
 import { sendEvent } from '@/lib/analytics';
+import { useCleanMode } from '@/lib/clean-mode';
 
 const Schema = z.object({
   name: z.string().trim().max(120).optional(),
@@ -17,6 +18,10 @@ const Schema = z.object({
 type FormData = z.infer<typeof Schema>;
 
 export default function BriefForm({ defaultSource }: { defaultSource?: string }) {
+  const cleanMode = useCleanMode();
+  if (cleanMode) {
+    return null;
+  }
   const router = useRouter();
   const [data, setData] = useState<FormData>({
     name: '',

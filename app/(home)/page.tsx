@@ -25,6 +25,7 @@ import Skeleton from '@/components/Skeleton';
 import BriefForm from '@/components/BriefForm';
 import Footer from '@/components/Footer';
 import Modal from '@/components/Modal';
+import { useCleanMode } from '@/lib/clean-mode';
 
 function SourceProvider({ children }: { children: (source: string) => React.ReactNode }) {
   const params = useSearchParams();
@@ -34,6 +35,7 @@ function SourceProvider({ children }: { children: (source: string) => React.Reac
 
 export default function HomePage() {
   const [open, setOpen] = useState(false);
+  const cleanMode = useCleanMode();
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -46,23 +48,31 @@ export default function HomePage() {
         <Stack />
         <Container id="brief" className="md:scroll-mt-20 py-10 scroll-mt-16">
           <h2 className="mb-6 text-2xl font-semibold">Оставить бриф проекта</h2>
-          <Suspense fallback={<Skeleton className="h-48" />}>
-            <SourceProvider>
-              {(source) => <BriefForm defaultSource={source} />}
-            </SourceProvider>
-          </Suspense>
+          {cleanMode ? (
+            <p className="max-w-2xl text-base text-slate-600 dark:text-slate-300">
+              Для связи используйте чат площадки.
+            </p>
+          ) : (
+            <Suspense fallback={<Skeleton className="h-48" />}>
+              <SourceProvider>
+                {(source) => <BriefForm defaultSource={source} />}
+              </SourceProvider>
+            </Suspense>
+          )}
         </Container>
       </main>
       <Footer />
-      <Modal
-        open={open}
-        onClose={() => setOpen(false)}
-        title="Скоро: запись через Telegram WebApp"
-      >
-        <p className="text-sm">
-          Оставьте email — пришлю ссылку, когда запись включу.
-        </p>
-      </Modal>
+      {cleanMode ? null : (
+        <Modal
+          open={open}
+          onClose={() => setOpen(false)}
+          title="Скоро: запись через Telegram WebApp"
+        >
+          <p className="text-sm">
+            Оставьте email — пришлю ссылку, когда запись включу.
+          </p>
+        </Modal>
+      )}
     </div>
   );
 }
