@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 
 type Props = { maxUploadMB?: number };
@@ -55,10 +55,19 @@ export default function BriefForm({ maxUploadMB }: Props) {
   const search = useSearchParams();
   const [status, setStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
   const [error, setError] = useState("");
-  const [agree, setAgree] = useState(false);
   const [file, setFile] = useState<File | null>(null);
+  const [budget, setBudget] = useState("");
+  const [deadline, setDeadline] = useState("");
   const [startedAt] = useState<number>(() => Date.now());
   const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    if (!formRef.current) return;
+    const budgetSelect = formRef.current.querySelector<HTMLSelectElement>("select[name=\"budget\"]");
+    const deadlineSelect = formRef.current.querySelector<HTMLSelectElement>("select[name=\"deadline\"]");
+    if (budgetSelect) setBudget(budgetSelect.value);
+    if (deadlineSelect) setDeadline(deadlineSelect.value);
+  }, []);
 
   const utm = useMemo(() => {
     const keys = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"] as const;
@@ -89,8 +98,6 @@ export default function BriefForm({ maxUploadMB }: Props) {
     const deadline = fd.get("deadline") as string;
     if (!BUDGETS.includes(budget as any)) return "Выберите бюджет";
     if (!DEADLINES.includes(deadline as any)) return "Выберите срок";
-
-    if (!agree) return "Необходимо согласие";
     return null;
   }
 
@@ -212,15 +219,16 @@ export default function BriefForm({ maxUploadMB }: Props) {
           <label className="block text-sm mb-1">Бюджет*</label>
           <select
             name="budget"
-            className="w-full rounded border px-3 py-2"
-            defaultValue=""
+            value={budget}
+            onChange={(event) => setBudget(event.target.value)}
+            className={`w-full rounded border px-3 py-2 ${budget ? "text-gray-900 dark:text-gray-100" : "text-gray-500"}`}
           >
-            <option value="" disabled>
+            <option value="" disabled hidden>
               Выберите
             </option>
-            {BUDGETS.map((budget) => (
-              <option key={budget} value={budget}>
-                {budget}
+            {BUDGETS.map((budgetOption) => (
+              <option key={budgetOption} value={budgetOption}>
+                {budgetOption}
               </option>
             ))}
           </select>
@@ -229,15 +237,16 @@ export default function BriefForm({ maxUploadMB }: Props) {
           <label className="block text-sm mb-1">Срок*</label>
           <select
             name="deadline"
-            className="w-full rounded border px-3 py-2"
-            defaultValue=""
+            value={deadline}
+            onChange={(event) => setDeadline(event.target.value)}
+            className={`w-full rounded border px-3 py-2 ${deadline ? "text-gray-900 dark:text-gray-100" : "text-gray-500"}`}
           >
-            <option value="" disabled>
+            <option value="" disabled hidden>
               Выберите
             </option>
-            {DEADLINES.map((deadline) => (
-              <option key={deadline} value={deadline}>
-                {deadline}
+            {DEADLINES.map((deadlineOption) => (
+              <option key={deadlineOption} value={deadlineOption}>
+                {deadlineOption}
               </option>
             ))}
           </select>
@@ -265,20 +274,10 @@ export default function BriefForm({ maxUploadMB }: Props) {
       <input type="hidden" name="utm_content" />
       <input type="hidden" name="utm_term" />
 
-      <label className="flex items-center gap-2 text-sm">
-        <input
-          type="checkbox"
-          name="agree"
-          checked={agree}
-          onChange={() => setAgree((v) => !v)}
-        />
-        Согласен(на) с обработкой и отправкой данных
-      </label>
-
       <button
         type="submit"
         disabled={status === "loading"}
-        className="rounded bg-black text-white px-4 py-2 disabled:opacity-50"
+        className="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-purple-500 via-indigo-500 to-sky-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-white hover:from-purple-400 hover:via-indigo-400 hover:to-sky-400 disabled:cursor-not-allowed disabled:opacity-60 dark:focus:ring-offset-slate-900"
       >
         {status === "loading" ? "Отправляю…" : "Отправить"}
       </button>
@@ -289,9 +288,6 @@ export default function BriefForm({ maxUploadMB }: Props) {
         </p>
       )}
       {status === "error" && <p className="text-red-600 text-sm">{error}</p>}
-      <p className="text-xs text-gray-400">
-        Антиспам: honeypot, тайминг, троттлинг 60с, идемпотентность 300с.
-      </p>
     </form>
   );
 }

@@ -109,14 +109,6 @@ export async function POST(req: NextRequest) {
     utm_term: ((form.get("utm_term") as string) || "").trim(),
   };
 
-  const agree = form.get("agree");
-  if (!agree) {
-    return NextResponse.json(
-      { ok: false, error: "Необходимо согласие" },
-      { status: 400, headers: corsHeaders(req) }
-    );
-  }
-
   if (!name || name.length < 2 || name.length > 60 || /(https?:\/\/|www\.|@.+\.)/i.test(name)) {
     return NextResponse.json(
       { ok: false, error: "Имя некорректно" },

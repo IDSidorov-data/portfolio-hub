@@ -71,7 +71,7 @@ Playwright-сценарий `npm run test:e2e` запускается повер
 ```env
 # Telegram
 TG_BOT_TOKEN=
-TG_CHAT_ID=
+TG_CHAT_ID=-1003159228544
 TG_TOPIC_ID=                # опционально, ID топика в супергруппе
 
 # Лимиты/безопасность
