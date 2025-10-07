@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import BriefForm from "@/components/BriefForm";
 
 export const metadata: Metadata = {
@@ -16,7 +17,9 @@ export default function BriefPage() {
       <p className="text-sm text-gray-500 mb-6">
         Заявка уйдёт напрямую в мой приватный Telegram-канал. Без БД.
       </p>
-      <BriefForm maxUploadMB={CLIENT_MAX_UPLOAD_MB} />
+      <Suspense fallback={null}>
+        <BriefForm maxUploadMB={CLIENT_MAX_UPLOAD_MB} />
+      </Suspense>
     </main>
   );
 }
