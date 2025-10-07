@@ -41,7 +41,9 @@ export default function HomePageView({ cleanMode }: HomePageViewProps) {
           <Process />
           <Stack />
           <Container id="brief" className="md:scroll-mt-20 py-10 scroll-mt-16">
-            <h2 className="mb-6 text-2xl font-semibold">Оставить бриф проекта</h2>
+            <h2 className="mb-6 text-3xl font-semibold leading-tight md:text-4xl">
+              Оставить бриф проекта
+            </h2>
             {cleanMode ? (
               <p className="max-w-2xl text-base text-slate-600 dark:text-slate-300">
                 Для связи используйте чат площадки.
