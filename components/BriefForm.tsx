@@ -63,6 +63,8 @@ export default function BriefForm({ maxUploadMB }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [budget, setBudget] = useState("");
   const [deadline, setDeadline] = useState("");
+  const [telegramValue, setTelegramValue] = useState("");
+  const [emailValue, setEmailValue] = useState("");
   const [startedAt] = useState<number>(() => Date.now());
   const formRef = useRef<HTMLFormElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -73,6 +75,15 @@ export default function BriefForm({ maxUploadMB }: Props) {
     const deadlineSelect = formRef.current.querySelector<HTMLSelectElement>("select[name=\"deadline\"]");
     if (budgetSelect) setBudget(budgetSelect.value);
     if (deadlineSelect) setDeadline(deadlineSelect.value);
+
+    const telegramInput = formRef.current.querySelector<HTMLInputElement>(
+      "input[name=\"telegram\"]"
+    );
+    const emailInput = formRef.current.querySelector<HTMLInputElement>(
+      "input[name=\"email\"]"
+    );
+    if (telegramInput) setTelegramValue(telegramInput.value);
+    if (emailInput) setEmailValue(emailInput.value);
   }, []);
 
   const utm = useMemo(() => {
@@ -90,8 +101,10 @@ export default function BriefForm({ maxUploadMB }: Props) {
     if (!name || name.length < 2 || name.length > 60) return "Имя: 2–60 символов";
     if (/(https?:\/\/|www\.|@.+\.)/i.test(name)) return "Имя не должно содержать ссылки/упоминания";
 
-    const telegramRaw = ((fd.get("telegram") as string) || "").replace(/^@/, "");
-    const email = (fd.get("email") as string) || "";
+    const telegramRaw = ((fd.get("telegram") as string) || "")
+      .trim()
+      .replace(/^@/, "");
+    const email = ((fd.get("email") as string) || "").trim();
 
     if (!telegramRaw && !email) return "Укажите Telegram или Email";
     if (telegramRaw && !TG_RE.test(telegramRaw)) return "Неверный Telegram username";
@@ -120,8 +133,12 @@ export default function BriefForm({ maxUploadMB }: Props) {
     formData.set("ref", document.referrer || "");
     Object.entries(utm).forEach(([key, value]) => formData.set(key, value));
 
-    const telegram = ((formData.get("telegram") as string) || "").trim().replace(/^@/, "");
+    const telegram = ((formData.get("telegram") as string) || "")
+      .trim()
+      .replace(/^@/, "");
     if (telegram) formData.set("telegram", telegram);
+    const email = ((formData.get("email") as string) || "").trim();
+    if (email) formData.set("email", email);
 
     const validationError = validateClient(formData);
     if (validationError) {
@@ -146,6 +163,8 @@ export default function BriefForm({ maxUploadMB }: Props) {
       if (response.ok && json?.ok) {
         setStatus("ok");
         setFile(null);
+        setTelegramValue("");
+        setEmailValue("");
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
         }
@@ -194,6 +213,8 @@ export default function BriefForm({ maxUploadMB }: Props) {
             name="telegram"
             className={BASE_FIELD_CLASSES}
             placeholder="@username"
+            value={telegramValue}
+            onChange={(event) => setTelegramValue(event.target.value)}
           />
         </div>
         <div>
@@ -203,6 +224,8 @@ export default function BriefForm({ maxUploadMB }: Props) {
             className={BASE_FIELD_CLASSES}
             type="email"
             placeholder="name@example.com"
+            value={emailValue}
+            onChange={(event) => setEmailValue(event.target.value)}
           />
         </div>
       </div>
@@ -260,7 +283,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
 
       <div>
         <p className="block text-sm mb-1 text-slate-600 dark:text-slate-300">
-          Файл (PDF/JPG/PNG, ≤ {effectiveMaxUploadMB} МБ)
+          Файл (PDF/JPG/PNG/DOX/HLSX, ≤ {effectiveMaxUploadMB} МБ)
         </p>
         <div className="flex flex-wrap items-center gap-3">
           <button
@@ -278,10 +301,9 @@ export default function BriefForm({ maxUploadMB }: Props) {
           ref={fileInputRef}
           name="file"
           type="file"
-          accept=".pdf,image/png,image/jpeg"
+          accept=".pdf,.dox,.hlsx,image/png,image/jpeg"
           onChange={(event) => setFile(event.target.files?.[0] || null)}
-          className="sr-only"
-          tabIndex={-1}
+          className="hidden"
         />
       </div>
 
@@ -296,8 +318,8 @@ export default function BriefForm({ maxUploadMB }: Props) {
 
       <button
         type="submit"
-        disabled={status === "loading"}
-        className="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-purple-500 via-indigo-500 to-sky-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-white hover:from-purple-400 hover:via-indigo-400 hover:to-sky-400 disabled:cursor-not-allowed disabled:opacity-60 dark:focus:ring-offset-slate-900"
+        disabled={status === "loading" || (!telegramValue.trim() && !emailValue.trim())}
+        className="inline-flex items-center justify-center rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-2 focus:ring-offset-white disabled:cursor-not-allowed disabled:opacity-60 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-indigo-400 dark:focus:ring-offset-slate-900"
       >
         {status === "loading" ? "Отправляю…" : "Отправить"}
       </button>
