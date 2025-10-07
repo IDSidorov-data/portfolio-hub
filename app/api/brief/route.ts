@@ -89,7 +89,8 @@ export async function POST(req: NextRequest) {
   }
 
   const name = ((form.get("name") as string) || "").trim();
-  const telegram = (((form.get("telegram") as string) || "").trim()).replace(/^@/, ""));
+  const telegramRaw = ((form.get("telegram") as string) || "").trim();
+  const telegram = telegramRaw.replace(/^@/, "");
   const email = ((form.get("email") as string) || "").trim();
   const about = ((form.get("about") as string) || "").trim();
   const budget = ((form.get("budget") as string) || "").trim();
