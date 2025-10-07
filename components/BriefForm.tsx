@@ -237,11 +237,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
             name="budget"
             value={budget}
             onChange={(event) => setBudget(event.target.value)}
-            className={`${SELECT_FIELD_CLASSES} ${
-              budget
-                ? "text-slate-900 dark:text-slate-100"
-                : "text-slate-500 dark:text-slate-300"
-            }`}
+            className={`${SELECT_FIELD_CLASSES} text-slate-900 dark:text-slate-100`}
           >
             <option value="" disabled hidden className="bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-100">
               Выберите
@@ -263,11 +259,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
             name="deadline"
             value={deadline}
             onChange={(event) => setDeadline(event.target.value)}
-            className={`${SELECT_FIELD_CLASSES} ${
-              deadline
-                ? "text-slate-900 dark:text-slate-100"
-                : "text-slate-500 dark:text-slate-300"
-            }`}
+            className={`${SELECT_FIELD_CLASSES} text-slate-900 dark:text-slate-100`}
           >
             <option value="" disabled hidden className="bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-100">
               Выберите
