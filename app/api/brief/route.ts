@@ -8,7 +8,7 @@ const BUDGETS = new Set(["до 50к", "50–150к", "150–300к", "300к+", "н
 const DEADLINES = new Set(["как можно скорее", "2–4 недели", "1–3 месяца", "исследую"]);
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const TG_RE = /^[a-zA-Z0-9_]{3,32}$/;
-const STOPWORDS_RE = /(крипт|ставк|заработ(ай|ок)|xxx|18\+|free money)/iu;
+const STOPWORDS_RE = /(крипт|ставк|заработ(?:ай|ок)|xxx|18\+|free money)/i;
 const LINKS_RE = /(https?:\/\/|www\.)/gi;
 
 const MAX_UPLOAD_MB = Number(process.env.MAX_UPLOAD_MB || 4);
