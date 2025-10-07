@@ -12,9 +12,9 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const TG_RE = /^[a-zA-Z0-9_]{3,32}$/;
 
 const BASE_FIELD_CLASSES =
-  "w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder:text-slate-900 shadow-sm transition focus:border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-300/70 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-100 dark:placeholder:text-slate-300 dark:focus:border-indigo-400/70 dark:focus:ring-indigo-400/60";
+  "w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder:text-slate-500 shadow-sm transition focus:border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-300/70 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-100 dark:placeholder:text-slate-300 dark:focus:border-indigo-400/70 dark:focus:ring-indigo-400/60";
 const SELECT_FIELD_CLASSES =
-  "w-full rounded-md border border-slate-300 bg-white px-3 py-2 shadow-sm transition focus:border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-300/70 dark:border-slate-600 dark:bg-slate-800/80 dark:focus:border-indigo-400/70 dark:focus:ring-indigo-400/60 dark:[color-scheme:dark]";
+  "w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm transition focus:border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-300/70 dark:border-slate-600 dark:bg-slate-800/80 dark:text-slate-100 dark:focus:border-indigo-400/70 dark:focus:ring-indigo-400/60 dark:[color-scheme:dark]";
 
 async function compressImageIfNeeded(file: File, maxBytes: number): Promise<File> {
   if (!/^image\/(png|jpeg)$/.test(file.type) || file.size <= maxBytes) return file;
@@ -237,7 +237,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
             name="budget"
             value={budget}
             onChange={(event) => setBudget(event.target.value)}
-            className={`${SELECT_FIELD_CLASSES} text-slate-900 dark:text-slate-100`}
+            className={`${SELECT_FIELD_CLASSES} ${!budget ? "text-slate-500 dark:text-slate-300" : ""}`}
           >
             <option value="" disabled hidden className="bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-100">
               Выберите
@@ -259,7 +259,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
             name="deadline"
             value={deadline}
             onChange={(event) => setDeadline(event.target.value)}
-            className={`${SELECT_FIELD_CLASSES} text-slate-900 dark:text-slate-100`}
+            className={`${SELECT_FIELD_CLASSES} ${!deadline ? "text-slate-500 dark:text-slate-300" : ""}`}
           >
             <option value="" disabled hidden className="bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-100">
               Выберите
@@ -285,7 +285,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="inline-flex items-center justify-center rounded-md border border-slate-300/70 bg-slate-200 px-4 py-2 text-sm font-medium text-slate-900 shadow-sm transition hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-2 focus:ring-offset-white dark:border-transparent dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-indigo-400 dark:focus:ring-offset-slate-900"
+            className="inline-flex items-center justify-center rounded-md bg-slate-200 px-4 py-2 text-sm font-medium text-slate-900 transition hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-2 focus:ring-offset-white dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-indigo-400 dark:focus:ring-offset-slate-900"
           >
             Выбрать файл
           </button>
