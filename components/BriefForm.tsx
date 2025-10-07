@@ -12,9 +12,9 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const TG_RE = /^[a-zA-Z0-9_]{3,32}$/;
 
 const BASE_FIELD_CLASSES =
-  "w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-800 placeholder:text-slate-500 shadow-sm transition focus:border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-300/70 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-200 dark:placeholder:text-slate-400 dark:focus:border-indigo-400/70 dark:focus:ring-indigo-400/60";
+  "w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder:text-slate-500 shadow-sm transition focus:border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-300/70 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-100 dark:placeholder:text-slate-300 dark:focus:border-indigo-400/70 dark:focus:ring-indigo-400/60";
 const SELECT_FIELD_CLASSES =
-  "w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-800 shadow-sm transition focus:border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-300/70 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-200 dark:focus:border-indigo-400/70 dark:focus:ring-indigo-400/60 dark:[color-scheme:dark]";
+  "w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm transition focus:border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-300/70 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-100 dark:focus:border-indigo-400/70 dark:focus:ring-indigo-400/60 dark:[color-scheme:dark]";
 
 async function compressImageIfNeeded(file: File, maxBytes: number): Promise<File> {
   if (!/^image\/(png|jpeg)$/.test(file.type) || file.size <= maxBytes) return file;
@@ -91,7 +91,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
     if (/(https?:\/\/|www\.|@.+\.)/i.test(name)) return "Имя не должно содержать ссылки/упоминания";
 
     const telegramRaw = ((fd.get("telegram") as string) || "").replace(/^@/, "");
-    const email = (fd.get("email") as string) || "";
+    const email = ((fd.get("email") as string) || "").trim();
 
     if (!telegramRaw && !email) return "Укажите Telegram или Email";
     if (telegramRaw && !TG_RE.test(telegramRaw)) return "Неверный Telegram username";
@@ -121,7 +121,18 @@ export default function BriefForm({ maxUploadMB }: Props) {
     Object.entries(utm).forEach(([key, value]) => formData.set(key, value));
 
     const telegram = ((formData.get("telegram") as string) || "").trim().replace(/^@/, "");
-    if (telegram) formData.set("telegram", telegram);
+    if (telegram) {
+      formData.set("telegram", telegram);
+    } else {
+      formData.delete("telegram");
+    }
+
+    const email = ((formData.get("email") as string) || "").trim();
+    if (email) {
+      formData.set("email", email);
+    } else {
+      formData.delete("email");
+    }
 
     const validationError = validateClient(formData);
     if (validationError) {
@@ -176,7 +187,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
       />
 
       <div>
-        <label className="block text-sm mb-1 text-slate-600 dark:text-slate-300">Имя*</label>
+        <label className="block text-sm mb-1 text-slate-700 dark:text-slate-100">Имя*</label>
         <input
           name="name"
           required
@@ -189,7 +200,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm mb-1 text-slate-600 dark:text-slate-300">Telegram</label>
+          <label className="block text-sm mb-1 text-slate-700 dark:text-slate-100">Telegram</label>
           <input
             name="telegram"
             className={BASE_FIELD_CLASSES}
@@ -197,7 +208,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
           />
         </div>
         <div>
-          <label className="block text-sm mb-1 text-slate-600 dark:text-slate-300">Email</label>
+          <label className="block text-sm mb-1 text-slate-700 dark:text-slate-100">Email</label>
           <input
             name="email"
             className={BASE_FIELD_CLASSES}
@@ -208,7 +219,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
       </div>
 
       <div>
-        <label className="block text-sm mb-1 text-slate-600 dark:text-slate-300">О проекте*</label>
+        <label className="block text-sm mb-1 text-slate-700 dark:text-slate-100">О проекте*</label>
         <textarea
           name="about"
           required
@@ -221,7 +232,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm mb-1 text-slate-600 dark:text-slate-300">Бюджет*</label>
+          <label className="block text-sm mb-1 text-slate-700 dark:text-slate-100">Бюджет*</label>
           <select
             name="budget"
             value={budget}
@@ -239,7 +250,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
           </select>
         </div>
         <div>
-          <label className="block text-sm mb-1 text-slate-600 dark:text-slate-300">Срок*</label>
+          <label className="block text-sm mb-1 text-slate-700 dark:text-slate-100">Срок*</label>
           <select
             name="deadline"
             value={deadline}
@@ -259,8 +270,8 @@ export default function BriefForm({ maxUploadMB }: Props) {
       </div>
 
       <div>
-        <p className="block text-sm mb-1 text-slate-600 dark:text-slate-300">
-          Файл (PDF/JPG/PNG, ≤ {effectiveMaxUploadMB} МБ)
+        <p className="block text-sm mb-1 text-slate-700 dark:text-slate-100">
+          Файл (PDF/JPG/PNG/DOX/HLSX, ≤ {effectiveMaxUploadMB} МБ)
         </p>
         <div className="flex flex-wrap items-center gap-3">
           <button
@@ -270,7 +281,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
           >
             Выбрать файл
           </button>
-          <span className="text-sm text-slate-600 dark:text-slate-300">
+          <span className="text-sm text-slate-700 dark:text-slate-100">
             {file ? file.name : "Файл не выбран"}
           </span>
         </div>
@@ -278,9 +289,9 @@ export default function BriefForm({ maxUploadMB }: Props) {
           ref={fileInputRef}
           name="file"
           type="file"
-          accept=".pdf,image/png,image/jpeg"
+          accept=".pdf,.dox,.hlsx,image/png,image/jpeg"
           onChange={(event) => setFile(event.target.files?.[0] || null)}
-          className="sr-only"
+          className="sr-only pointer-events-none"
           tabIndex={-1}
         />
       </div>
@@ -297,7 +308,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
       <button
         type="submit"
         disabled={status === "loading"}
-        className="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-purple-500 via-indigo-500 to-sky-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-white hover:from-purple-400 hover:via-indigo-400 hover:to-sky-400 disabled:cursor-not-allowed disabled:opacity-60 dark:focus:ring-offset-slate-900"
+        className="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-white hover:from-blue-400 hover:via-blue-500 hover:to-blue-600 disabled:cursor-not-allowed disabled:opacity-60 dark:focus:ring-offset-slate-900"
       >
         {status === "loading" ? "Отправляю…" : "Отправить"}
       </button>
