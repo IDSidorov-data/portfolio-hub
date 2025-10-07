@@ -17,7 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     caseSlugs = [];
   }
 
-  const staticRoutes = ['/', '/cases', '/services', '/contacts'];
+  const staticRoutes = ['/', '/cases', '/services', '/contacts', '/brief'];
   const caseRoutes = caseSlugs.map((slug) => `/cases/${slug}`);
 
   return [...staticRoutes, ...caseRoutes].map((pathUrl) => ({

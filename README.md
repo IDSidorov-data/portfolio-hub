@@ -76,6 +76,14 @@ SUPABASE_ANON_KEY=
 # Analytics
 NEXT_PUBLIC_YM_ID=
 
+# Brief → Telegram
+TG_BOT_TOKEN=
+TG_CHAT_ID=
+TG_TOPIC_ID=            # optional: topic/thread id for forum chats
+MAX_UPLOAD_MB=4         # server-side upload limit in MB
+NEXT_PUBLIC_MAX_UPLOAD_MB=4
+ALLOWED_ORIGIN=         # optional: strict CORS origin
+
 # Email (выберите одно)
 RESEND_API_KEY=           # Resend.com
 # или SMTP:
