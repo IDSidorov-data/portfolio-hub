@@ -12,9 +12,9 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const TG_RE = /^[a-zA-Z0-9_]{3,32}$/;
 
 const BASE_FIELD_CLASSES =
-  "w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-800 placeholder:text-slate-500 shadow-sm transition focus:border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-300/70 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-200 dark:placeholder:text-slate-400 dark:focus:border-indigo-400/70 dark:focus:ring-indigo-400/60";
+  "w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder:text-slate-500 shadow-sm transition focus:border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-300/70 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-100 dark:placeholder:text-slate-300 dark:focus:border-indigo-400/70 dark:focus:ring-indigo-400/60";
 const SELECT_FIELD_CLASSES =
-  "w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-800 shadow-sm transition focus:border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-300/70 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-200 dark:focus:border-indigo-400/70 dark:focus:ring-indigo-400/60 dark:[color-scheme:dark]";
+  "w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm transition focus:border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-300/70 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-100 dark:focus:border-indigo-400/70 dark:focus:ring-indigo-400/60 dark:[color-scheme:dark]";
 
 async function compressImageIfNeeded(file: File, maxBytes: number): Promise<File> {
   if (!/^image\/(png|jpeg)$/.test(file.type) || file.size <= maxBytes) return file;
@@ -63,15 +63,9 @@ export default function BriefForm({ maxUploadMB }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [budget, setBudget] = useState("");
   const [deadline, setDeadline] = useState("");
-  const [contactInfo, setContactInfo] = useState({ telegram: "", email: "" });
   const [startedAt] = useState<number>(() => Date.now());
   const formRef = useRef<HTMLFormElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const isContactProvided = useMemo(() => {
-    const telegram = contactInfo.telegram.trim().replace(/^@/, "");
-    const email = contactInfo.email.trim();
-    return Boolean(telegram || email);
-  }, [contactInfo]);
 
   useEffect(() => {
     if (!formRef.current) return;
@@ -96,9 +90,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
     if (!name || name.length < 2 || name.length > 60) return "Имя: 2–60 символов";
     if (/(https?:\/\/|www\.|@.+\.)/i.test(name)) return "Имя не должно содержать ссылки/упоминания";
 
-    const telegramRaw = ((fd.get("telegram") as string) || "")
-      .trim()
-      .replace(/^@/, "");
+    const telegramRaw = ((fd.get("telegram") as string) || "").replace(/^@/, "");
     const email = ((fd.get("email") as string) || "").trim();
 
     if (!telegramRaw && !email) return "Укажите Telegram или Email";
@@ -128,14 +120,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
     formData.set("ref", document.referrer || "");
     Object.entries(utm).forEach(([key, value]) => formData.set(key, value));
 
-    const telegramFromState = contactInfo.telegram.trim();
-    const emailFromState = contactInfo.email.trim();
-    formData.set("telegram", telegramFromState);
-    formData.set("email", emailFromState);
-
-    const telegram = ((formData.get("telegram") as string) || "")
-      .trim()
-      .replace(/^@/, "");
+    const telegram = ((formData.get("telegram") as string) || "").trim().replace(/^@/, "");
     if (telegram) {
       formData.set("telegram", telegram);
     } else {
@@ -172,7 +157,6 @@ export default function BriefForm({ maxUploadMB }: Props) {
       if (response.ok && json?.ok) {
         setStatus("ok");
         setFile(null);
-        setContactInfo({ telegram: "", email: "" });
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
         }
@@ -203,7 +187,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
       />
 
       <div>
-        <label className="block text-sm mb-1 text-slate-600 dark:text-slate-300">Имя*</label>
+        <label className="block text-sm mb-1 text-slate-700 dark:text-slate-100">Имя*</label>
         <input
           name="name"
           required
@@ -216,34 +200,26 @@ export default function BriefForm({ maxUploadMB }: Props) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm mb-1 text-slate-600 dark:text-slate-300">Telegram</label>
+          <label className="block text-sm mb-1 text-slate-700 dark:text-slate-100">Telegram</label>
           <input
             name="telegram"
             className={BASE_FIELD_CLASSES}
             placeholder="@username"
-            value={contactInfo.telegram}
-            onChange={(event) =>
-              setContactInfo((prev) => ({ ...prev, telegram: event.target.value }))
-            }
           />
         </div>
         <div>
-          <label className="block text-sm mb-1 text-slate-600 dark:text-slate-300">Email</label>
+          <label className="block text-sm mb-1 text-slate-700 dark:text-slate-100">Email</label>
           <input
             name="email"
             className={BASE_FIELD_CLASSES}
             type="email"
             placeholder="name@example.com"
-            value={contactInfo.email}
-            onChange={(event) =>
-              setContactInfo((prev) => ({ ...prev, email: event.target.value }))
-            }
           />
         </div>
       </div>
 
       <div>
-        <label className="block text-sm mb-1 text-slate-600 dark:text-slate-300">О проекте*</label>
+        <label className="block text-sm mb-1 text-slate-700 dark:text-slate-100">О проекте*</label>
         <textarea
           name="about"
           required
@@ -256,7 +232,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm mb-1 text-slate-600 dark:text-slate-300">Бюджет*</label>
+          <label className="block text-sm mb-1 text-slate-700 dark:text-slate-100">Бюджет*</label>
           <select
             name="budget"
             value={budget}
@@ -274,7 +250,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
           </select>
         </div>
         <div>
-          <label className="block text-sm mb-1 text-slate-600 dark:text-slate-300">Срок*</label>
+          <label className="block text-sm mb-1 text-slate-700 dark:text-slate-100">Срок*</label>
           <select
             name="deadline"
             value={deadline}
@@ -294,7 +270,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
       </div>
 
       <div>
-        <p className="block text-sm mb-1 text-slate-600 dark:text-slate-300">
+        <p className="block text-sm mb-1 text-slate-700 dark:text-slate-100">
           Файл (PDF/JPG/PNG/DOX/HLSX, ≤ {effectiveMaxUploadMB} МБ)
         </p>
         <div className="flex flex-wrap items-center gap-3">
@@ -305,7 +281,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
           >
             Выбрать файл
           </button>
-          <span className="text-sm text-slate-600 dark:text-slate-300">
+          <span className="text-sm text-slate-700 dark:text-slate-100">
             {file ? file.name : "Файл не выбран"}
           </span>
         </div>
@@ -331,8 +307,8 @@ export default function BriefForm({ maxUploadMB }: Props) {
 
       <button
         type="submit"
-        disabled={status === "loading" || !isContactProvided}
-        className="inline-flex items-center justify-center rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 focus:ring-offset-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-offset-slate-900"
+        disabled={status === "loading"}
+        className="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-white hover:from-blue-400 hover:via-blue-500 hover:to-blue-600 disabled:cursor-not-allowed disabled:opacity-60 dark:focus:ring-offset-slate-900"
       >
         {status === "loading" ? "Отправляю…" : "Отправить"}
       </button>
