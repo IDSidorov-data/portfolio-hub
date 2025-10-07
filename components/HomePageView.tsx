@@ -1,7 +1,6 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 
 import Nav from "@/components/Nav";
@@ -18,18 +17,13 @@ const Cases = dynamic(() => import("@/components/Cases"), { loading: () => null 
 const Process = dynamic(() => import("@/components/Process"), { loading: () => null });
 const Stack = dynamic(() => import("@/components/Stack"), { loading: () => null });
 
-function SourceProvider({ children }: { children: (source: string) => React.ReactNode }) {
-  const params = useSearchParams();
-  const source = params.get("utm_source") ?? "site";
-  return <>{children(source)}</>;
-}
-
 type HomePageViewProps = {
   cleanMode: boolean;
 };
 
 export default function HomePageView({ cleanMode }: HomePageViewProps) {
   const [open, setOpen] = useState(false);
+  const CLIENT_MAX_UPLOAD_MB = Number(process.env.NEXT_PUBLIC_MAX_UPLOAD_MB ?? 4) || 4;
 
   useEffect(() => {
     if (window.location.hash === "#brief") {
@@ -55,7 +49,7 @@ export default function HomePageView({ cleanMode }: HomePageViewProps) {
               </p>
             ) : (
               <Suspense fallback={<Skeleton className="h-48" />}>
-                <SourceProvider>{(source) => <BriefForm defaultSource={source} />}</SourceProvider>
+                <BriefForm maxUploadMB={CLIENT_MAX_UPLOAD_MB} />
               </Suspense>
             )}
           </Container>
