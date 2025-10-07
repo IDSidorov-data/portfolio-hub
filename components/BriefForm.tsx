@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 
 type Props = { maxUploadMB: number };
@@ -53,10 +53,24 @@ export default function BriefForm({ maxUploadMB }: Props) {
   const search = useSearchParams();
   const [status, setStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
   const [error, setError] = useState<string>("");
-  const [agree, setAgree] = useState(false);
   const [file, setFile] = useState<File | null>(null);
+  const [selectedBudget, setSelectedBudget] = useState("");
+  const [selectedDeadline, setSelectedDeadline] = useState("");
   const [startedAt] = useState<number>(() => Date.now());
   const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    const form = formRef.current;
+    if (!form) return;
+    const budgetControl = form.elements.namedItem("budget") as HTMLSelectElement | null;
+    const deadlineControl = form.elements.namedItem("deadline") as HTMLSelectElement | null;
+    if (budgetControl && budgetControl.value) {
+      setSelectedBudget(budgetControl.value);
+    }
+    if (deadlineControl && deadlineControl.value) {
+      setSelectedDeadline(deadlineControl.value);
+    }
+  }, []);
 
   const utm = useMemo(() => {
     const keys = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"] as const;
@@ -83,12 +97,11 @@ export default function BriefForm({ maxUploadMB }: Props) {
     const about = ((fd.get("about") as string) || "").trim();
     if (about.length < 20 || about.length > 1500) return "О проекте: 20–1500 символов";
 
-    const budget = fd.get("budget") as string;
-    const deadline = fd.get("deadline") as string;
+    const budget = (fd.get("budget") as string) || "";
+    const deadline = (fd.get("deadline") as string) || "";
     if (!BUDGETS.includes(budget as (typeof BUDGETS)[number])) return "Выберите бюджет";
     if (!DEADLINES.includes(deadline as (typeof DEADLINES)[number])) return "Выберите срок";
 
-    if (!agree) return "Необходимо согласие";
     return null;
   }
 
@@ -206,42 +219,69 @@ export default function BriefForm({ maxUploadMB }: Props) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm mb-1">Бюджет*</label>
-          <select name="budget" className="w-full rounded border px-3 py-2" defaultValue="">
-            <option value="" disabled>
-              Выберите
-            </option>
-            {BUDGETS.map((budget) => (
-              <option key={budget} value={budget}>
-                {budget}
-              </option>
-            ))}
-          </select>
+          <div className="relative">
+            <select
+              name="budget"
+              className={`w-full rounded border px-3 py-2 pr-8 ${selectedBudget ? "text-gray-900" : "text-transparent"}`}
+              value={selectedBudget}
+              onChange={(event) => setSelectedBudget(event.target.value)}
+            >
+              <option value="" disabled hidden />
+              {BUDGETS.map((budget) => (
+                <option key={budget} value={budget} className="text-gray-900">
+                  {budget}
+                </option>
+              ))}
+            </select>
+            {!selectedBudget && (
+              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-400">
+                Выберите
+              </span>
+            )}
+          </div>
         </div>
         <div>
           <label className="block text-sm mb-1">Срок*</label>
-          <select name="deadline" className="w-full rounded border px-3 py-2" defaultValue="">
-            <option value="" disabled>
-              Выберите
-            </option>
-            {DEADLINES.map((deadline) => (
-              <option key={deadline} value={deadline}>
-                {deadline}
-              </option>
-            ))}
-          </select>
+          <div className="relative">
+            <select
+              name="deadline"
+              className={`w-full rounded border px-3 py-2 pr-8 ${selectedDeadline ? "text-gray-900" : "text-transparent"}`}
+              value={selectedDeadline}
+              onChange={(event) => setSelectedDeadline(event.target.value)}
+            >
+              <option value="" disabled hidden />
+              {DEADLINES.map((deadline) => (
+                <option key={deadline} value={deadline} className="text-gray-900">
+                  {deadline}
+                </option>
+              ))}
+            </select>
+            {!selectedDeadline && (
+              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-400">
+                Выберите
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
       <div>
-        <label className="block text-sm mb-1">
-          Файл (PDF/JPG/PNG, ≤ {maxUploadMB} МБ)
+        <span className="block text-sm mb-1">Файл (PDF/JPG/PNG, ≤ {maxUploadMB} МБ)</span>
+        <label className="inline-flex items-center gap-3">
+          <span className="rounded border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 cursor-pointer transition hover:bg-gray-50 focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-gray-400">
+            Выбрать файл
+          </span>
+          <input
+            name="file"
+            type="file"
+            accept=".pdf,image/png,image/jpeg"
+            className="sr-only"
+            onChange={(event) => setFile(event.target.files?.[0] ?? null)}
+          />
+          <span className="text-sm text-gray-500 truncate max-w-[60%]" title={file ? file.name : undefined}>
+            {file ? file.name : "Файл не выбран"}
+          </span>
         </label>
-        <input
-          name="file"
-          type="file"
-          accept=".pdf,image/png,image/jpeg"
-          onChange={(event) => setFile(event.target.files?.[0] ?? null)}
-        />
       </div>
 
       <input type="hidden" name="startedAt" />
@@ -253,20 +293,10 @@ export default function BriefForm({ maxUploadMB }: Props) {
       <input type="hidden" name="utm_content" />
       <input type="hidden" name="utm_term" />
 
-      <label className="flex items-center gap-2 text-sm">
-        <input
-          type="checkbox"
-          name="agree"
-          checked={agree}
-          onChange={() => setAgree((value) => !value)}
-        />
-        Согласен(на) с обработкой и отправкой данных
-      </label>
-
       <button
         type="submit"
         disabled={status === "loading"}
-        className="rounded bg-black text-white px-4 py-2 disabled:opacity-50"
+        className="rounded bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 px-4 py-2 font-medium text-white shadow-md transition hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600 disabled:opacity-70"
       >
         {status === "loading" ? "Отправляю…" : "Отправить"}
       </button>
@@ -277,9 +307,6 @@ export default function BriefForm({ maxUploadMB }: Props) {
         </p>
       )}
       {status === "error" && <p className="text-red-600 text-sm">{error}</p>}
-      <p className="text-xs text-gray-400">
-        Антиспам: honeypot, тайминг, троттлинг 60с, идемпотентность 300с.
-      </p>
     </form>
   );
 }
