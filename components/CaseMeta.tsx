@@ -1,43 +1,53 @@
 'use client';
 
+import Badge from '@/components/primitives/Badge';
+import type { BadgeTone } from '@/lib/badge';
+
 type Props = {
   role?: string;
   duration?: string;
   status?: string;
   tags?: string[];
+  appearance?: 'default' | 'glass';
+  tone?: BadgeTone;
 };
 
-export default function CaseMeta({ role, duration, status, tags }: Props) {
+export default function CaseMeta({
+  role,
+  duration,
+  status,
+  tags,
+  appearance = 'default',
+  tone = 'slate',
+}: Props) {
   if (!role && !duration && !status && (!tags || tags.length === 0)) return null;
 
-  const pillBase =
-    "inline-flex items-center rounded-full px-2 py-1 text-xs md:text-sm border select-text";
-  const tint =
-    // лёгкая заливка + читаемый текст (светлая/тёмная темы)
-    "bg-[rgba(0,0,0,0.04)] border-black/10 text-black/90 " +
-    "dark:bg-[rgba(255,255,255,0.08)] dark:border-white/15 dark:text-white/85";
+  const glass =
+    appearance === 'glass'
+      ? 'backdrop-blur bg-white/70 text-slate-900 dark:bg-white/10 dark:text-white'
+      : '';
 
   return (
     <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
       {role && (
-        <span className={`${pillBase} ${tint}`}>
+        <Badge tone={tone} size="sm" className={glass}>
           Роль:&nbsp;<strong>{role}</strong>
-        </span>
+        </Badge>
       )}
       {duration && (
-        <span className={`${pillBase} ${tint}`}>
-          Длительность:&nbsp;<strong>{duration}</strong>
-        </span>
+        <Badge tone={tone} size="sm" className={glass}>
+          Таймлайн:&nbsp;<strong>{duration}</strong>
+        </Badge>
       )}
       {status && (
-        <span className={`${pillBase} ${tint}`}>
+        <Badge tone={tone} size="sm" className={glass}>
           Статус:&nbsp;<strong>{status}</strong>
-        </span>
+        </Badge>
       )}
       {tags?.map((t) => (
-        <span key={t} className={`${pillBase} ${tint}`} title={t}>
+        <Badge key={t} tone="slate" size="sm" className={glass} title={t}>
           {t}
-        </span>
+        </Badge>
       ))}
     </div>
   );

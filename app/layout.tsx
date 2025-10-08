@@ -2,10 +2,12 @@ import "./globals.css";
 import type { Metadata } from "next";
 import Analytics from "@/components/Analytics";
 import ThemeScript from "@/components/ThemeScript";
+import ScrollMemory from "@/components/ScrollMemory";
 import Providers from "./providers";
 import dynamic from "next/dynamic";
+import CleanModeRootProvider from "@/components/CleanModeRootProvider";
 
-const BackgroundFXPro = dynamic(() => import("@/components/BackgroundFXPro"), { ssr: false });
+const BackgroundFXGate = dynamic(() => import("@/components/BackgroundFXGate"), { ssr: false });
 
 // базовый URL сайта
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
@@ -33,11 +35,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="color-scheme" content="light dark" />
       </head>
       {/* .page-bg остаётся как fallback на случай отключённого WebGL */}
-      <body className="page-bg min-h-dvh antialiased">
+      <body className="page-bg min-h-dvh antialiased min-h-screen overflow-x-hidden">
         <Providers>
-          <BackgroundFXPro />
-          <div className="relative z-10">{children}</div>
+          <CleanModeRootProvider value={false}>
+            <BackgroundFXGate />
+            <div className="relative z-10">{children}</div>
+          </CleanModeRootProvider>
         </Providers>
+        <ScrollMemory />
         <Analytics />
       </body>
     </html>

@@ -3,10 +3,13 @@ export default function robots() {
     process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
   return {
-    rules: {
-      userAgent: '*',
-      allow: '/',
-    },
+    rules: [
+      {
+        userAgent: '*',
+        allow: '/',
+        disallow: ['/market'],
+      },
+    ],
     sitemap: `${siteUrl}/sitemap.xml`,
     host: siteUrl,
   };

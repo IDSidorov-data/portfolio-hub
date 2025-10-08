@@ -18,7 +18,14 @@ export default function Modal({ open, onClose, title, children }: { open: boolea
       <div ref={ref} className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl">
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-lg font-semibold">{title}</h3>
-          <button aria-label="Закрыть" onClick={onClose}>✕</button>
+          <button
+            aria-label="Закрыть"
+            onClick={onClose}
+            data-qa="modal-close"
+            className="rounded-full p-1 text-slate-500 transition hover:text-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-400"
+          >
+            ✕
+          </button>
         </div>
         <div>{children}</div>
       </div>

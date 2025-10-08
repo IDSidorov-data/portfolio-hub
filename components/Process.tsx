@@ -1,47 +1,181 @@
+'use client';
+
+import clsx from '@/lib/clsx';
+
 import Container from '@/components/Container';
 import Card from '@/components/Card';
-import { ArrowRight } from 'lucide-react';
+import Badge from '@/components/primitives/Badge';
+import { useCardAnalytics } from '@/components/hooks/useCardAnalytics';
+import { useSnapCarousel } from '@/components/hooks/useSnapCarousel';
+import type { BadgeTone } from '@/lib/badge';
+import type { CSSProperties } from 'react';
 
 const steps = [
-  { title: 'Диагностика и метрики', text: 'Быстрое погружение, цель и критерии успеха. Согласуем, что меряем и какие артефакты на выходе.' },
-  { title: 'Спринт MVP', text: 'Прототип/интеграция за 1–2 недели: только то, что проверяет гипотезу. Прозрачные риски и сроки.' },
-  { title: 'Валидация на данных', text: 'Запуск A/B или пилота. Считаем метрики, делаем вывод — раскатывать, доработать или закрыть.' },
-  { title: 'Продукт в работу', text: 'Упаковка решения: автоматизация, документация, передача артефактов. Поддержка по договорённости.' },
+  {
+    title: 'Дискавери и гипотезы',
+    text: 'Совместно формируем контекст, собираем данные, определяем критерии успеха. Подготовлю бэклог задач и дорожную карту.',
+  },
+  {
+    title: 'Запуск MVP',
+    text: 'Собираю рабочий прототип за 1–3 недели: backend, интеграции, UI. Настраиваем метрики и доступы, готовим к релизу.',
+  },
+  {
+    title: 'Рост и масштабирование',
+    text: 'Подключаем эксперименты, автоматизации, отчёты. Разворачиваем аналитику и улучшаем ключевые показатели.',
+  },
+  {
+    title: 'Поддержка и развитие',
+    text: 'Передаю проект, документирую процессы и остаюсь на связи. Могу помогать с дальнейшими итерациями и развитием команды.',
+  },
+];
+
+type StepVibe = {
+  emoji: string;
+  label: string;
+  tone: BadgeTone;
+  surface: string;
+  shadow: string;
+  halo: string;
+};
+
+const stepVibes: StepVibe[] = [
+  {
+    emoji: '🔍',
+    label: 'Discovery',
+    tone: 'sky',
+    surface:
+      'bg-gradient-to-br from-sky-50 via-blue-50/80 to-indigo-50 dark:from-sky-500/15 dark:via-blue-500/15 dark:to-indigo-500/15',
+    shadow: 'shadow-[0_18px_40px_-22px_rgba(59,130,246,0.28)]',
+    halo: 'bg-sky-200/35 dark:bg-sky-500/20',
+  },
+  {
+    emoji: '🛠️',
+    label: 'MVP',
+    tone: 'amber',
+    surface:
+      'bg-gradient-to-br from-amber-50 via-orange-50/80 to-lime-50 dark:from-amber-500/15 dark:via-orange-500/15 dark:to-lime-500/15',
+    shadow: 'shadow-[0_18px_40px_-22px_rgba(251,191,36,0.28)]',
+    halo: 'bg-amber-200/35 dark:bg-amber-500/20',
+  },
+  {
+    emoji: '📊',
+    label: 'Scale',
+    tone: 'emerald',
+    surface:
+      'bg-gradient-to-br from-emerald-50 via-teal-50/80 to-sky-50 dark:from-emerald-500/15 dark:via-teal-500/15 dark:to-sky-500/15',
+    shadow: 'shadow-[0_18px_40px_-22px_rgba(16,185,129,0.28)]',
+    halo: 'bg-emerald-200/35 dark:bg-emerald-500/20',
+  },
+  {
+    emoji: '🚀',
+    label: 'Launch',
+    tone: 'purple',
+    surface:
+      'bg-gradient-to-br from-purple-50 via-violet-50/80 to-rose-50 dark:from-purple-500/15 dark:via-violet-500/15 dark:to-rose-500/15',
+    shadow: 'shadow-[0_18px_40px_-22px_rgba(147,51,234,0.28)]',
+    halo: 'bg-purple-200/35 dark:bg-purple-500/20',
+  },
 ];
 
 export default function Process() {
+  const { listRef, activeIndex, handleKeyDown, handleScroll } = useSnapCarousel(steps.length);
+  const carouselStyle = {
+    '--snap-lg-columns': 'repeat(2, minmax(0, 1fr))',
+  } as CSSProperties;
+
   return (
     <section id="process" className="py-16 sm:py-24">
       <Container>
-        <h2 className="mb-6 text-3xl font-semibold">Как я работаю</h2>
+        <header className="mb-8 space-y-3">
+          <p className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+            Как работаем
+          </p>
+          <h2 className="text-3xl font-semibold leading-tight md:text-4xl">Процесс от запроса до запуска</h2>
+          <p className="max-w-2xl text-base text-slate-600 dark:text-slate-300">
+            Шаги, которые проходим вместе с командой: от брифа и первичных гипотез до метрик и передачи в эксплуатацию.
+          </p>
+        </header>
 
-        {/* Моб/планшет — сетка */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:hidden">
-          {steps.map((s) => (
-            <Card key={s.title} className="p-6">
-              <h3 className="text-xl font-semibold">{s.title}</h3>
-              <p className="mt-1 text-sm opacity-80">{s.text}</p>
-            </Card>
-          ))}
-        </div>
-
-        {/* Десктоп — ряд со стрелками по центру */}
-        <div className="mt-2 hidden lg:flex items-center gap-4">
-          {steps.map((s, i) => (
-            <div key={s.title} className="flex items-center">
-              <Card className="p-6 w-72">
-                <h3 className="text-xl font-semibold">{s.title}</h3>
-                <p className="mt-1 text-sm opacity-80">{s.text}</p>
-              </Card>
-              {i < steps.length - 1 && (
-                <div className="mx-4 flex items-center">
-                  <ArrowRight className="h-6 w-6 text-zinc-500 dark:text-zinc-300" />
-                </div>
-              )}
+        <div role="group" aria-roledescription="carousel" aria-label="Процесс">
+          <ul
+            ref={listRef}
+            className="case-carousel"
+            role="list"
+            tabIndex={0}
+            onKeyDown={handleKeyDown}
+            onScroll={handleScroll}
+            style={carouselStyle}
+          >
+            {steps.map((step, index) => (
+              <StepCard key={step.title} step={step} index={index} />
+            ))}
+          </ul>
+          {steps.length > 1 ? (
+            <div className="mt-4 flex justify-center gap-2 md:hidden" aria-hidden="true">
+              {steps.map((step, index) => (
+                <span
+                  key={step.title}
+                  className={clsx(
+                    'h-1.5 w-6 rounded-full transition-colors',
+                    activeIndex === index
+                      ? 'bg-white/80 shadow-[0_0_8px_rgba(0,0,0,0.25)] dark:bg-slate-100'
+                      : 'bg-slate-300/60 dark:bg-slate-600/60'
+                  )}
+                />
+              ))}
             </div>
-          ))}
+          ) : null}
         </div>
       </Container>
     </section>
+  );
+}
+
+type StepCardProps = {
+  step: { title: string; text: string };
+  index: number;
+};
+
+function StepCard({ step, index }: StepCardProps) {
+  const vibe = stepVibes[index % stepVibes.length];
+  const { ref } = useCardAnalytics<HTMLLIElement>({
+    id: `step-${index + 1}`,
+    section: 'process',
+    index,
+    payload: { title: step.title },
+  });
+
+  const cardId = `process-step-${index + 1}`;
+
+  return (
+    <li ref={ref} className="group/card list-none">
+      <Card
+        role="article"
+        aria-labelledby={`${cardId}-title`}
+        className={`relative flex h-full flex-col gap-3 transition md:hover:-translate-y-1 md:hover:shadow-lg motion-reduce:md:hover:translate-y-0 ${vibe.surface} ${vibe.shadow}`}
+      >
+        <span
+          aria-hidden
+          className={`pointer-events-none absolute -right-10 -top-12 h-32 w-32 rounded-full blur-3xl opacity-0 transition-opacity duration-500 md:group-hover/card:opacity-100 ${vibe.halo}`}
+        />
+        <div className="flex items-center justify-between gap-3">
+          <Badge tone={vibe.tone} size="sm" leftIcon={vibe.emoji}>
+            {vibe.label}
+          </Badge>
+          <Badge tone="slate" size="sm">
+            Шаг {index + 1}
+          </Badge>
+        </div>
+        <h3
+          id={`${cardId}-title`}
+          className="mt-2 text-lg font-semibold leading-tight text-slate-900 line-clamp-2 md:mt-3 dark:text-white"
+        >
+          {step.title}
+        </h3>
+        <p className="text-sm leading-6 text-slate-600 dark:text-slate-300">
+          {step.text}
+        </p>
+      </Card>
+    </li>
   );
 }

@@ -1,0 +1,31 @@
+﻿import type { ReactNode } from 'react';
+
+type Tone = 'neutral' | 'cool' | 'warm' | 'iris';
+
+type Props = {
+  tone?: Tone;
+  className?: string;
+  children: ReactNode;
+};
+
+const toneClasses: Record<Tone, string> = {
+  neutral:
+    'sm:border-slate-200/60 sm:bg-white/80 sm:shadow-[0_18px_56px_-30px_rgba(15,23,42,0.4)] dark:sm:border-white/12 dark:sm:bg-slate-900/45',
+  cool:
+    'sm:border-sky-200/60 sm:bg-gradient-to-br sm:from-sky-50/90 sm:via-slate-50/70 sm:to-transparent sm:shadow-[0_26px_60px_-34px_rgba(56,189,248,0.45)] dark:sm:border-sky-500/20 dark:sm:from-slate-900/60 dark:sm:via-slate-900/40 dark:sm:to-slate-900/20',
+  warm:
+    'sm:border-amber-200/60 sm:bg-gradient-to-br sm:from-amber-50/85 sm:via-white/70 sm:to-transparent sm:shadow-[0_26px_60px_-34px_rgba(251,191,36,0.4)] dark:sm:border-amber-500/20 dark:sm:from-slate-900/60 dark:sm:via-slate-900/40 dark:sm:to-slate-900/20',
+  iris:
+    'sm:border-indigo-200/60 sm:bg-gradient-to-br sm:from-indigo-50/90 sm:via-slate-50/70 sm:to-transparent sm:shadow-[0_26px_60px_-34px_rgba(129,140,248,0.4)] dark:sm:border-indigo-500/20 dark:sm:from-slate-900/60 dark:sm:via-slate-900/40 dark:sm:to-slate-900/20',
+};
+
+export default function CaseSectionIsland({ tone = 'neutral', className = '', children }: Props) {
+  const base = `relative overflow-hidden rounded-none border-0 bg-transparent sm:rounded-3xl sm:border sm:bg-transparent sm:backdrop-blur-xl ${toneClasses[tone]} ${className}`.trim();
+
+  return (
+    <section className={base}>
+      <div className="absolute inset-0 hidden bg-gradient-to-br from-white/20 via-transparent to-transparent dark:from-white/4 sm:block" aria-hidden />
+      <div className="relative z-[1] flex flex-col gap-5 px-0 py-6 sm:px-8 sm:py-8">{children}</div>
+    </section>
+  );
+}
