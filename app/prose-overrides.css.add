@@ -1,0 +1,4 @@
+
+/* MDX page heading sizes for readability */
+.prose :where(h1){ @apply text-3xl sm:text-4xl; }
+.prose :where(h2){ @apply text-2xl sm:text-3xl; }
