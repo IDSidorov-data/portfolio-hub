@@ -1,7 +1,6 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 
 import Nav from "@/components/Nav";
@@ -17,12 +16,6 @@ const Services = dynamic(() => import("@/components/Services"), { loading: () =>
 const Cases = dynamic(() => import("@/components/Cases"), { loading: () => null });
 const Process = dynamic(() => import("@/components/Process"), { loading: () => null });
 const Stack = dynamic(() => import("@/components/Stack"), { loading: () => null });
-
-function SourceProvider({ children }: { children: (source: string) => React.ReactNode }) {
-  const params = useSearchParams();
-  const source = params.get("utm_source") ?? "site";
-  return <>{children(source)}</>;
-}
 
 type HomePageViewProps = {
   cleanMode: boolean;
@@ -48,14 +41,16 @@ export default function HomePageView({ cleanMode }: HomePageViewProps) {
           <Process />
           <Stack />
           <Container id="brief" className="md:scroll-mt-20 py-10 scroll-mt-16">
-            <h2 className="mb-6 text-2xl font-semibold">Оставить бриф проекта</h2>
+            <h2 className="mb-6 text-3xl font-semibold leading-tight md:text-4xl">
+              Оставить бриф проекта
+            </h2>
             {cleanMode ? (
               <p className="max-w-2xl text-base text-slate-600 dark:text-slate-300">
                 Для связи используйте чат площадки.
               </p>
             ) : (
               <Suspense fallback={<Skeleton className="h-48" />}>
-                <SourceProvider>{(source) => <BriefForm defaultSource={source} />}</SourceProvider>
+                <BriefForm />
               </Suspense>
             )}
           </Container>
