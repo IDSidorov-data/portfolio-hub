@@ -323,7 +323,7 @@ export default function BriefForm({ maxUploadMB }: Props) {
 
       {status === "ok" && (
         <p className="text-green-600 text-sm">
-          Спасибо! Я свяжусь в течение дня. Если срочно — TG @idsidorov
+          Спасибо! Я свяжусь с Вами в течение дня. Если срочно — TG: @IDSidorov_data
         </p>
       )}
       {status === "error" && <p className="text-red-600 text-sm">{error}</p>}
